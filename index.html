@@ -12,38 +12,38 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><img class="brand-mark" src="logo.svg" alt="BlokBird 彩虹像素鸟图标" /><span><strong>BlokBird</strong><small>UI DESIGN</small></span></div>
+    <div class="brand"><img class="brand-mark" src="logo.svg" alt="BlokBird 彩虹像素鸟图标" /><span><strong>BlokBird</strong><small>交互界面编辑器</small></span></div>
     <div class="top-center"><span class="status-dot"></span><span id="projectName">未命名项目</span><span class="muted">/ 设计项目</span></div>
     <div class="top-actions"><button class="ghost" id="newBtn">新建</button><button class="ghost" id="importBtn">导入项目</button><button class="ghost" id="saveBtn">保存</button><button class="primary" id="exportBtn">导出网页 <span>↗</span></button></div>
   </header>
   <main class="workspace">
     <aside class="sidebar left-panel">
-      <div class="sidebar-head"><div class="eyebrow">01 / MATERIALS</div><h2>搭建你的界面</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
+      <div class="sidebar-head"><div class="eyebrow">01</div><h2>搭建你的界面</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
       <div id="pageManager" class="page-manager"></div>
       <div class="panel-tabs"><button class="tab active" data-lefttab="components">组件</button><button class="tab" data-lefttab="templates">模板</button><button class="tab" data-lefttab="effects">动效</button><button class="tab" data-lefttab="assets">素材</button><button class="tab" data-lefttab="guide">提示</button></div>
       <section id="componentsTab" class="tab-body">
-        <div class="section-label">基础元素 <span>ELEMENTS</span></div>
+        <div class="section-label">基础元素</div>
         <div class="component-grid">
-          <button class="component-card" data-add="heading"><span class="component-icon serif">T</span><strong>标题</strong><small>Heading</small></button>
-          <button class="component-card" data-add="text"><span class="component-icon">☷</span><strong>文本</strong><small>Paragraph</small></button>
-          <button class="component-card" data-add="button"><span class="component-icon button-demo">按钮</span><strong>按钮</strong><small>Button</small></button>
-          <button class="component-card" data-add="image"><span class="component-icon">▧</span><strong>图片</strong><small>Image</small></button>
-          <button class="component-card" data-add="divider"><span class="component-icon">―</span><strong>分隔线</strong><small>Divider</small></button>
-          <button class="component-card" data-add="card"><span class="component-icon">▣</span><strong>卡片</strong><small>Card</small></button>
-          <button class="component-card" data-add="layout"><span class="component-icon">▥</span><strong>布局</strong><small>Layout</small></button>
-          <button class="component-card" data-add="input"><span class="component-icon">▭</span><strong>输入框</strong><small>Input</small></button>
-          <button class="component-card" data-add="switch"><span class="component-icon">◉</span><strong>开关</strong><small>Switch</small></button>
+          <button class="component-card" data-add="heading"><span class="component-icon serif">T</span><strong>标题</strong><small>信息层级</small></button>
+          <button class="component-card" data-add="text"><span class="component-icon">☷</span><strong>文本</strong><small>正文说明</small></button>
+          <button class="component-card" data-add="button"><span class="component-icon button-demo">按钮</span><strong>按钮</strong><small>触发操作</small></button>
+          <button class="component-card" data-add="image"><span class="component-icon">▧</span><strong>图片</strong><small>视觉内容</small></button>
+          <button class="component-card" data-add="divider"><span class="component-icon">―</span><strong>分隔线</strong><small>划分区域</small></button>
+          <button class="component-card" data-add="card"><span class="component-icon">▣</span><strong>卡片</strong><small>组合信息</small></button>
+          <button class="component-card" data-add="layout"><span class="component-icon">▥</span><strong>布局</strong><small>排列组件</small></button>
+          <button class="component-card" data-add="input"><span class="component-icon">▭</span><strong>输入框</strong><small>接收输入</small></button>
+          <button class="component-card" data-add="switch"><span class="component-icon">◉</span><strong>开关</strong><small>切换状态</small></button>
         </div>
         <div id="variantPanel" class="variant-panel"></div>
         <div class="tip"><span>✦</span><div><strong>从组件开始</strong><p>每类组件都有现成样式。放入画布后，在右侧修改内容和交互。</p></div></div>
       </section>
-      <section id="templatesTab" class="tab-body hidden"><div class="section-label">应用流程 <span>FLOWS</span></div><p class="template-intro">选择一个场景，会加入互相关联的手机页面。按钮已连接下一步，你可以继续修改内容、状态和跳转。</p><div id="templateList" class="template-list"></div></section>
-      <section id="effectsTab" class="tab-body hidden"><div class="section-label">动画与效果 <span>MOTION</span></div><p class="template-intro">先选中手机画布中的元素，再点击一种动画或视觉效果。更多参数在右侧调整。</p><div class="section-label">动画 <span>ANIMATION</span></div><div id="animationList" class="effect-list"></div><div class="section-label asset-heading">视觉效果 <span>EFFECTS</span></div><div id="effectList" class="effect-list"></div></section>
-      <section id="assetsTab" class="tab-body hidden"><div class="section-label">图片素材 <span>ASSETS</span></div><label class="upload-zone" for="assetInput"><span>↑</span><strong>上传图片</strong><small>支持 PNG、JPG、WEBP，单张不超过 2 MB</small></label><input id="assetInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden /><input id="assetSearch" class="library-search" type="search" placeholder="搜索图片素材" aria-label="搜索图片素材" /><div id="assetList" class="asset-list"></div><div class="section-label asset-heading">内置素材 <span>ORIGINAL SVG</span></div><div id="builtInAssets" class="asset-list"></div><p class="hint">内置 SVG 为本项目原创，可直接用于作品和导出网页。</p></section>
-      <section id="guideTab" class="tab-body hidden"><div class="section-label">使用提示 <span>QUICK GUIDE</span></div><div class="guide-card"><strong>从任意组件开始</strong><p>挑选左侧预设，放入当前手机页面；右侧可调整文字、颜色、动画和按钮行为。</p></div><div class="guide-card"><strong>设计真实操作路径</strong><p>新建页面并给按钮设置“切换页面”，把首页、详情和完成页连成一条可预览的流程。页面列表右键可设置主导航页或子页面。</p></div><div class="guide-card"><strong>直接在画布上操作</strong><p>点击选中，拖动调整顺序，右键打开复制、粘贴和移动菜单。预览时可点击按钮体验交互。</p></div><div class="guide-card"><strong>带走你的作品</strong><p>“保存”会下载可继续编辑的项目文件；“导出网页”会生成可独立运行的 HTML。</p></div><div class="concept"><strong>HTML 与 CSS</strong><p>组件是页面内容，右侧属性决定外观。选中元素时，右下角会显示对应的 CSS 样式。</p></div></section>
+      <section id="templatesTab" class="tab-body hidden"><div class="section-label">应用流程</div><p class="template-intro">选择一个场景，会加入互相关联的手机页面。按钮已连接下一步，你可以继续修改内容、状态和跳转。</p><div id="templateList" class="template-list"></div></section>
+      <section id="effectsTab" class="tab-body hidden"><div class="section-label">动画与效果</div><p class="template-intro">先选中手机画布中的元素，再点击一种动画或视觉效果。更多参数在右侧调整。</p><div class="section-label">动画</div><div id="animationList" class="effect-list"></div><div class="section-label asset-heading">视觉效果</div><div id="effectList" class="effect-list"></div></section>
+      <section id="assetsTab" class="tab-body hidden"><div class="section-label">图片素材</div><label class="upload-zone" for="assetInput"><span>↑</span><strong>上传图片</strong><small>支持 PNG、JPG、WEBP，单张不超过 2 MB</small></label><input id="assetInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden /><input id="assetSearch" class="library-search" type="search" placeholder="搜索图片素材" aria-label="搜索图片素材" /><div id="assetList" class="asset-list"></div><div class="section-label asset-heading">内置素材</div><div id="builtInAssets" class="asset-list"></div><p class="hint">内置 SVG 为本项目原创，可直接用于作品和导出网页。</p></section>
+      <section id="guideTab" class="tab-body hidden"><div class="section-label">使用提示</div><div class="guide-card"><strong>从任意组件开始</strong><p>挑选左侧预设，放入当前手机页面；右侧可调整文字、颜色、动画和按钮行为。</p></div><div class="guide-card"><strong>设计真实操作路径</strong><p>新建页面并给按钮设置“切换页面”，把首页、详情和完成页连成一条可预览的流程。页面列表右键可设置主导航页或子页面；点击底部导航页后，可在右侧更换图标。</p></div><div class="guide-card"><strong>直接在画布上操作</strong><p>点击选中，拖动调整顺序，右键打开复制、粘贴和移动菜单。预览时可点击按钮体验交互。</p></div><div class="guide-card"><strong>带走你的作品</strong><p>“保存”会下载可继续编辑的项目文件；“导出网页”会生成可独立运行的 HTML。</p></div><div class="concept"><strong>HTML 与 CSS</strong><p>组件是页面内容，右侧属性决定外观。选中元素时，右下角会显示对应的 CSS 样式。</p></div></section>
     </aside>
     <section class="stage">
-      <div class="stage-toolbar"><div><span class="eyebrow">02 / PHONE CANVAS</span><strong>手机画布</strong></div><div class="stage-controls"><button id="undoBtn" class="icon-btn" title="撤销">↶</button><button id="redoBtn" class="icon-btn" title="重做">↷</button><span class="toolbar-rule"></span><button id="replayBtn" class="preview-btn" title="重播当前页面动画">重播动画 ↺</button><button id="previewBtn" class="preview-btn">预览交互</button></div></div>
+      <div class="stage-toolbar"><div><span class="eyebrow">02</span><strong>手机画布</strong></div><div class="stage-controls"><button id="undoBtn" class="icon-btn" title="撤销">↶</button><button id="redoBtn" class="icon-btn" title="重做">↷</button><span class="toolbar-rule"></span><button id="replayBtn" class="preview-btn" title="重播当前页面动画">重播动画 ↺</button><button id="previewBtn" class="preview-btn">预览交互</button></div></div>
       <div class="canvas-area"><div class="canvas-frame mobile" id="canvasFrame">
         <div class="phone-status"><span>9:41</span><span class="phone-signals" aria-hidden="true">●●● ▰</span></div>
         <div class="phone-app-header"><button id="phoneBackBtn" class="phone-back hidden" type="button" aria-label="返回上一页">←</button><strong id="phonePageTitle">首页</strong><button id="phoneMoreBtn" class="phone-header-dot" type="button" aria-label="页面操作">•••</button></div>
@@ -56,7 +56,7 @@
       </div></div>
       <div class="stage-footer"><span><span class="status-dot"></span> 自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面</span><span id="elementCount">0 个元素</span></div>
     </section>
-    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><div class="eyebrow">03 / INSPECTOR</div><h2>属性设置</h2><p>选中画布中的元素来调整它。</p></div><div id="inspector" class="inspector"></div><div class="code-pane"><div class="code-title"><span>理解生成的代码</span><button id="copyCssBtn">复制</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p></div></aside>
+    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><div class="eyebrow">03</div><h2>属性设置</h2><p>选中画布中的元素来调整它。</p></div><div id="inspector" class="inspector"></div><div class="code-pane"><div class="code-title"><span>理解生成的代码</span><button id="copyCssBtn">复制</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p></div></aside>
   </main>
   <input type="file" id="projectInput" accept="application/json,.json" hidden />
   <div id="toast" role="status" aria-live="polite"></div>

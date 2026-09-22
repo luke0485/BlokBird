@@ -28,6 +28,10 @@ for (const ext of ['png', 'jpg', 'webp']) {
   assert.ok(asset.data.startsWith(`data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,`));
   context.asset = asset;
   assert.equal(vm.runInContext('safeSrc(asset.data)', context), asset.data);
+  const navIcon = await vm.runInContext('readNavIcon(file)', context);
+  assert.equal(navIcon, asset.data);
+  context.navIcon = navIcon;
+  assert.equal(vm.runInContext('safeNavIcon(navIcon)', context), navIcon);
 }
 for (const [name, bytes] of [['unknown', Buffer.alloc(64)], ['corrupt.png', Buffer.concat([fs.readFileSync('tests/fixtures/upload.png').subarray(0, 16), Buffer.alloc(48)])]]) {
   context.file = { name, size: bytes.length, arrayBuffer: async () => bytes };

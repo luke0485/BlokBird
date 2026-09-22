@@ -2,7 +2,22 @@ const KEY = 'blokbird-ui-design-v3';
 const OLD_KEYS = ['blokbird-studio-v2', 'blokbird-palette-v1', 'interface-lab-monochrome-v1'];
 const DEFAULT_PAGES = ['home', 'discover', 'profile'];
 const PAGE_LABELS = { home: '首页', discover: '发现', profile: '我的' };
-const PAGE_ICONS = { home: '⌂', discover: '◇', profile: '◉' };
+const PAGE_ICONS = { home: 'icon:home', discover: 'icon:compass', profile: 'icon:person' };
+const NAV_ICONS = [
+  { id: 'home', name: '首页', outline: '<path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1z"/>', filled: '<path d="m12 2 10 8v10a2 2 0 0 1-2 2h-6v-7h-4v7H4a2 2 0 0 1-2-2V10z"/>' },
+  { id: 'compass', name: '发现', outline: '<circle cx="12" cy="12" r="9"/><path d="m15.8 8.2-2.5 5.1-5.1 2.5 2.5-5.1z"/>', filled: '<circle cx="12" cy="12" r="10"/><path d="m16.5 7.5-3 6-6 3 3-6z" fill="#fff"/>' },
+  { id: 'person', name: '我的', outline: '<circle cx="12" cy="7.5" r="3.5"/><path d="M4.5 21v-2.2a7.5 7.5 0 0 1 15 0V21z"/>', filled: '<circle cx="12" cy="7.5" r="4"/><path d="M3 21v-2a9 9 0 0 1 18 0v2z"/>' },
+  { id: 'search', name: '搜索', outline: '<circle cx="10.8" cy="10.8" r="7"/><path d="m16 16 5 5"/>' },
+  { id: 'heart', name: '喜欢', outline: '<path d="M20.5 5.5a5 5 0 0 0-7.1 0L12 6.9l-1.4-1.4a5 5 0 0 0-7.1 7.1L12 21l8.5-8.4a5 5 0 0 0 0-7.1z"/>', filled: '<path d="M12 21 2.7 11.8a6 6 0 0 1 8.5-8.5L12 4l.8-.7a6 6 0 0 1 8.5 8.5z"/>' },
+  { id: 'music', name: '音乐', outline: '<path d="M9 18V5l12-2v13"/><circle cx="6" cy="18" r="3"/><circle cx="18" cy="16" r="3"/>' },
+  { id: 'library', name: '资料库', outline: '<path d="M4 4h4v16H4zM10 4h4v16h-4zM16 6l3-1 4 14-3 1z"/>' },
+  { id: 'bell', name: '消息', outline: '<path d="M18 8a6 6 0 0 0-12 0c0 7-3 8-3 10h18c0-2-3-3-3-10zM10 21h4"/>' },
+  { id: 'calendar', name: '日程', outline: '<rect x="3" y="5" width="18" height="16" rx="2"/><path d="M7 3v4M17 3v4M3 10h18"/>' },
+  { id: 'cart', name: '购物', outline: '<path d="M3 4h2l2.2 11.5h11.6L21 7H6M8 20h.01M18 20h.01"/>' },
+  { id: 'play', name: '播放', outline: '<circle cx="12" cy="12" r="9"/><path d="m10 8 6 4-6 4z"/>', filled: '<circle cx="12" cy="12" r="10"/><path d="m10 7 7 5-7 5z" fill="#fff"/>' },
+  { id: 'settings', name: '设置', outline: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>' }
+];
+const DEFAULT_NAV_ICON_STYLE = { size: 23, stroke: 1.9, activeColor: '#1F2A24', inactiveColor: '#7B857E' };
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
 const uid = () => globalThis.crypto?.randomUUID?.() || `bb-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -188,7 +203,7 @@ function composeTemplate(id, page) {
   const items = [];
   const add = (type, variant, props = {}, layoutId = null) => { const item = Object.assign(makeItem(type, variant, page), props); item.layoutId = layoutId; items.push(item); return item; };
   const group = (variant, children) => { const layout = add('layout', variant); for (const [type, style, props] of children) add(type, style, props, layout.id); return layout; };
-  if (id === 'portfolio') { add('heading', 'eyebrow', { text: 'PORTFOLIO' }); add('heading', 'display', { text: '你好，我是设计者。' }); add('text', 'lead', { text: '我喜欢把想法变成清晰、好用的数字产品。' }); add('image', 'builtin-22'); group('two', [['card', 'stat', { text: '12 个作品', detail: '持续探索与更新' }], ['card', 'feature', { text: '我的专长', detail: '界面设计与前端开发' }]]); add('button', 'dark', { text: '联系我', action: 'toast', prompt: '欢迎与我联系！' }); }
+  if (id === 'portfolio') { add('heading', 'eyebrow', { text: '个人作品' }); add('heading', 'display', { text: '你好，我是设计者。' }); add('text', 'lead', { text: '我喜欢把想法变成清晰、好用的数字产品。' }); add('image', 'builtin-22'); group('two', [['card', 'stat', { text: '12 个作品', detail: '持续探索与更新' }], ['card', 'feature', { text: '我的专长', detail: '界面设计与前端开发' }]]); add('button', 'dark', { text: '联系我', action: 'toast', prompt: '欢迎与我联系！' }); }
   if (id === 'shop') { add('image', 'builtin-14'); add('heading', 'section', { text: '一杯好咖啡' }); add('text', 'body', { text: '香气与口感都刚刚好，给日常片刻温暖。' }); group('two', [['card', 'stat', { text: '¥ 39', detail: '单杯价格' }], ['card', 'warm', { text: '限时优惠', detail: '今日下单立享好价' }]]); add('button', 'wide', { text: '加入购物袋', action: 'toast', prompt: '已加入购物袋' }); }
   if (id === 'dashboard') { add('heading', 'section', { text: '数据概览' }); add('text', 'caption', { text: '今天的表现，一眼掌握' }); group('three', [['card', 'stat', { text: '1.2k', detail: '访问' }], ['card', 'stat', { text: '86', detail: '收藏' }], ['card', 'stat', { text: '24', detail: '分享' }]]); add('image', 'builtin-16'); add('card', 'accent', { text: '趋势向好', detail: '本周的数据持续增长。' }); }
   if (id === 'event') { add('image', 'builtin-17'); add('heading', 'hero', { text: '灵感之夜' }); add('text', 'lead', { text: '和有趣的人一起，分享设计、创作与新的可能。' }); add('card', 'ticket', { text: '本周六 · 19:00', detail: '城市创意空间，期待见到你。' }); add('button', 'gradient', { text: '立即报名', action: 'modal', prompt: '报名成功，期待见到你！' }); }
@@ -227,7 +242,8 @@ function createTemplatePage(templateId) {
   const template = PAGE_TEMPLATES.find(entry => entry.id === templateId); if (!template) return;
   commit(); const pages = [0, 1, 2].map(() => `page-${uid()}`); const names = [template.name, ...TEMPLATE_FLOWS[templateId]];
   state.pageModes ||= {}; state.pageParent ||= {};
-  pages.forEach((page, index) => { state.pages.push(page); state.pageTitles[page] = names[index]; state.pageIcons[page] = template.icon; state.pageModes[page] = index === 0 ? 'tab' : 'detail'; if (index) state.pageParent[page] = pages[index - 1]; state.headerActions[page] = { icon: '•••', action: 'menu', prompt: names[index], targetPage: pages[index === 2 ? 0 : index + 1] }; });
+  const templateIcons = { portfolio: 'library', shop: 'cart', dashboard: 'library', event: 'calendar', profile: 'person', notes: 'library', signup: 'person' };
+  pages.forEach((page, index) => { state.pages.push(page); state.pageTitles[page] = names[index]; state.pageIcons[page] = `icon:${templateIcons[templateId]}`; state.pageIconSettings ||= {}; state.pageIconSettings[page] = clone(DEFAULT_NAV_ICON_STYLE); state.pageModes[page] = index === 0 ? 'tab' : 'detail'; if (index) state.pageParent[page] = pages[index - 1]; state.headerActions[page] = { icon: '•••', action: 'menu', prompt: names[index], targetPage: pages[index === 2 ? 0 : index + 1] }; });
   const first = composeTemplate(templateId, pages[0]); let primary = first.find(item => item.type === 'button');
   if (!primary) { primary = makeItem('button', 'wide', pages[0]); primary.text = '查看详情'; first.push(primary); }
   primary.action = 'page'; primary.targetPage = pages[1]; primary.animation = 'rise';
@@ -245,6 +261,8 @@ function normalizeProject(value) {
   result.pages = Array.isArray(result.pages) && result.pages.length ? [...new Set(result.pages.filter(page => typeof page === 'string'))] : [...DEFAULT_PAGES];
   result.pageTitles = { ...PAGE_LABELS, ...(result.pageTitles || {}) };
   result.pageIcons = { ...PAGE_ICONS, ...(result.pageIcons || {}) };
+  for (const page of result.pages) result.pageIcons[page] = safeNavIcon(result.pageIcons[page]);
+  result.pageIconSettings = Object.fromEntries(result.pages.map(page => { const style = result.pageIconSettings?.[page] || {}; return [page, { size: Math.max(16, Math.min(32, Number(style.size) || 23)), stroke: Math.max(1, Math.min(3, Number(style.stroke) || 1.9)), activeColor: safeColor(style.activeColor, '#1F2A24'), inactiveColor: safeColor(style.inactiveColor, '#7B857E') }]; }));
   result.pageModes = Object.fromEntries(result.pages.map(page => [page, result.pageModes?.[page] === 'detail' ? 'detail' : 'tab']));
   if (!result.pages.some(page => result.pageModes[page] === 'tab')) result.pageModes[result.pages[0]] = 'tab';
   result.pageParent = Object.fromEntries(result.pages.filter(page => result.pageModes[page] === 'detail' && result.pages.includes(result.pageParent?.[page]) && result.pageParent[page] !== page).map(page => [page, result.pageParent[page]]));
@@ -275,6 +293,21 @@ function phoneToast(message) { const box = $('#phoneToast'); box.textContent = m
 function showModal(message) { $('#modalMessage').textContent = message; $('#phoneModal').classList.remove('hidden'); }
 function safeHref(value) { return typeof value === 'string' && /^(https?:\/\/|mailto:|#)/i.test(value) ? value : '#'; }
 function safeColor(value, fallback = '#1F2A24') { return /^#[0-9a-f]{6}$/i.test(value || '') ? value : fallback; }
+function safeNavIcon(value) {
+  const old = { '⌂': 'icon:home', '◇': 'icon:compass', '◉': 'icon:person', '□': 'icon:home' };
+  if (old[value]) return old[value];
+  if (typeof value === 'string' && value.startsWith('icon:') && NAV_ICONS.some(icon => icon.id === value.slice(5))) return value;
+  if (typeof value === 'string' && value.length < 900000 && /^data:image\/(?:png|jpeg|webp|svg\+xml)[;,]/i.test(value)) return value;
+  if (typeof value === 'string' && value.length <= 6 && !/[<>]/.test(value)) return value;
+  return 'icon:home';
+}
+function navIconSettings(page) {
+  const value = state.pageIconSettings?.[page] || {};
+  return { size: Math.max(16, Math.min(32, Number(value.size) || 23)), stroke: Math.max(1, Math.min(3, Number(value.stroke) || 1.9)), activeColor: safeColor(value.activeColor, '#1F2A24'), inactiveColor: safeColor(value.inactiveColor, '#7B857E') };
+}
+function navSvgMarkup(value) { const icon = NAV_ICONS.find(entry => `icon:${entry.id}` === safeNavIcon(value)) || NAV_ICONS[0]; return `<svg${icon.filled ? ' class="has-fill"' : ''} viewBox="0 0 24 24" aria-hidden="true"><g class="icon-outline">${icon.outline}</g>${icon.filled ? `<g class="icon-filled">${icon.filled}</g>` : ''}</svg>`; }
+function navIconHtml(value) { const safe = safeNavIcon(value); return safe.startsWith('icon:') ? navSvgMarkup(safe) : safe.startsWith('data:image/') ? `<img src="${escapeHtml(safe)}" alt="">` : `<span aria-hidden="true">${escapeHtml(safe)}</span>`; }
+function navIconElement(value) { const box = document.createElement('span'); box.className = 'nav-icon'; const safe = safeNavIcon(value); if (safe.startsWith('icon:')) box.innerHTML = navSvgMarkup(safe); else if (safe.startsWith('data:image/')) { const img = document.createElement('img'); img.src = safe; img.alt = ''; box.append(img); } else box.textContent = safe; return box; }
 function safeEasing(value) { return ['ease', 'linear', 'ease-in', 'ease-out', 'cubic-bezier(.2,1.5,.45,1)'].includes(value) ? value : 'ease'; }
 function safeInputType(value) { return ['text', 'search', 'email', 'password'].includes(value) ? value : 'text'; }
 function escapeHtml(value) { return String(value ?? '').replace(/[&<>"']/g, char => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[char]); }
@@ -285,8 +318,8 @@ function goBack() { const fromHistory = pageHistory.pop(); const parent = state.
 function setPageMode(page, mode) { if (mode === 'detail' && state.pages.filter(id => !isDetailPage(id)).length <= 1 && !isDetailPage(page)) { editorToast('至少保留一个主导航页面'); return; } commit(); state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[page] = mode; if (mode === 'detail') state.pageParent[page] = state.pages.find(id => id !== page && !isDetailPage(id)) || state.pages[0]; else delete state.pageParent[page]; update(); }
 function addPage() { const title = prompt('新页面名称', `新页面 ${state.pages.length + 1}`); if (title === null) return; commit(); const page = `page-${uid()}`; state.pages.push(page); state.pageTitles[page] = title.trim().slice(0, 16) || `新页面 ${state.pages.length}`; state.pageIcons[page] = '□'; state.pageModes ||= {}; state.pageModes[page] = 'tab'; state.headerActions[page] = { icon: '•••', action: 'menu', prompt: `这是${state.pageTitles[page]}`, targetPage: state.pages[0] }; activePage = page; selected = null; update(); }
 function renamePage(page) { const title = prompt('页面名称', state.pageTitles[page]); if (title === null) return; commit(); state.pageTitles[page] = title.trim().slice(0, 16) || state.pageTitles[page]; update(); }
-function duplicatePage(page) { commit(); const copy = `page-${uid()}`; const index = state.pages.indexOf(page); state.pages.splice(index + 1, 0, copy); state.pageTitles[copy] = `${state.pageTitles[page]} 副本`; state.pageIcons[copy] = state.pageIcons[page]; state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[copy] = isDetailPage(page) ? 'detail' : 'tab'; if (state.pageParent[page]) state.pageParent[copy] = state.pageParent[page]; state.headerActions[copy] = clone(state.headerActions[page]); const originals = state.items.filter(item => item.page === page); const ids = Object.fromEntries(originals.map(item => [item.id, uid()])); const items = originals.map(item => ({ ...clone(item), id: ids[item.id], page: copy, layoutId: item.layoutId ? ids[item.layoutId] || null : null })); state.items.push(...items); activePage = copy; selected = null; update(); }
-function deletePage(page) { if (state.pages.length <= 1) { editorToast('至少保留一个页面'); return; } if (!confirm(`删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复。`)) return; commit(); state.pages = state.pages.filter(id => id !== page); state.items = state.items.filter(item => item.page !== page); delete state.pageTitles[page]; delete state.pageIcons[page]; delete state.headerActions[page]; if (state.pageModes) delete state.pageModes[page]; const promoted = !state.pages.some(id => !isDetailPage(id)); if (promoted) { state.pageModes ||= {}; state.pageModes[state.pages[0]] = 'tab'; } if (state.pageParent) { delete state.pageParent[page]; if (promoted) delete state.pageParent[state.pages[0]]; for (const [child, parent] of Object.entries(state.pageParent)) if (parent === page) state.pageParent[child] = state.pages.find(id => !isDetailPage(id)) || state.pages[0]; } for (const item of state.items) if (item.targetPage === page) item.targetPage = state.pages[0]; for (const action of Object.values(state.headerActions)) if (action.targetPage === page) action.targetPage = state.pages[0]; if (activePage === page) activePage = state.pages[0]; pageHistory = []; selected = null; update(); }
+function duplicatePage(page) { commit(); const copy = `page-${uid()}`; const index = state.pages.indexOf(page); state.pages.splice(index + 1, 0, copy); state.pageTitles[copy] = `${state.pageTitles[page]} 副本`; state.pageIcons[copy] = state.pageIcons[page]; state.pageIconSettings ||= {}; state.pageIconSettings[copy] = clone(navIconSettings(page)); state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[copy] = isDetailPage(page) ? 'detail' : 'tab'; if (state.pageParent[page]) state.pageParent[copy] = state.pageParent[page]; state.headerActions[copy] = clone(state.headerActions[page]); const originals = state.items.filter(item => item.page === page); const ids = Object.fromEntries(originals.map(item => [item.id, uid()])); const items = originals.map(item => ({ ...clone(item), id: ids[item.id], page: copy, layoutId: item.layoutId ? ids[item.layoutId] || null : null })); state.items.push(...items); activePage = copy; selected = null; update(); }
+function deletePage(page) { if (state.pages.length <= 1) { editorToast('至少保留一个页面'); return; } if (!confirm(`删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复。`)) return; commit(); state.pages = state.pages.filter(id => id !== page); state.items = state.items.filter(item => item.page !== page); delete state.pageTitles[page]; delete state.pageIcons[page]; if (state.pageIconSettings) delete state.pageIconSettings[page]; delete state.headerActions[page]; if (state.pageModes) delete state.pageModes[page]; const promoted = !state.pages.some(id => !isDetailPage(id)); if (promoted) { state.pageModes ||= {}; state.pageModes[state.pages[0]] = 'tab'; } if (state.pageParent) { delete state.pageParent[page]; if (promoted) delete state.pageParent[state.pages[0]]; for (const [child, parent] of Object.entries(state.pageParent)) if (parent === page) state.pageParent[child] = state.pages.find(id => !isDetailPage(id)) || state.pages[0]; } for (const item of state.items) if (item.targetPage === page) item.targetPage = state.pages[0]; for (const action of Object.values(state.headerActions)) if (action.targetPage === page) action.targetPage = state.pages[0]; if (activePage === page) activePage = state.pages[0]; pageHistory = []; selected = null; update(); }
 function runAction(item) {
   if (item.visualState === 'disabled') return;
   if (item.requiresInput) { const inputs = [...$('#canvasPage').querySelectorAll('input.ui-input')]; const invalid = inputs.find(input => !input.value.trim() || !input.checkValidity()); if (!inputs.length || invalid) { phoneToast(!inputs.length ? '请先在当前页面添加输入框' : '请填写有效的输入内容'); invalid?.focus(); return; } }
@@ -304,12 +337,12 @@ function renderNav() {
   for (const page of state.pages.filter(page => !isDetailPage(page))) {
     const button = document.createElement('button'); button.type = 'button'; button.className = page === activePage ? 'active' : '';
     button.setAttribute('aria-label', state.pageTitles[page]); button.setAttribute('aria-current', page === activePage ? 'page' : 'false');
-    const icon = document.createElement('span'); icon.className = 'nav-icon'; icon.textContent = state.pageIcons[page] || '□';
+    const icon = navIconElement(state.pageIcons[page]); const settings = navIconSettings(page);
+    button.style.setProperty('--icon-size', `${settings.size}px`); button.style.setProperty('--icon-stroke', settings.stroke); button.style.setProperty('--nav-active', settings.activeColor); button.style.setProperty('--nav-inactive', settings.inactiveColor);
     const label = document.createElement('span'); label.textContent = state.pageTitles[page]; button.append(icon, label);
     button.onclick = () => switchPage(page); pages.append(button);
   }
-  const add = document.createElement('button'); add.type = 'button'; add.className = 'nav-add'; add.title = '新建页面'; add.setAttribute('aria-label', '新建页面'); add.textContent = '+'; add.onclick = addPage;
-  nav.append(pages, add); nav.classList.toggle('hidden', isDetailPage(activePage)); $('#phoneBackBtn').classList.toggle('hidden', !isDetailPage(activePage));
+  nav.append(pages); nav.classList.toggle('hidden', isDetailPage(activePage)); $('#phoneBackBtn').classList.toggle('hidden', !isDetailPage(activePage));
 }
 function renderPageManager() {
   const manager = $('#pageManager'); manager.replaceChildren();
@@ -383,7 +416,7 @@ function createElementNode(item) {
   if (item.type === 'card') {
     node = document.createElement('div'); node.className = 'ui-card variant-card-' + item.variant;
     if (item.variant === 'profile') { const avatar = document.createElement('span'); avatar.className = 'avatar'; avatar.textContent = '我'; node.append(avatar); }
-    if (item.variant === 'accent') { const kicker = document.createElement('span'); kicker.className = 'card-kicker'; kicker.textContent = 'FEATURED'; node.append(kicker); }
+    if (item.variant === 'accent') { const kicker = document.createElement('span'); kicker.className = 'card-kicker'; kicker.textContent = '精选'; node.append(kicker); }
     const title = document.createElement('strong'); title.className = 'card-title'; title.textContent = item.text || '卡片标题';
     const detail = document.createElement('span'); detail.className = 'card-detail'; detail.textContent = item.detail ?? CARD_DETAILS[item.variant] ?? '';
     node.append(title, detail);
@@ -448,6 +481,20 @@ function colorField(container, label, value, onChange) {
   const input = field(container, label, safeColor(value), 'color'); input.onchange = () => onChange(input.value);
 }
 function section(container, title) { const label = document.createElement('div'); label.className = 'inspector-section'; label.textContent = title; container.append(label); }
+function renderNavIconInspector(box, page) {
+  section(box, '底部导航图标');
+  const picker = document.createElement('div'); picker.className = 'nav-icon-picker';
+  for (const icon of NAV_ICONS) { const button = document.createElement('button'); button.type = 'button'; button.title = icon.name; button.setAttribute('aria-label', `使用${icon.name}图标`); button.classList.toggle('active', state.pageIcons[page] === `icon:${icon.id}`); button.innerHTML = navSvgMarkup(`icon:${icon.id}`); button.onclick = () => { commit(); state.pageIcons[page] = `icon:${icon.id}`; update(); }; picker.append(button); }
+  box.append(picker);
+  const upload = document.createElement('div'); upload.className = 'nav-icon-upload'; const current = navIconElement(state.pageIcons[page]); const choose = document.createElement('button'); choose.type = 'button'; choose.textContent = '上传自己的图标'; const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/svg+xml,image/png,image/jpeg,image/webp,.svg'; input.hidden = true; choose.onclick = () => input.click(); input.onchange = async () => { const file = input.files?.[0]; if (!file) return; try { const data = await readNavIcon(file); commit(); state.pageIcons[page] = data; update(); editorToast('导航图标已更新'); } catch (error) { editorToast(error.message || '图标导入失败'); } }; upload.append(current, choose, input); box.append(upload);
+  const hint = document.createElement('p'); hint.className = 'nav-icon-hint'; hint.textContent = '内置图标可改颜色和线条；上传的 SVG、PNG、JPG、WEBP 会随项目保存。'; box.append(hint);
+  const settings = navIconSettings(page);
+  const changeSetting = (key, value) => { commit(); state.pageIconSettings ||= {}; state.pageIconSettings[page] = { ...navIconSettings(page), [key]: value }; update(); };
+  const size = field(box, '图标大小（px）', settings.size, 'number'); size.min = '16'; size.max = '32'; size.onchange = () => changeSetting('size', Math.max(16, Math.min(32, Number(size.value) || 23)));
+  const stroke = field(box, '线条粗细', settings.stroke, 'number'); stroke.min = '1'; stroke.max = '3'; stroke.step = '0.2'; stroke.onchange = () => changeSetting('stroke', Math.max(1, Math.min(3, Number(stroke.value) || 1.9)));
+  colorField(box, '选中颜色', settings.activeColor, value => changeSetting('activeColor', value));
+  colorField(box, '未选中颜色', settings.inactiveColor, value => changeSetting('inactiveColor', value));
+}
 function change(key, value) { const item = state.items.find(entry => entry.id === selected); if (!item) return; commit(); item[key] = value; if (['color', 'background', 'radius'].includes(key)) state.styled = true; update(); }
 function applyVariant(value) { const item = state.items.find(entry => entry.id === selected); if (!item) return; const preset = VARIANTS[item.type].find(variant => variant.id === value); if (!preset) return; commit(); const text = item.text; Object.assign(item, { color: '#1F2A24', background: '#FFFFFF', size: item.type === 'button' ? 14 : 16, radius: 0, align: 'left' }, clone(preset.props)); item.text = text; if (item.type === 'card') item.detail = CARD_DETAILS[value] || ''; item.variant = value; state.styled = true; update(); }
 function moveIntoLayout(itemId, layoutId) { const item = state.items.find(entry => entry.id === itemId && entry.page === activePage); if (!item || item.type === 'layout') return; if (layoutId && !state.items.some(entry => entry.id === layoutId && entry.type === 'layout' && entry.page === activePage)) return; commit(); item.layoutId = layoutId || null; selected = item.id; update(); }
@@ -484,7 +531,7 @@ function renderInspector() {
   if (!item) {
     const intro = document.createElement('div'); intro.className = 'inspector-empty'; intro.innerHTML = '<span>◇</span>先选择画布元素<br>或设置当前页面名称'; box.append(intro);
     const title = field(box, '当前页面名称', state.pageTitles[activePage]); title.onchange = () => { commit(); state.pageTitles[activePage] = title.value.trim().slice(0, 16) || PAGE_LABELS[activePage] || '新页面'; update(); };
-    const icon = field(box, '底部导航图标', state.pageIcons[activePage]); icon.onchange = () => { commit(); state.pageIcons[activePage] = icon.value.slice(0, 3) || '□'; update(); };
+    if (!isDetailPage(activePage)) renderNavIconInspector(box, activePage);
     showCode(null); return;
   }
   const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = TYPE_LABELS[item.type] + ' / ' + activePage; box.append(heading);
@@ -573,7 +620,7 @@ function showCode(item) {
 function renderVariants() {
   document.querySelectorAll('[data-add]').forEach(button => button.classList.toggle('active', button.dataset.add === selectedCategory));
   const panel = $('#variantPanel'); panel.replaceChildren();
-  const heading = document.createElement('div'); heading.className = 'section-label'; heading.innerHTML = `${TYPE_LABELS[selectedCategory]}预设 <span>PRESETS</span>`; panel.append(heading);
+  const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = `${TYPE_LABELS[selectedCategory]}预设`; panel.append(heading);
   const search = document.createElement('input'); search.className = 'library-search'; search.type = 'search'; search.placeholder = `搜索${TYPE_LABELS[selectedCategory]}预设`; search.setAttribute('aria-label', search.placeholder); panel.append(search);
   const list = document.createElement('div'); list.className = 'variant-options';
   for (const variant of VARIANTS[selectedCategory]) {
@@ -641,6 +688,27 @@ async function readImageAsset(file) {
   await new Promise((resolve, reject) => { const image = new Image(); image.onload = () => image.naturalWidth && image.naturalHeight ? resolve() : reject(Error('图片尺寸无效')); image.onerror = () => reject(Error('图片无法解码')); image.src = data; });
   return { name: file.name, data };
 }
+async function readNavIcon(file) {
+  if (!file || file.size > 512 * 1024) throw Error('导航图标请小于 512 KB');
+  if (!/\.svg$/i.test(file.name) && file.type !== 'image/svg+xml') return (await readImageAsset(file)).data;
+  if (file.size > 128 * 1024) throw Error('SVG 图标请小于 128 KB');
+  const source = await file.text();
+  const parsed = new DOMParser().parseFromString(source, 'image/svg+xml');
+  const root = parsed.documentElement;
+  if (root.localName !== 'svg' || parsed.querySelector('parsererror')) throw Error('SVG 文件格式不正确');
+  const namespace = 'http://www.w3.org/2000/svg';
+  const allowedTags = new Set(['g', 'path', 'circle', 'rect', 'line', 'polyline', 'polygon', 'ellipse']);
+  const allowedAttrs = new Set(['d', 'cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2', 'width', 'height', 'points', 'fill', 'stroke', 'stroke-width', 'stroke-linecap', 'stroke-linejoin', 'fill-rule', 'transform', 'opacity']);
+  const clean = document.createElementNS(namespace, 'svg'); clean.setAttribute('xmlns', namespace);
+  const viewBox = root.getAttribute('viewBox'); clean.setAttribute('viewBox', viewBox && /^[-+\d.e\s]+$/.test(viewBox) ? viewBox : '0 0 24 24');
+  let count = 0;
+  const copy = (from, to, depth) => { if (depth > 16 || count > 150) return; for (const child of from.children) { if (!allowedTags.has(child.localName)) continue; count++; const node = document.createElementNS(namespace, child.localName); for (const attr of child.attributes) if (allowedAttrs.has(attr.name) && !/url\s*\(|javascript:|data:|https?:/i.test(attr.value)) node.setAttribute(attr.name, attr.value.slice(0, 4000)); to.append(node); copy(child, node, depth + 1); } };
+  copy(root, clean, 0);
+  if (!clean.children.length) throw Error('SVG 图标没有可用的图形');
+  const data = 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(new XMLSerializer().serializeToString(clean));
+  await new Promise((resolve, reject) => { const image = new Image(); image.onload = () => image.naturalWidth && image.naturalHeight ? resolve() : reject(Error('SVG 图标尺寸无效')); image.onerror = () => reject(Error('SVG 图标无法显示')); image.src = data; });
+  return data;
+}
 function safeTrigger(value) { return ['enter', 'hover', 'click'].includes(value) ? value : 'enter'; }
 function presentationClasses(item) { return ` effect-${escapeHtml(item.effect || 'none')}${item.animation && item.animation !== 'none' ? ` anim-${escapeHtml(item.animation)} anim-on-${safeTrigger(item.animationTrigger)}` : ''}`; }
 function presentationCss(item) { return `--effect-color:${safeColor(item.effectColor, '#2F6B4F')};opacity:${Math.max(0, Math.min(100, Number(item.opacity ?? 100) || 0)) / 100 * (item.visualState === 'disabled' ? .48 : 1)};--anim-duration:${Math.max(100, Math.min(3000, Number(item.animationDuration) || 600))}ms;--anim-delay:${Math.max(0, Math.min(2000, Number(item.animationDelay) || 0))}ms;--anim-ease:${safeEasing(item.animationEasing)};`; }
@@ -658,7 +726,7 @@ function exportElement(item) {
   if (item.type === 'image') return safeSrc(item.src) ? `<img class="item${classes}" src="${escapeHtml(safeSrc(item.src))}" alt="${text}" style="width:${Math.max(10, Math.min(100, Number(item.width) || 100))}%;${presentationCss(item)}"${trigger}>` : '';
   if (item.type === 'divider') return item.variant === 'wave' ? `<svg class="item ui-wave${classes}" style="${presentationCss(item)}"${trigger} viewBox="0 0 320 27"><path d="M0 15 Q40 1 80 15 T160 15 T240 15 T320 15" fill="none" stroke="#DFE2DB" stroke-width="3"/></svg>` : `<hr class="item ui-divider variant-divider-${escapeHtml(item.variant)}${classes}" style="${presentationCss(item)}"${trigger}>`;
   const avatar = item.variant === 'profile' ? '<span class="avatar">我</span>' : '';
-  const kicker = item.variant === 'accent' ? '<span class="card-kicker">FEATURED</span>' : '';
+  const kicker = item.variant === 'accent' ? '<span class="card-kicker">精选</span>' : '';
   const detail = escapeHtml(item.detail ?? CARD_DETAILS[item.variant] ?? '');
   return `<div class="item ui-card variant-card-${escapeHtml(item.variant)}${classes}" style="${base}"${trigger}>${avatar}${kicker}<strong class="card-title">${text}</strong><span class="card-detail">${detail}</span></div>`;
 }
@@ -680,7 +748,7 @@ const PRESET_CSS = `
 `;
 function exportHtml() {
   const pages = state.pages.map(page => `<section class="app-page" data-page="${escapeHtml(page)}">${state.items.filter(item => item.page === page && !item.layoutId).map(exportElement).join('\n')}</section>`).join('\n');
-  const nav = state.pages.filter(page => !isDetailPage(page)).map(page => `<button data-page-target="${escapeHtml(page)}"><span>${escapeHtml(state.pageIcons[page] || '□')}</span>${escapeHtml(state.pageTitles[page])}</button>`).join('');
+  const nav = state.pages.filter(page => !isDetailPage(page)).map(page => { const setting = navIconSettings(page); return `<button data-page-target="${escapeHtml(page)}" style="--icon-size:${setting.size}px;--icon-stroke:${setting.stroke};--nav-active:${setting.activeColor};--nav-inactive:${setting.inactiveColor}"><span class="nav-icon">${navIconHtml(state.pageIcons[page])}</span><span>${escapeHtml(state.pageTitles[page])}</span></button>`; }).join('');
   const actions = Object.fromEntries(state.items.filter(item => item.type === 'button').map(item => [item.id, { action: item.action, prompt: item.prompt, targetPage: item.targetPage, href: safeHref(item.href), requiresInput: Boolean(item.requiresInput) }]));
   const actionsJson = JSON.stringify(actions).replace(/</g, '\\u003c');
   const titlesJson = JSON.stringify(state.pageTitles).replace(/</g, '\\u003c');
@@ -689,9 +757,10 @@ function exportHtml() {
   const pageModesJson = JSON.stringify(state.pageModes || {}).replace(/</g, '\\u003c');
   const pageParentJson = JSON.stringify(state.pageParent || {}).replace(/</g, '\\u003c');
   const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(state.name)}</title><style>
-  *{box-sizing:border-box}body{margin:0;background:#F5F3EF;color:#1F2A24;font-family:system-ui,"Microsoft YaHei",sans-serif}.app{width:min(100%,468px);height:100dvh;min-height:650px;margin:auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 30px #1F2A2418}.status{height:38px;flex:none;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.header{height:56px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #DFE2DB;font-size:20px;font-weight:700}main{flex:1;overflow:auto;padding:24px 22px}nav{height:72px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DFE2DB}nav button{border:0;background:#fff;color:#66716A;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:22px}nav button.active{color:#2F6B4F}.app-page{display:none}.app-page.active{display:block}.item{display:block;margin:0 0 17px;max-width:100%}.btn{padding:10px 18px;border:1px solid transparent;font-weight:700;cursor:pointer}.btn.outline{border-color:#2F6B4F}.btn.text-button{padding-left:0;padding-right:0}.btn:active{transform:scale(.96)}.card{padding:20px;border:1px solid #DFE2DB}.card.accent{border-left:4px solid #2F6B4F}.card.outline{border-color:#2F6B4F}.card small{display:block;margin-top:7px;color:#66716A;font-size:12px}hr{border:0;border-top:1px solid #DFE2DB}.dashed{border-top-style:dashed}.wave{height:27px;width:100%}.toast{position:fixed;left:50%;bottom:91px;transform:translateX(-50%);display:none;padding:10px 18px;background:#1F2A24;color:#fff;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#1F2A2470;display:none;place-items:center;padding:20px}.modal>div{max-width:320px;width:100%;background:#fff;border-radius:15px;padding:24px;text-align:center}.modal button{background:#2F6B4F;color:#fff;border:0;border-radius:8px;padding:10px 24px}.bb-fade{animation:fade .5s ease both}.bb-rise{animation:rise .5s ease both}.bb-pop{animation:pop .4s ease both}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1}}
+  *{box-sizing:border-box}body{margin:0;background:#F5F3EF;color:#1F2A24;font-family:"Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif}.app{width:min(100%,468px);height:100dvh;min-height:650px;margin:auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 30px #1F2A2418}.status{height:38px;flex:none;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.header{height:56px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #DFE2DB;font-size:20px;font-weight:700}main{flex:1;overflow:auto;padding:24px 22px}nav{height:72px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DFE2DB}nav button{border:0;background:#fff;color:#66716A;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:22px}nav button.active{color:#2F6B4F}.app-page{display:none}.app-page.active{display:block}.item{display:block;margin:0 0 17px;max-width:100%}.btn{padding:10px 18px;border:1px solid transparent;font-weight:700;cursor:pointer}.btn.outline{border-color:#2F6B4F}.btn.text-button{padding-left:0;padding-right:0}.btn:active{transform:scale(.96)}.card{padding:20px;border:1px solid #DFE2DB}.card.accent{border-left:4px solid #2F6B4F}.card.outline{border-color:#2F6B4F}.card small{display:block;margin-top:7px;color:#66716A;font-size:12px}hr{border:0;border-top:1px solid #DFE2DB}.dashed{border-top-style:dashed}.wave{height:27px;width:100%}.toast{position:fixed;left:50%;bottom:91px;transform:translateX(-50%);display:none;padding:10px 18px;background:#1F2A24;color:#fff;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#1F2A2470;display:none;place-items:center;padding:20px}.modal>div{max-width:320px;width:100%;background:#fff;border-radius:15px;padding:24px;text-align:center}.modal button{background:#2F6B4F;color:#fff;border:0;border-radius:8px;padding:10px 24px}.bb-fade{animation:fade .5s ease both}.bb-rise{animation:rise .5s ease both}.bb-pop{animation:pop .4s ease both}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1}}
   .header{justify-content:space-between}.header button{border:0;background:transparent;color:#66716A;font-size:16px;cursor:pointer}nav{display:flex;grid-template-columns:none;overflow-x:auto;scrollbar-width:none}nav button{min-width:74px;flex:1 0 74px}.more-menu{position:fixed;right:max(12px,calc((100vw - 468px)/2 + 20px));top:88px;width:145px;background:#fff;border:1px solid #DFE2DB;border-radius:9px;box-shadow:0 10px 25px #1F2A2420;display:none}.more-menu button{display:block;width:100%;padding:10px;background:#fff;border:0;text-align:left;color:#1F2A24}
   #back[hidden],nav[hidden]{display:none}.header #back{font-size:23px;color:#1F2A24}
+  nav{height:72px;padding:4px 12px 0;box-shadow:0 -6px 18px #1F2A2408}nav button{min-width:76px;gap:3px;padding:5px 4px 3px;border-radius:10px;color:var(--nav-inactive,#7B857E);font-size:10px;font-weight:550}nav button.active{color:var(--nav-active,#1F2A24);font-weight:750}nav .nav-icon{width:26px;height:26px;display:grid;place-items:center}nav .nav-icon svg,nav .nav-icon img{width:var(--icon-size,23px);height:var(--icon-size,23px);display:block;object-fit:contain}nav .nav-icon svg{stroke:currentColor;stroke-width:var(--icon-stroke,1.9);stroke-linecap:round;stroke-linejoin:round;fill:none}nav .nav-icon .icon-filled{display:none;fill:currentColor;stroke:none}nav button.active .nav-icon svg.has-fill .icon-outline{display:none}nav button.active .nav-icon svg.has-fill .icon-filled{display:block}nav button:not(.active) .nav-icon img{opacity:.58}
   ${PRESET_CSS}</style></head><body><div class="app"><div class="status"><span>9:41</span><span>●●● ▰</span></div><div class="header"><button id="back" aria-label="返回上一页" hidden>←</button><span id="title"></span><button id="more" aria-label="页面操作">•••</button></div><main>${pages}</main><nav>${nav}</nav></div><div class="more-menu" id="moreMenu"><button id="moreInfo">页面信息</button><button id="moreNext">下一页</button><button id="moreClose">关闭菜单</button></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div><strong>提示</strong><p id="message"></p><button id="close">知道了</button></div></div><script>
   const titles=${titlesJson},actions=${actionsJson},headers=${headerJson},pageIds=${pageIdsJson},pageModes=${pageModesJson},pageParent=${pageParentJson};
   let current=pageIds[0],pageHistory=[];
@@ -727,7 +796,7 @@ $('#saveBtn').onclick = () => { const name = prompt('项目名称', state.name);
 $('#exportBtn').onclick = exportHtml;
 $('#importBtn').onclick = () => $('#projectInput').click();
 $('#projectInput').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { const imported = JSON.parse(await file.text()); if (!validProject(imported)) throw Error(); commit(); state = normalizeProject(imported); activePage = state.pages[0]; selected = null; update(); renderAssets(); editorToast('项目导入成功'); } catch { editorToast('项目文件格式不正确'); } event.target.value = ''; };
-$('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: '⌂' }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
+$('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
 $('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); update(); renderAssets(); editorToast(`已导入 ${asset.name}`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
 $('#copyCssBtn').onclick = async () => { try { await navigator.clipboard.writeText($('#cssPreview').textContent); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
