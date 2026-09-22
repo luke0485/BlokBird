@@ -1,0 +1,38 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const script = fs.readFileSync('script.js', 'utf8');
+const cutoff = script.indexOf("\ndocument.querySelectorAll('[data-add]')");
+const known = new Set(['png', 'jpeg', 'webp'].map((mime, index) => fs.readFileSync(`tests/fixtures/upload.${['png', 'jpg', 'webp'][index]}`).toString('base64')));
+class FakeReader {
+  async readAsDataURL(blob) {
+    const encoded = Buffer.from(await blob.arrayBuffer()).toString('base64');
+    this.result = `data:${blob.type};base64,${encoded}`;
+    this.onload();
+  }
+}
+class FakeImage {
+  naturalWidth = 3;
+  naturalHeight = 2;
+  set src(data) { known.has(data.split(',')[1]) ? this.onload() : this.onerror(); }
+}
+const context = vm.createContext({ localStorage: { getItem: () => null }, crypto: globalThis.crypto, console, setTimeout, clearTimeout, Blob, FileReader: FakeReader, Image: FakeImage });
+vm.runInContext(script.slice(0, cutoff), context);
+for (const ext of ['png', 'jpg', 'webp']) {
+  const bytes = fs.readFileSync(`tests/fixtures/upload.${ext}`);
+  const file = { name: `uploaded.${ext}`, size: bytes.length, type: 'application/octet-stream', arrayBuffer: async () => bytes };
+  context.file = file;
+  const asset = await vm.runInContext('readImageAsset(file)', context);
+  assert.equal(asset.name, file.name);
+  assert.ok(asset.data.startsWith(`data:image/${ext === 'jpg' ? 'jpeg' : ext};base64,`));
+  context.asset = asset;
+  assert.equal(vm.runInContext('safeSrc(asset.data)', context), asset.data);
+}
+for (const [name, bytes] of [['unknown', Buffer.alloc(64)], ['corrupt.png', Buffer.concat([fs.readFileSync('tests/fixtures/upload.png').subarray(0, 16), Buffer.alloc(48)])]]) {
+  context.file = { name, size: bytes.length, arrayBuffer: async () => bytes };
+  await assert.rejects(vm.runInContext('readImageAsset(file)', context));
+}
+context.file = { name: 'large.png', size: 2 * 1024 * 1024 + 1, arrayBuffer: async () => { throw Error('must not read'); } };
+await assert.rejects(vm.runInContext('readImageAsset(file)', context));
+console.log('PNG, JPEG, WEBP upload pipeline, MIME detection, decode rejection, and size limit passed.');

@@ -1,0 +1,27 @@
+import fs from 'node:fs';
+import vm from 'node:vm';
+import assert from 'node:assert/strict';
+
+const source = fs.readFileSync('script.js', 'utf8');
+const cutoff = source.indexOf("\ndocument.querySelectorAll('[data-add]')");
+const ctx = vm.createContext({ localStorage: { getItem: () => null }, crypto: globalThis.crypto, console, setTimeout, clearTimeout });
+vm.runInContext(source.slice(0, cutoff), ctx);
+const result = vm.runInContext(`(function(){const item=makeItem('button','neon');item.effect='glow';item.effectColor='#ff00aa';item.opacity=75;item.animation='bounce';item.animationDuration=950;item.animationDelay=180;item.animationEasing='ease-out';item.animationTrigger='click';return {html:exportElement(item),css:cssFor(item),js:jsFor(item)}})()`, ctx);
+for (const expected of ['effect-glow','anim-bounce','anim-on-click','data-animation-trigger="click"','--effect-color:#ff00aa','--anim-duration:950ms','--anim-delay:180ms','opacity:0.75']) assert.ok(result.html.includes(expected), expected);
+assert.ok(result.css.includes('animation: bb-bounce 950ms ease-out'));
+assert.ok(result.css.includes('box-shadow: 0 0 20px #ff00aa'));
+assert.ok(result.js.includes('toast(') && result.js.includes('replayAnimation'));
+const old = vm.runInContext(`normalizeProject({name:'旧项目',items:[{id:'x',type:'button',text:'旧按钮'}],assets:[]}).items[0]`, ctx);
+assert.equal(old.animationDuration, 600);
+assert.equal(old.effect, 'none');
+const exported = vm.runInContext(`(function(){download=(name,data)=>{globalThis.out=data};editorToast=()=>{};const item=makeItem('button','neon');item.animation='bounce';item.animationTrigger='click';item.animationDuration=950;item.effect='glow';state.items.push(item);exportHtml();return globalThis.out})()`, ctx);
+assert.ok(exported.includes('data-animation-trigger="click"'));
+assert.ok(exported.includes('--anim-duration:950ms'));
+assert.ok(exported.includes("closest('[data-animation-trigger=\"click\"]')"));
+const input = vm.runInContext("exportElement(makeItem('input','email'))", ctx);
+const toggle = vm.runInContext("exportElement(makeItem('switch','teal'))", ctx);
+assert.ok(input.includes('type="email"') && input.includes('placeholder='));
+assert.ok(toggle.includes('role="switch"') && toggle.includes('aria-checked="true"'));
+const html = fs.readFileSync('index.html', 'utf8');
+for (const id of ['replayBtn','effectsTab','animationList','effectList','codeExplain']) assert.ok(html.includes(`id="${id}"`));
+console.log('Motion settings, visual effects, exported trigger, code preview, and old project defaults passed.');
