@@ -2,7 +2,7 @@
   "name": "blokbird",
   "version": "0.1.0",
   "license": "MIT",
-  "author": "luke04 and GPT 5.6sol",
+  "author": "luke0485 and GPT 5.6sol",
   "description": "Browser based interactive UI design playground",
   "scripts": {
     "test": "node --check script.js && node tests/test_app.mjs && node tests/test_library.mjs && node tests/test_layout.mjs && node tests/test_motion.mjs && node tests/test_upload.mjs && node tests/test_navigation.mjs"

@@ -612,8 +612,36 @@ function showCode(item) {
   if (selected === '__header__') code = { css: '.phone-header-dot {\n  cursor: pointer;\n}', html: '<button aria-label="页面操作">•••</button>', js: '// 在右侧选择菜单、提示、弹窗或页面跳转。' };
   else if (!item) code = { css: '/* 选择一个组件查看它的样式 */', html: '<!-- 选择组件后查看生成的 HTML -->', js: '// 选择可交互组件后查看点击逻辑。' };
   else code = { css: cssFor(item), html: exportElement(item), js: jsFor(item) };
-  $('#cssPreview').textContent = code[codeMode];
+  const preview = $('#cssPreview'); preview.replaceChildren();
+  const explainLine = line => {
+    const text = line.trim();
+    if (!text) return '空行把代码分成更容易阅读的小段。';
+    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return '这是注释：帮助你理解代码，不会改变界面。';
+    if (/^<\/?[a-z]/i.test(text)) return text.startsWith('</') ? '这里结束一个 HTML 元素。' : 'HTML 标签决定画布里出现什么组件。';
+    if (/addEventListener/.test(text)) return '这一行监听用户操作，把界面点击连接到交互逻辑。';
+    if (/background/.test(text)) return '这一行控制组件背景；你在属性面板改颜色时它会同步变化。';
+    if (/color:/.test(text)) return '这一行控制文字或图标的颜色。';
+    if (/font-size/.test(text)) return '这一行控制字号，也就是文字在手机里的视觉大小。';
+    if (/border-radius/.test(text)) return '这一行控制圆角；数值越大，边角越圆。';
+    if (/padding|margin|gap/.test(text)) return '这一行控制留白和间距，决定布局的呼吸感。';
+    if (/animation/.test(text)) return '这一行把你选择的动效映射成 CSS 动画。';
+    if (/display|grid|flex/.test(text)) return '这一行控制元素的排列方式和布局结构。';
+    if (/width|height/.test(text)) return '这一行控制组件的宽度或高度。';
+    if (/^\.[\w-]+\s*\{/.test(text)) return '这是 CSS 选择器：它指向画布中当前类型的组件。';
+    if (text === '}' || text === '});') return '这里结束当前样式块或交互逻辑。';
+    return codeMode === 'js' ? '这一行参与当前组件的交互行为。' : codeMode === 'html' ? '这一行对应手机画布里的内容结构。' : '这一行负责当前组件的一部分外观。';
+  };
+  code[codeMode].split('\n').forEach(line => {
+    const row = document.createElement('span'); row.className = 'code-line'; row.textContent = line || ' ';
+    if (/^[\s.]*[\w-]+\s*:/.test(line) || /addEventListener|<\/?[a-z]/i.test(line)) row.classList.add('is-key');
+    if (/#[0-9a-f]{3,8}|\d+(px|ms|%)/i.test(line)) row.classList.add('is-value');
+    row.onmouseenter = () => { $('#codeLearningNote').textContent = explainLine(line); };
+    preview.append(row);
+  });
+  const selectionName = selected === '__header__' ? '页面操作按钮' : item ? TYPE_LABELS[item.type] : '选择画布元素开始理解';
+  $('#codeSelectionLabel').textContent = item || selected === '__header__' ? `${selectionName} · 属性与代码已连接` : selectionName;
   $('#codeExplain').textContent = codeMode === 'html' ? 'HTML 描述页面有哪些元素。' : codeMode === 'css' ? 'CSS 控制布局、颜色和动画效果。' : 'JavaScript 负责点击、页面切换与提示。';
+  $('#codeLearningNote').textContent = item ? `当前选中“${selectionName}”。修改右侧属性，观察对应代码如何变化。` : '点击手机中的任意元素，查看它的结构、样式和交互。';
   document.querySelectorAll('[data-code]').forEach(button => button.classList.toggle('active', button.dataset.code === codeMode));
 }
 
@@ -799,7 +827,7 @@ $('#projectInput').onchange = async event => { const file = event.target.files[0
 $('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
 $('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); update(); renderAssets(); editorToast(`已导入 ${asset.name}`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
-$('#copyCssBtn').onclick = async () => { try { await navigator.clipboard.writeText($('#cssPreview').textContent); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
+$('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.textContent).join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });

@@ -44,6 +44,7 @@
     </aside>
     <section class="stage">
       <div class="stage-toolbar"><div><span class="eyebrow">02</span><strong>手机画布</strong></div><div class="stage-controls"><button id="undoBtn" class="icon-btn" title="撤销">↶</button><button id="redoBtn" class="icon-btn" title="重做">↷</button><span class="toolbar-rule"></span><button id="replayBtn" class="preview-btn" title="重播当前页面动画">重播动画 ↺</button><button id="previewBtn" class="preview-btn">预览交互</button></div></div>
+      <div class="learning-workbench">
       <div class="canvas-area"><div class="canvas-frame mobile" id="canvasFrame">
         <div class="phone-status"><span>9:41</span><span class="phone-signals" aria-hidden="true">●●● ▰</span></div>
         <div class="phone-app-header"><button id="phoneBackBtn" class="phone-back hidden" type="button" aria-label="返回上一页">←</button><strong id="phonePageTitle">首页</strong><button id="phoneMoreBtn" class="phone-header-dot" type="button" aria-label="页面操作">•••</button></div>
@@ -54,9 +55,11 @@
         <div class="phone-more-menu hidden" id="phoneMoreMenu"><button id="moreInfoBtn" type="button">页面信息</button><button id="moreNextBtn" type="button">下一页</button><button id="moreCloseBtn" type="button">关闭菜单</button></div>
         <div class="phone-modal hidden" id="phoneModal"><div class="phone-modal-card"><strong id="modalTitle">提示</strong><p id="modalMessage"></p><button id="modalCloseBtn">知道了</button></div></div>
       </div></div>
+      <section class="code-pane code-workbench" aria-label="实时代码映射"><div class="code-title"><div><span class="code-live-dot"></span><strong>实时代码映射</strong><small id="codeSelectionLabel">选择画布元素开始理解</small></div><button id="copyCssBtn">复制代码</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><div class="code-map-hint"><span>界面</span><b>↔</b><span>代码</span><em>修改属性时，这里同步变化</em></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p><div class="code-learning-note" id="codeLearningNote">鼠标移到代码行上，可以看到这一行在界面中负责什么。</div></section>
+      </div>
       <div class="stage-footer"><span><span class="status-dot"></span> 自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面</span><span id="elementCount">0 个元素</span></div>
     </section>
-    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><div class="eyebrow">03</div><h2>属性设置</h2><p>选中画布中的元素来调整它。</p></div><div id="inspector" class="inspector"></div><div class="code-pane"><div class="code-title"><span>理解生成的代码</span><button id="copyCssBtn">复制</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p></div></aside>
+    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><div class="eyebrow">03</div><h2>属性与交互</h2><p>修改属性，旁边立即看到对应代码。</p></div><div id="inspector" class="inspector"></div></aside>
   </main>
   <input type="file" id="projectInput" accept="application/json,.json" hidden />
   <div id="toast" role="status" aria-live="polite"></div>

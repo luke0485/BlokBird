@@ -2,7 +2,7 @@
 
 BlokBird 是浏览器里的交互式手机界面设计工具。选择组件或应用流程模板，在手机画布中调整布局、样式、动画与点击行为，同时查看对应的 HTML、CSS 和 JavaScript。
 
-作者：luke04、GPT 5.6sol。项目以 MIT 许可证开源，详见 [LICENSE](LICENSE)。
+作者：luke0485、GPT 5.6sol。项目以 MIT 许可证开源，详见 [LICENSE](LICENSE)。
 
 编辑器默认配色使用米白 `#F5F3EF`、墨绿 `#2F6B4F`、少量琥珀黄 `#D9A441` 与深色文字 `#1F2A24`。用户仍可在属性栏自由修改作品内元素的颜色。
 
