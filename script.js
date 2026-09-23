@@ -167,6 +167,7 @@ let selected = null;
 let clipboard = null;
 let contextTarget = null;
 let selectedCategory = 'button';
+let componentCategoryOpen = false;
 let preview = false;
 let history = [];
 let future = [];
@@ -646,9 +647,15 @@ function showCode(item) {
 }
 
 function renderVariants() {
+  componentCategoryOpen = true;
+  $('#componentsTab').classList.add('category-open');
   document.querySelectorAll('[data-add]').forEach(button => button.classList.toggle('active', button.dataset.add === selectedCategory));
   const panel = $('#variantPanel'); panel.replaceChildren();
-  const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = `${TYPE_LABELS[selectedCategory]}预设`; panel.append(heading);
+  const heading = document.createElement('div'); heading.className = 'variant-header';
+  const back = document.createElement('button'); back.type = 'button'; back.className = 'variant-back'; back.textContent = '← 返回组件'; back.onclick = closeComponentCategory;
+  const title = document.createElement('strong'); title.textContent = `${TYPE_LABELS[selectedCategory]}预设`;
+  const shortcut = document.createElement('span'); shortcut.textContent = 'Esc 返回';
+  heading.append(back, title, shortcut); panel.append(heading);
   const search = document.createElement('input'); search.className = 'library-search'; search.type = 'search'; search.placeholder = `搜索${TYPE_LABELS[selectedCategory]}预设`; search.setAttribute('aria-label', search.placeholder); panel.append(search);
   const list = document.createElement('div'); list.className = 'variant-options';
   for (const variant of VARIANTS[selectedCategory]) {
@@ -668,6 +675,12 @@ function renderVariants() {
     list.append(button);
   }
   panel.append(list); search.oninput = () => { const query = search.value.trim().toLocaleLowerCase(); for (const button of list.children) button.classList.toggle('hidden', !button.textContent.toLocaleLowerCase().includes(query)); };
+}
+function closeComponentCategory() {
+  componentCategoryOpen = false;
+  $('#componentsTab').classList.remove('category-open');
+  $('#variantPanel').replaceChildren();
+  document.querySelectorAll('[data-add]').forEach(button => button.classList.remove('active'));
 }
 function renderTemplates() {
   const list = $('#templateList'); list.replaceChildren();
@@ -830,6 +843,6 @@ $('#assetSearch').oninput = renderAssets;
 $('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.textContent).join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
 const presetStyle = document.createElement('style'); presetStyle.textContent = PRESET_CSS; document.head.append(presetStyle);
-renderVariants(); renderTemplates(); renderEffects(); renderAssets(); render();
+renderTemplates(); renderEffects(); renderAssets(); render();

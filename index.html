@@ -18,21 +18,21 @@
   </header>
   <main class="workspace">
     <aside class="sidebar left-panel">
-      <div class="sidebar-head"><div class="eyebrow">01</div><h2>搭建你的界面</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
+      <div class="sidebar-head"><h2>搭建你的界面</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
       <div id="pageManager" class="page-manager"></div>
       <div class="panel-tabs"><button class="tab active" data-lefttab="components">组件</button><button class="tab" data-lefttab="templates">模板</button><button class="tab" data-lefttab="effects">动效</button><button class="tab" data-lefttab="assets">素材</button><button class="tab" data-lefttab="guide">提示</button></div>
       <section id="componentsTab" class="tab-body">
-        <div class="section-label">基础元素</div>
+        <div class="section-label component-home-label">基础元素</div>
         <div class="component-grid">
-          <button class="component-card" data-add="heading"><span class="component-icon serif">T</span><strong>标题</strong><small>信息层级</small></button>
-          <button class="component-card" data-add="text"><span class="component-icon">☷</span><strong>文本</strong><small>正文说明</small></button>
-          <button class="component-card" data-add="button"><span class="component-icon button-demo">按钮</span><strong>按钮</strong><small>触发操作</small></button>
-          <button class="component-card" data-add="image"><span class="component-icon">▧</span><strong>图片</strong><small>视觉内容</small></button>
-          <button class="component-card" data-add="divider"><span class="component-icon">―</span><strong>分隔线</strong><small>划分区域</small></button>
-          <button class="component-card" data-add="card"><span class="component-icon">▣</span><strong>卡片</strong><small>组合信息</small></button>
-          <button class="component-card" data-add="layout"><span class="component-icon">▥</span><strong>布局</strong><small>排列组件</small></button>
-          <button class="component-card" data-add="input"><span class="component-icon">▭</span><strong>输入框</strong><small>接收输入</small></button>
-          <button class="component-card" data-add="switch"><span class="component-icon">◉</span><strong>开关</strong><small>切换状态</small></button>
+          <button class="component-card" data-add="heading"><span class="component-preview preview-heading"><b>页面标题</b><i>副标题</i></span><strong>标题</strong><small>信息层级</small></button>
+          <button class="component-card" data-add="text"><span class="component-preview preview-copy">这是一段正文内容，用来说明页面信息。</span><strong>文本</strong><small>正文说明</small></button>
+          <button class="component-card" data-add="button"><span class="component-preview preview-action">继续</span><strong>按钮</strong><small>触发操作</small></button>
+          <button class="component-card" data-add="image"><span class="component-preview preview-picture"><i></i><b></b></span><strong>图片</strong><small>视觉内容</small></button>
+          <button class="component-card" data-add="divider"><span class="component-preview preview-rule"><i></i></span><strong>分隔线</strong><small>划分区域</small></button>
+          <button class="component-card" data-add="card"><span class="component-preview preview-content-card"><b>内容标题</b><i>简短说明文字</i></span><strong>卡片</strong><small>组合信息</small></button>
+          <button class="component-card" data-add="layout"><span class="component-preview preview-columns"><i></i><i></i><i></i></span><strong>布局</strong><small>排列组件</small></button>
+          <button class="component-card" data-add="input"><span class="component-preview preview-field">请输入内容</span><strong>输入框</strong><small>接收输入</small></button>
+          <button class="component-card" data-add="switch"><span class="component-preview preview-toggle"><i></i></span><strong>开关</strong><small>切换状态</small></button>
         </div>
         <div id="variantPanel" class="variant-panel"></div>
         <div class="tip"><span>✦</span><div><strong>从组件开始</strong><p>每类组件都有现成样式。放入画布后，在右侧修改内容和交互。</p></div></div>
@@ -43,7 +43,7 @@
       <section id="guideTab" class="tab-body hidden"><div class="section-label">使用提示</div><div class="guide-card"><strong>从任意组件开始</strong><p>挑选左侧预设，放入当前手机页面；右侧可调整文字、颜色、动画和按钮行为。</p></div><div class="guide-card"><strong>设计真实操作路径</strong><p>新建页面并给按钮设置“切换页面”，把首页、详情和完成页连成一条可预览的流程。页面列表右键可设置主导航页或子页面；点击底部导航页后，可在右侧更换图标。</p></div><div class="guide-card"><strong>直接在画布上操作</strong><p>点击选中，拖动调整顺序，右键打开复制、粘贴和移动菜单。预览时可点击按钮体验交互。</p></div><div class="guide-card"><strong>带走你的作品</strong><p>“保存”会下载可继续编辑的项目文件；“导出网页”会生成可独立运行的 HTML。</p></div><div class="concept"><strong>HTML 与 CSS</strong><p>组件是页面内容，右侧属性决定外观。选中元素时，右下角会显示对应的 CSS 样式。</p></div></section>
     </aside>
     <section class="stage">
-      <div class="stage-toolbar"><div><span class="eyebrow">02</span><strong>手机画布</strong></div><div class="stage-controls"><button id="undoBtn" class="icon-btn" title="撤销">↶</button><button id="redoBtn" class="icon-btn" title="重做">↷</button><span class="toolbar-rule"></span><button id="replayBtn" class="preview-btn" title="重播当前页面动画">重播动画 ↺</button><button id="previewBtn" class="preview-btn">预览交互</button></div></div>
+      <div class="stage-toolbar"><div><strong>手机画布</strong></div><div class="stage-controls"><button id="undoBtn" class="icon-btn" title="撤销">↶</button><button id="redoBtn" class="icon-btn" title="重做">↷</button><span class="toolbar-rule"></span><button id="replayBtn" class="preview-btn" title="重播当前页面动画">重播动画 ↺</button><button id="previewBtn" class="preview-btn">预览交互</button></div></div>
       <div class="learning-workbench">
       <div class="canvas-area"><div class="canvas-frame mobile" id="canvasFrame">
         <div class="phone-status"><span>9:41</span><span class="phone-signals" aria-hidden="true">●●● ▰</span></div>
@@ -59,7 +59,7 @@
       </div>
       <div class="stage-footer"><span><span class="status-dot"></span> 自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面</span><span id="elementCount">0 个元素</span></div>
     </section>
-    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><div class="eyebrow">03</div><h2>属性与交互</h2><p>修改属性，旁边立即看到对应代码。</p></div><div id="inspector" class="inspector"></div></aside>
+    <aside class="sidebar right-panel"><div class="sidebar-head properties-head"><h2>属性与交互</h2><p>修改属性，旁边立即看到对应代码。</p></div><div id="inspector" class="inspector"></div></aside>
   </main>
   <input type="file" id="projectInput" accept="application/json,.json" hidden />
   <div id="toast" role="status" aria-live="polite"></div>
