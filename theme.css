@@ -127,3 +127,28 @@ button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-vis
 .code-learning-note{margin:0 20px 18px;padding:11px 12px;border-left:2px solid #D9A441;background:#D9A44112;color:#CAD2CC;font-size:10px;line-height:1.6}
 @media(max-width:1180px){.workspace{grid-template-columns:220px minmax(570px,1fr) 260px}.learning-workbench{grid-template-columns:minmax(310px,.9fr) minmax(260px,1.1fr)}.learning-workbench .canvas-frame.mobile{width:320px}.code-map-hint em{display:none}}
 @media(max-width:900px){.workspace{display:flex;height:auto;min-height:0;flex-direction:column}.left-panel{order:1}.stage{order:2;height:auto}.right-panel{order:3}.learning-workbench{grid-template-columns:1fr;overflow:visible}.learning-workbench .canvas-area{min-height:700px}.code-workbench{height:480px;border-left:0;border-top:1px solid #3A463F}.sidebar{height:auto;overflow:visible}}
+
+/* Scratch-inspired visual system: bright, direct and friendly for learning. */
+:root{--page:#F2F2F2;--surface:#FFFFFF;--primary:#4C97FF;--selected:#4C97FF;--accent:#FFAB19;--text:#575E75;--muted:#7B8292;--line:#D9D9D9;--soft:#E5F0FF;font-family:"Helvetica Neue",Helvetica,Arial,"Microsoft YaHei UI",sans-serif}
+body{background:#F2F2F2;color:var(--text)}
+.topbar{height:64px;background:#4C97FF;border-bottom:0;color:#FFF;padding:0 20px;box-shadow:0 2px 7px #2B6FC033}
+.brand{min-width:230px}.brand-mark{width:42px;height:42px;border-radius:10px;background:#111318}.brand strong{color:#FFF;font-size:19px;font-weight:700;letter-spacing:-.02em}.brand small{color:#FFFFFFCC;font-size:10px;letter-spacing:.04em;margin-top:3px}
+.top-center,.top-center .muted{color:#FFF}.top-center{background:#FFFFFF1C;border:1px solid #FFFFFF30;border-radius:9px;padding:8px 13px}.top-center .status-dot{background:#FFBF3F}
+.top-actions button{border:1px solid #FFFFFF66;background:#FFFFFF12;color:#FFF;border-radius:8px}.top-actions button:hover{background:#FFFFFF25}.top-actions .primary{background:#FFF;border-color:#FFF;color:#4C97FF}
+.workspace{background:#F2F2F2;gap:8px;padding:8px;height:calc(100dvh - 64px)}
+.sidebar,.stage{background:#FFF;border:1px solid #D9D9D9;border-radius:10px;box-shadow:none;overflow:hidden}.sidebar{overflow-y:auto}.left-panel,.right-panel{border:1px solid #D9D9D9}
+.sidebar-head{padding:21px 18px 16px}.eyebrow{color:#4C97FF;font-weight:800}.sidebar h2{color:#575E75;font-size:20px}.sidebar p{color:#7B8292}
+.panel-tabs{background:#F7F7F7;padding:0 8px}.tab{color:#575E75;border-bottom-width:3px}.tab.active{color:#4C97FF;border-color:#4C97FF;background:#FFF}
+.component-card,.variant-option,.template-card,.effect-option,.asset-item,.guide-card{border:1px solid #D9D9D9;border-radius:8px;box-shadow:0 1px 0 #0000000C}.component-card:hover,.variant-option:hover,.template-card:hover,.effect-option:hover{border-color:#4C97FF;box-shadow:0 0 0 2px #4C97FF20;transform:none}
+.component-card:nth-child(1) .component-icon{color:#9966FF}.component-card:nth-child(2) .component-icon{color:#FF6680}.component-card:nth-child(3) .component-icon{background:#4C97FF}.component-card:nth-child(4) .component-icon{color:#0FBD8C}.component-card:nth-child(5) .component-icon{color:#FFAB19}.component-card:nth-child(6) .component-icon{color:#9966FF}.component-card:nth-child(7) .component-icon{color:#59C059}.component-card:nth-child(8) .component-icon{color:#5CB1D6}.component-card:nth-child(9) .component-icon{color:#FF8C1A}
+.page-manager{background:#F7F7F7}.page-row.active{border-color:#4C97FF;background:#E5F0FF}.new-page-btn{color:#4C97FF}
+.stage-toolbar{height:54px;background:#FFF;border-bottom:1px solid #D9D9D9}.stage-controls button{color:#575E75}.stage-controls button:hover,.stage-controls button.active{background:#E5F0FF;color:#4C97FF}.stage-controls .preview-btn{border-color:#4C97FF;color:#4C97FF}
+.learning-workbench{background:#E9EEF2;gap:12px;padding:12px}.learning-workbench .canvas-area{background:#E9EEF2;background-image:none;padding:10px}
+.learning-workbench .canvas-frame.mobile{box-shadow:0 2px 8px #0002;border-color:#30343B}
+.code-workbench{height:calc(100% - 4px);margin:2px 2px 2px 0;border:1px solid #2D3741;border-radius:14px;background:#1C222B;box-shadow:0 3px 10px #26323F28;overflow:hidden}
+.code-workbench .code-title{background:#242C37;border-bottom-color:#FFFFFF18;border-radius:13px 13px 0 0}.code-live-dot{background:#4C97FF;box-shadow:0 0 0 4px #4C97FF20}.code-title button{color:#78B3FF}.code-workbench .code-tabs button.active{background:#4C97FF;border-color:#4C97FF}.code-map-hint b{color:#FFBF3F}.code-line:hover{border-left-color:#FFBF3F}.code-learning-note{border-left-color:#FFBF3F;background:#FFBF3F12}
+.properties-head{background:#F7F7F7}.field input,.field select,.field textarea{border-color:#C7CBD1;border-radius:7px}.field input:focus,.field textarea:focus,.field select:focus{border-color:#4C97FF;box-shadow:0 0 0 2px #4C97FF20}.inspector-section{color:#4C97FF}
+.nav-icon-option.active{border-color:#4C97FF!important;background:#E5F0FF!important}.upload-icon-btn{color:#4C97FF!important;border-color:#4C97FF!important}
+.stage-footer{background:#FFF;color:#7B8292}.stage-footer .status-dot{background:#59C059}
+#toast{background:#575E75;border-radius:8px}
+@media(max-width:900px){.workspace{padding:6px;gap:6px}.sidebar,.stage{border-radius:8px}.learning-workbench{padding:8px}.code-workbench{margin:0;border-radius:12px}}

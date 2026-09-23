@@ -1,13 +1,11 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" shape-rendering="crispEdges" role="img" aria-label="彩虹像素鸟">
-  <rect width="64" height="64" rx="9" fill="#111"/>
-  <path fill="#fff" d="M16 27h5v-6h6v-5h15v5h5v5h5v16h-5v5H25v-5h-5v-6h-4z"/>
-  <path fill="#fff" d="M11 27h6v5h-6z"/>
-  <path fill="#ff3b47" d="M23 30h6v6h-6z"/>
-  <path fill="#ff9f1c" d="M29 30h6v6h-6z"/>
-  <path fill="#f6dc35" d="M35 30h6v6h-6z"/>
-  <path fill="#5bd66f" d="M23 36h6v6h-6z"/>
-  <path fill="#369cf7" d="M29 36h6v6h-6z"/>
-  <path fill="#ad67eb" d="M35 36h6v6h-6z"/>
-  <path fill="#111" d="M39 22h5v5h-5z"/>
-  <path fill="#111" d="M47 31h5v5h-5z"/>
+  <rect width="64" height="64" rx="8" fill="#111318"/>
+  <path fill="#fff" d="M9 20h7v5h7v4h5V19h5v-5h14v5h6v5h7v7h-7v14h-6v5H25v-5h-7v-5h-6v-6h7v-4h-6v-5H9z"/>
+  <path fill="#ff4d5a" d="M24 29h6v6h-6z"/>
+  <path fill="#ff9f1c" d="M30 29h6v6h-6z"/>
+  <path fill="#ffd83d" d="M36 29h6v6h-6z"/>
+  <path fill="#35c46a" d="M24 35h6v6h-6z"/>
+  <path fill="#4c97ff" d="M30 35h6v6h-6z"/>
+  <path fill="#a66cff" d="M36 35h6v6h-6z"/>
+  <path fill="#111318" d="M42 20h5v5h-5z"/>
 </svg>
