@@ -174,3 +174,7 @@ body{background:#F2F2F2;color:var(--text)}
 .code-line.is-focused:before{left:8px;top:8px;color:#AFC7E9}
 .code-line-comment{display:block;margin:8px 0 0;padding:9px 10px;border-top:1px solid #FFFFFF24;background:#151B24;color:#DDE8F5;font-family:"Helvetica Neue",Helvetica,Arial,"Microsoft YaHei UI",sans-serif;font-size:10px;font-weight:400;line-height:1.65;white-space:normal;border-radius:5px}
 @media(max-width:1180px) and (min-width:901px){.learning-workbench{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.effect-list{grid-template-columns:1fr}.effect-option small{-webkit-line-clamp:2}}
+
+/* Scale the whole phone proportionally to fill its half of the workbench. */
+.learning-workbench .canvas-area{align-items:center;justify-content:center}
+.learning-workbench .canvas-frame.mobile{width:min(100%,calc((100dvh - 138px) * 13 / 24));height:auto;max-height:calc(100dvh - 138px);aspect-ratio:13/24}
