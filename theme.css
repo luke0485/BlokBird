@@ -162,3 +162,15 @@ body{background:#F2F2F2;color:var(--text)}
 .preview-rule{display:grid;place-items:center}.preview-rule i{display:block;width:75%;border-top:2px solid #8C94A3}.preview-content-card{padding:9px 10px;background:#fff;box-shadow:inset 4px 0 #9966FF}.preview-content-card b,.preview-content-card i{display:block;font-style:normal;text-align:left}.preview-content-card b{font-size:9px}.preview-content-card i{font-size:7px;color:#788195;margin-top:5px}
 .preview-columns{display:flex;gap:4px;padding:7px}.preview-columns i{flex:1;border:1px dashed #59C059;background:#59C05920;border-radius:2px}.preview-field{height:28px;margin:13px 0 0;padding:7px 8px;text-align:left;background:#fff;font-size:7px;color:#8C94A3}.preview-toggle{width:42px;height:23px;margin:15px auto;background:#0FBD8C;border:0;border-radius:20px}.preview-toggle i{position:absolute;width:17px;height:17px;right:3px;top:3px;border-radius:50%;background:#fff;box-shadow:0 1px 3px #0003}
 #componentsTab.category-open>.component-home-label,#componentsTab.category-open>.component-grid,#componentsTab.category-open>.tip{display:none}.variant-panel:empty{display:none}.category-open .variant-panel{margin-top:0}.variant-header{display:grid;grid-template-columns:auto 1fr auto;align-items:center;gap:8px;margin-bottom:13px}.variant-header strong{text-align:center;font-size:13px}.variant-header span{font-size:9px;color:#7C8496}.variant-back{border:1px solid #C9D0DC;background:#fff;color:#4C67A1;border-radius:6px;padding:6px 8px;font-size:10px;font-weight:700}.variant-back:hover{border-color:#4C97FF;background:#F1F7FF}
+
+/* Balanced learning canvas and readable effect cards */
+.learning-workbench{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+.learning-workbench>.canvas-area,.learning-workbench>.code-workbench{min-width:0;width:100%;height:100%}
+.effect-option>span:last-child{min-width:0;flex:1;overflow:hidden}.effect-option strong{white-space:normal;line-height:1.25;overflow-wrap:anywhere}.effect-option small{white-space:normal;line-height:1.35;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;overflow-wrap:anywhere}.effect-option{min-height:58px;overflow:hidden}
+
+/* Click a code line to lift it forward and reveal a Chinese explanation. */
+.code-line{cursor:pointer;transition:background .16s,transform .16s,box-shadow .16s,padding .16s}
+.code-line.is-focused{z-index:2;margin:5px 12px 8px;padding:8px 12px 10px 42px;border:1px solid #4C97FF88;border-left:4px solid #FFBF3F;border-radius:8px;background:#303A49;color:#FFF;box-shadow:0 10px 24px #0006;transform:translateY(-2px)}
+.code-line.is-focused:before{left:8px;top:8px;color:#AFC7E9}
+.code-line-comment{display:block;margin:8px 0 0;padding:9px 10px;border-top:1px solid #FFFFFF24;background:#151B24;color:#DDE8F5;font-family:"Helvetica Neue",Helvetica,Arial,"Microsoft YaHei UI",sans-serif;font-size:10px;font-weight:400;line-height:1.65;white-space:normal;border-radius:5px}
+@media(max-width:1180px) and (min-width:901px){.learning-workbench{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}.effect-list{grid-template-columns:1fr}.effect-option small{-webkit-line-clamp:2}}

@@ -617,32 +617,38 @@ function showCode(item) {
   const explainLine = line => {
     const text = line.trim();
     if (!text) return '空行把代码分成更容易阅读的小段。';
-    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return '这是注释：帮助你理解代码，不会改变界面。';
-    if (/^<\/?[a-z]/i.test(text)) return text.startsWith('</') ? '这里结束一个 HTML 元素。' : 'HTML 标签决定画布里出现什么组件。';
-    if (/addEventListener/.test(text)) return '这一行监听用户操作，把界面点击连接到交互逻辑。';
-    if (/background/.test(text)) return '这一行控制组件背景；你在属性面板改颜色时它会同步变化。';
-    if (/color:/.test(text)) return '这一行控制文字或图标的颜色。';
-    if (/font-size/.test(text)) return '这一行控制字号，也就是文字在手机里的视觉大小。';
-    if (/border-radius/.test(text)) return '这一行控制圆角；数值越大，边角越圆。';
-    if (/padding|margin|gap/.test(text)) return '这一行控制留白和间距，决定布局的呼吸感。';
-    if (/animation/.test(text)) return '这一行把你选择的动效映射成 CSS 动画。';
-    if (/display|grid|flex/.test(text)) return '这一行控制元素的排列方式和布局结构。';
-    if (/width|height/.test(text)) return '这一行控制组件的宽度或高度。';
-    if (/^\.[\w-]+\s*\{/.test(text)) return '这是 CSS 选择器：它指向画布中当前类型的组件。';
-    if (text === '}' || text === '});') return '这里结束当前样式块或交互逻辑。';
-    return codeMode === 'js' ? '这一行参与当前组件的交互行为。' : codeMode === 'html' ? '这一行对应手机画布里的内容结构。' : '这一行负责当前组件的一部分外观。';
+    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return '这是注释，只负责向阅读代码的人说明用途，浏览器不会把它绘制到界面中。你可以放心修改或删除注释，它不会改变手机画布的效果。';
+    if (/^<\/?[a-z]/i.test(text)) return text.startsWith('</') ? '这是 HTML 结束标签，表示当前组件的内容到这里结束。开始标签与结束标签之间的文字或子元素，都属于同一个界面组件。' : '这是 HTML 标签，它描述页面中存在什么内容。标签名决定组件的基础语义，属性则补充文字、状态或交互需要的信息。';
+    if (/addEventListener/.test(text)) return 'addEventListener 用来监听用户操作。这里把手机画布中的点击、输入等动作连接到 JavaScript 逻辑，只有触发对应操作时，括号里的代码才会执行。';
+    if (/background/.test(text)) return 'background 控制组件的背景颜色或背景效果。修改右侧背景设置后，这里的值会同步变化；十六进制色值由 # 和六个字符组成。';
+    if (/color:/.test(text)) return 'color 控制文字或图标的前景颜色。它不会改变组件背景；如果文字与背景对比太低，内容会变得难以阅读。';
+    if (/font-size/.test(text)) return 'font-size 控制文字大小，px 表示屏幕像素。数值越大，文字越醒目，同时也会占据更多布局空间。';
+    if (/border-radius/.test(text)) return 'border-radius 控制边角弧度，单位 px 表示圆角半径。0px 是直角，数值增大后边角会逐渐变圆。';
+    if (/padding|margin|gap/.test(text)) return '这一行控制组件周围的空间。padding 是内容与边框之间的内边距，margin 是组件外部间距，gap 是多个子元素之间的距离。';
+    if (/animation/.test(text)) return 'animation 把一个预设动画应用到组件，并指定时长、速度曲线等参数。页面出现或交互触发时，浏览器会按这些参数计算每一帧。';
+    if (/display|grid|flex/.test(text)) return '这一行决定布局方式。Flex 适合一行或一列排列，Grid 适合行列同时存在的网格；它会直接影响子元素的位置。';
+    if (/width|height/.test(text)) return '这一行控制组件的宽度或高度。固定 px 适合明确尺寸，百分比会跟随父容器变化，适合响应式界面。';
+    if (/^\.[\w-]+\s*\{/.test(text)) return '这是 CSS 选择器，用来找到画布中具有对应 class 的组件。大括号内的每一条属性都会应用到这些组件上。';
+    if (text === '}' || text === '});') return '这一行结束当前样式块或交互逻辑。它与前面的开始大括号配对，让浏览器知道这一组规则到哪里结束。';
+    return codeMode === 'js' ? '这是 JavaScript 逻辑的一部分，用来描述组件在用户操作后如何响应。点击不同代码行，可以逐步理解整个交互过程。' : codeMode === 'html' ? '这一行对应手机画布中的内容结构。HTML 负责组织信息，具体颜色、间距和动画通常交给 CSS。' : '这是当前组件的一条 CSS 外观规则。冒号左边是要修改的属性，右边是该属性采用的具体值。';
   };
   code[codeMode].split('\n').forEach(line => {
-    const row = document.createElement('span'); row.className = 'code-line'; row.textContent = line || ' ';
+    const row = document.createElement('span'); row.className = 'code-line'; row.dataset.codeText = line; row.append(document.createTextNode(line || ' '));
     if (/^[\s.]*[\w-]+\s*:/.test(line) || /addEventListener|<\/?[a-z]/i.test(line)) row.classList.add('is-key');
     if (/#[0-9a-f]{3,8}|\d+(px|ms|%)/i.test(line)) row.classList.add('is-value');
     row.onmouseenter = () => { $('#codeLearningNote').textContent = explainLine(line); };
+    row.onclick = () => {
+      preview.querySelectorAll('.code-line.is-focused').forEach(active => { active.classList.remove('is-focused'); active.querySelector('.code-line-comment')?.remove(); });
+      row.classList.add('is-focused');
+      const comment = document.createElement('span'); comment.className = 'code-line-comment'; comment.textContent = explainLine(line); row.append(comment);
+      $('#codeLearningNote').textContent = `已聚焦第 ${[...preview.children].indexOf(row) + 1} 行：${explainLine(line)}`;
+    };
     preview.append(row);
   });
   const selectionName = selected === '__header__' ? '页面操作按钮' : item ? TYPE_LABELS[item.type] : '选择画布元素开始理解';
   $('#codeSelectionLabel').textContent = item || selected === '__header__' ? `${selectionName} · 属性与代码已连接` : selectionName;
   $('#codeExplain').textContent = codeMode === 'html' ? 'HTML 描述页面有哪些元素。' : codeMode === 'css' ? 'CSS 控制布局、颜色和动画效果。' : 'JavaScript 负责点击、页面切换与提示。';
-  $('#codeLearningNote').textContent = item ? `当前选中“${selectionName}”。修改右侧属性，观察对应代码如何变化。` : '点击手机中的任意元素，查看它的结构、样式和交互。';
+  $('#codeLearningNote').textContent = item ? `当前选中“${selectionName}”。点击任意一行代码，可展开这一行的详细中文解释。` : '点击手机中的任意元素，再点击代码行查看详细中文解释。';
   document.querySelectorAll('[data-code]').forEach(button => button.classList.toggle('active', button.dataset.code === codeMode));
 }
 
@@ -840,7 +846,7 @@ $('#projectInput').onchange = async event => { const file = event.target.files[0
 $('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
 $('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); update(); renderAssets(); editorToast(`已导入 ${asset.name}`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
-$('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.textContent).join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
+$('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.dataset.codeText || '').join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });

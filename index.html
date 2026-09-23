@@ -12,13 +12,13 @@
 </head>
 <body>
   <header class="topbar">
-    <div class="brand"><img class="brand-mark" src="logo.svg" alt="BlokBird 彩虹像素鸟图标" /><span><strong>BlokBird</strong><small>交互界面编辑器</small></span></div>
+    <div class="brand"><img class="brand-mark" src="logo.svg" alt="BlokBird 彩虹像素鸟图标" /><span><strong>BlokBird</strong><small>UI 学习工具</small></span></div>
     <div class="top-center"><span class="status-dot"></span><span id="projectName">未命名项目</span><span class="muted">/ 设计项目</span></div>
     <div class="top-actions"><button class="ghost" id="newBtn">新建</button><button class="ghost" id="importBtn">导入项目</button><button class="ghost" id="saveBtn">保存</button><button class="primary" id="exportBtn">导出网页 <span>↗</span></button></div>
   </header>
   <main class="workspace">
     <aside class="sidebar left-panel">
-      <div class="sidebar-head"><h2>搭建你的界面</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
+      <div class="sidebar-head"><h2>创造你的 UI 设计</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
       <div id="pageManager" class="page-manager"></div>
       <div class="panel-tabs"><button class="tab active" data-lefttab="components">组件</button><button class="tab" data-lefttab="templates">模板</button><button class="tab" data-lefttab="effects">动效</button><button class="tab" data-lefttab="assets">素材</button><button class="tab" data-lefttab="guide">提示</button></div>
       <section id="componentsTab" class="tab-body">
@@ -55,7 +55,7 @@
         <div class="phone-more-menu hidden" id="phoneMoreMenu"><button id="moreInfoBtn" type="button">页面信息</button><button id="moreNextBtn" type="button">下一页</button><button id="moreCloseBtn" type="button">关闭菜单</button></div>
         <div class="phone-modal hidden" id="phoneModal"><div class="phone-modal-card"><strong id="modalTitle">提示</strong><p id="modalMessage"></p><button id="modalCloseBtn">知道了</button></div></div>
       </div></div>
-      <section class="code-pane code-workbench" aria-label="实时代码映射"><div class="code-title"><div><span class="code-live-dot"></span><strong>实时代码映射</strong><small id="codeSelectionLabel">选择画布元素开始理解</small></div><button id="copyCssBtn">复制代码</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><div class="code-map-hint"><span>界面</span><b>↔</b><span>代码</span><em>修改属性时，这里同步变化</em></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p><div class="code-learning-note" id="codeLearningNote">鼠标移到代码行上，可以看到这一行在界面中负责什么。</div></section>
+      <section class="code-pane code-workbench" aria-label="代码理解"><div class="code-title"><div><span class="code-live-dot"></span><strong>代码理解</strong><small id="codeSelectionLabel">选择画布元素开始理解</small></div><button id="copyCssBtn">复制代码</button></div><div class="code-tabs"><button class="active" data-code="css">CSS</button><button data-code="html">HTML</button><button data-code="js">JS</button></div><div class="code-map-hint"><span>界面</span><b>↔</b><span>代码</span><em>点击代码行查看中文解释</em></div><pre id="cssPreview"></pre><p id="codeExplain" class="code-explain"></p><div class="code-learning-note" id="codeLearningNote">点击任意一行代码，聚焦并查看详细中文解释。</div></section>
       </div>
       <div class="stage-footer"><span><span class="status-dot"></span> 自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面</span><span id="elementCount">0 个元素</span></div>
     </section>
