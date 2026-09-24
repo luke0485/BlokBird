@@ -54,7 +54,7 @@ const LEGACY_BUILTINS = [
 
 const productScene = (accent, body, surface = '#F7F8FA') => svgData(`<rect width="360" height="200" fill="${surface}"/><rect x="18" y="16" width="324" height="168" rx="18" fill="#fff"/><rect x="18" y="16" width="324" height="7" rx="3.5" fill="${accent}"/>${body}`);
 const BUILTINS = [
-  { name: '运动鞋商品图', data: productScene('#4C97FF', '<ellipse cx="181" cy="151" rx="112" ry="13" fill="#DDE4ED"/><path d="M76 124c30-5 58-42 78-64 12 31 31 47 81 57 24 5 41 16 40 28H84c-14 0-19-18-8-21Z" fill="#F5F7FA" stroke="#17233C" stroke-width="5"/><path d="m105 112 84 7m-65-30 54 21" stroke="#4C97FF" stroke-width="8"/><path d="M82 143h190" stroke="#17233C" stroke-width="7"/>') },
+  { name: '白色运动鞋摄影 · DK / Unsplash', data: 'assets/white-sneaker-unsplash.jpg' },
   { name: '护肤品商品图', data: productScene('#FF6680', '<ellipse cx="181" cy="160" rx="92" ry="10" fill="#F0DDE2"/><rect x="96" y="70" width="61" height="84" rx="12" fill="#F7C9D3"/><rect x="108" y="46" width="37" height="28" rx="6" fill="#17233C"/><rect x="177" y="53" width="88" height="101" rx="16" fill="#FFF1E5" stroke="#FF6680" stroke-width="4"/><circle cx="221" cy="99" r="22" fill="#FF6680"/><path d="M207 99h28M221 85v28" stroke="#fff" stroke-width="5"/>') },
   { name: '咖啡外卖主图', data: productScene('#FFAB19', '<ellipse cx="184" cy="159" rx="105" ry="10" fill="#E7DED3"/><path d="M105 61h126l-13 92h-99Z" fill="#EFE4D4" stroke="#5B3B2A" stroke-width="4"/><path d="M231 77q53-3 42 36-8 24-49 18" fill="none" stroke="#5B3B2A" stroke-width="10"/><ellipse cx="168" cy="61" rx="63" ry="16" fill="#73472F"/><path d="M145 112c18 12 37 12 55 0" fill="none" stroke="#FFAB19" stroke-width="6"/>') },
   { name: '餐厅菜品主图', data: productScene('#59C059', '<ellipse cx="180" cy="118" rx="117" ry="53" fill="#E9EEF2"/><ellipse cx="180" cy="111" rx="94" ry="39" fill="#fff"/><path d="M113 115q32-45 64 0t66 0" fill="none" stroke="#F2A33A" stroke-width="15"/><circle cx="142" cy="95" r="16" fill="#E85555"/><circle cx="214" cy="99" r="13" fill="#59C059"/><path d="m180 82 10 27m-28-17 9 30" stroke="#356C3F" stroke-width="5"/>') },
@@ -648,20 +648,29 @@ function showCode(item) {
   const explainLine = line => {
     const text = line.trim();
     if (!text) return '空行把代码分成更容易阅读的小段。';
-    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return '这是注释，只负责向阅读代码的人说明用途，浏览器不会把它绘制到界面中。你可以放心修改或删除注释，它不会改变手机画布的效果。';
-    if (/^<\/?[a-z]/i.test(text)) return text.startsWith('</') ? '这是 HTML 结束标签，表示当前组件的内容到这里结束。开始标签与结束标签之间的文字或子元素，都属于同一个界面组件。' : '这是 HTML 标签，它描述页面中存在什么内容。标签名决定组件的基础语义，属性则补充文字、状态或交互需要的信息。';
-    if (/addEventListener/.test(text)) return 'addEventListener 用来监听用户操作。这里把手机画布中的点击、输入等动作连接到 JavaScript 逻辑，只有触发对应操作时，括号里的代码才会执行。';
-    if (/background/.test(text)) return 'background 控制组件的背景颜色或背景效果。修改右侧背景设置后，这里的值会同步变化；十六进制色值由 # 和六个字符组成。';
-    if (/color:/.test(text)) return 'color 控制文字或图标的前景颜色。它不会改变组件背景；如果文字与背景对比太低，内容会变得难以阅读。';
-    if (/font-size/.test(text)) return 'font-size 控制文字大小，px 表示屏幕像素。数值越大，文字越醒目，同时也会占据更多布局空间。';
-    if (/border-radius/.test(text)) return 'border-radius 控制边角弧度，单位 px 表示圆角半径。0px 是直角，数值增大后边角会逐渐变圆。';
-    if (/padding|margin|gap/.test(text)) return '这一行控制组件周围的空间。padding 是内容与边框之间的内边距，margin 是组件外部间距，gap 是多个子元素之间的距离。';
-    if (/animation/.test(text)) return 'animation 把一个预设动画应用到组件，并指定时长、速度曲线等参数。页面出现或交互触发时，浏览器会按这些参数计算每一帧。';
-    if (/display|grid|flex/.test(text)) return '这一行决定布局方式。Flex 适合一行或一列排列，Grid 适合行列同时存在的网格；它会直接影响子元素的位置。';
-    if (/width|height/.test(text)) return '这一行控制组件的宽度或高度。固定 px 适合明确尺寸，百分比会跟随父容器变化，适合响应式界面。';
-    if (/^\.[\w-]+\s*\{/.test(text)) return '这是 CSS 选择器，用来找到画布中具有对应 class 的组件。大括号内的每一条属性都会应用到这些组件上。';
+    const colorMeaning = value => { const [red, green, blue] = hexToRgb(value); return `${value.toUpperCase()} 对应 RGB(${red}, ${green}, ${blue})；“#”表示十六进制颜色，后六位依次代表红、绿、蓝。`; };
+    const declaration = text.match(/^([\w-]+):\s*(.+);$/);
+    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return `这是一行给学习者看的注释，浏览器不会把它显示在手机里。当前注释写的是“${text.replace(/^\/\*|\*\/$|^\/\/|^<!--|-->$/g, '').trim()}”，删除它也不会改变界面。`;
+    if (/^<\/?[a-z]/i.test(text)) { const tag = text.match(/^<\/?([\w-]+)/i)?.[1] || '元素'; const content = text.match(/>([^<]+)</)?.[1]; return text.startsWith('</') ? `</${tag}> 用斜杠表示“结束 ${tag} 元素”。它和前面的 <${tag}> 配对，防止后面的内容被误算进当前组件。` : `这里实际创建了一个 <${tag}> 元素${content ? `，手机里显示的内容是“${content}”` : ''}。尖括号 < > 用来包住标签名，浏览器看到它就知道这是页面结构，而不是普通文字。`; }
+    if (/^\.[\w-]+\s*\{/.test(text)) { const className = text.match(/^\.([\w-]+)/)?.[1]; return `“.${className}”正在选中当前画布里 class="${className}" 的组件；开头的点号表示按 class 查找。“{”之后的规则只作用于这类组件。`; }
+    if (declaration) {
+      const [, property, value] = declaration;
+      if (property === 'color') return `当前把这个组件的文字设为 ${value}。${colorMeaning(value)} 这里用白色文字，是为了和当前深色背景形成清楚对比。`;
+      if (property === 'background') return `当前组件的背景实际使用 ${value}。${colorMeaning(value)} 这个值来自右侧“背景颜色”，修改色盘后本行会同步变化。`;
+      if (property === 'font-size') return `当前字号是 ${value}。px 是屏幕像素；这里的 ${parseFloat(value)} 让按钮文字保持紧凑，增大数值会更醒目，也更容易把按钮撑高。`;
+      if (property === 'border-radius') return `当前圆角半径是 ${value}。这里的 ${parseFloat(value)}px 会把四个角各向内收同样距离；0px 是方角，接近按钮高度一半时会变成胶囊形。`;
+      if (property === 'text-align') return `当前值 ${value} 表示内容${value === 'left' ? '靠左排列' : value === 'center' ? '水平居中' : '靠右排列'}。冒号左边是属性名，右边是这个组件正在使用的真实值，分号表示本条规则结束。`;
+      if (property === 'opacity') return `当前透明度是 ${value}：1 表示完全可见，0 表示完全透明，0.5 则是半透明。这里保持 1，所以手机中的组件没有被淡化。`;
+      if (property === 'box-shadow') { const color = value.match(/#[0-9a-f]{6}/i)?.[0]; return `当前阴影写成 ${value}：前两个 0 表示不向左右或上下偏移，20px 是模糊半径，所以光会均匀包围组件；${color ? colorMeaning(color) : ''}`; }
+      if (property === 'animation') { const parts = value.split(/\s+/); return `当前动画名是 ${parts[0]}，持续 ${parts[1]}（${parseInt(parts[1]) / 1000} 秒），${parts[2]} 让速度先加快再减慢，both 会同时保留动画开始前和结束后的状态。每个空格把一个动画参数分开。`; }
+      if (property === 'animation-delay') return `当前延迟是 ${value}。0ms 表示触发后立刻播放；ms 是毫秒，1000ms 等于 1 秒。`;
+      if (['padding', 'margin', 'gap'].includes(property)) return `当前 ${property} 使用 ${value}。${property === 'padding' ? '它控制内容到边框的内部距离' : property === 'margin' ? '它控制组件与外部元素的距离' : '它控制多个子元素之间的空隙'}；这里展示的是当前组件正在采用的数值。`;
+      if (property === 'display') return `当前 display 使用 ${value}，表示这个组件实际采用 ${value === 'grid' ? '网格布局' : value === 'flex' ? '弹性布局' : value}。属性和值之间必须用冒号分隔。`;
+      return `当前组件把 ${property} 设为 ${value}。冒号左侧是要改变的属性，右侧是画布正在使用的值，结尾分号告诉浏览器这条设置已经写完。`;
+    }
+    if (/addEventListener/.test(text)) return `这里用 addEventListener 监听当前组件的用户操作。括号里的 'click' 表示只有用户点击它时才运行后面的函数；=> 是把这次操作指向后面的处理代码。`;
     if (text === '}' || text === '});') return '这一行结束当前样式块或交互逻辑。它与前面的开始大括号配对，让浏览器知道这一组规则到哪里结束。';
-    return codeMode === 'js' ? '这是 JavaScript 逻辑的一部分，用来描述组件在用户操作后如何响应。点击不同代码行，可以逐步理解整个交互过程。' : codeMode === 'html' ? '这一行对应手机画布中的内容结构。HTML 负责组织信息，具体颜色、间距和动画通常交给 CSS。' : '这是当前组件的一条 CSS 外观规则。冒号左边是要修改的属性，右边是该属性采用的具体值。';
+    return codeMode === 'js' ? `这一行是当前组件真实执行的 JavaScript：“${text}”。括号表示传入数据或条件，大括号把需要一起执行的语句包成一组。` : codeMode === 'html' ? `这一行就是当前组件对应的 HTML 结构：“${text}”。标签决定它是什么，属性记录它现在的内容、状态和用途。` : `这一行参与当前组件的实际外观：“${text}”。点击右侧相应属性后再回来看，可以观察具体字符和值如何变化。`;
   };
   code[codeMode].split('\n').forEach(line => {
     const row = document.createElement('span'); row.className = 'code-line'; row.dataset.codeText = line; row.append(document.createTextNode(line || ' '));
@@ -751,7 +760,7 @@ function renderAssets() {
 }
 
 function download(filename, data, type) { const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([data], { type })); link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1200); }
-function safeSrc(src) { return typeof src === 'string' && (/^data:image\/(?:png|jpeg|webp|svg\+xml)[;,]/i.test(src) || /^https:\/\//i.test(src)) ? src : ''; }
+function safeSrc(src) { return typeof src === 'string' && (/^data:image\/(?:png|jpeg|webp|svg\+xml)[;,]/i.test(src) || /^https:\/\//i.test(src) || /^assets\/[\w.-]+$/i.test(src)) ? src : ''; }
 function imageMime(bytes) {
   if (bytes.length >= 8 && [137,80,78,71,13,10,26,10].every((value, index) => bytes[index] === value)) return 'image/png';
   if (bytes.length >= 3 && bytes[0] === 255 && bytes[1] === 216 && bytes[2] === 255) return 'image/jpeg';
@@ -889,11 +898,14 @@ function exportHtml() {
 }
 
 document.querySelectorAll('[data-add]').forEach(button => button.onclick = () => { selectedCategory = button.dataset.add; renderVariants(); });
-document.querySelectorAll('[data-lefttab]').forEach(button => button.onclick = () => { document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab === button)); for (const tab of ['components', 'templates', 'effects', 'assets', 'guide']) $('#' + tab + 'Tab').classList.toggle('hidden', tab !== button.dataset.lefttab); });
+document.querySelectorAll('[data-lefttab]').forEach(button => button.onclick = () => { document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab === button)); for (const tab of ['components', 'templates', 'effects', 'assets']) $('#' + tab + 'Tab').classList.toggle('hidden', tab !== button.dataset.lefttab); });
 $('#undoBtn').onclick = () => { if (!history.length) return; future.push(clone(state)); state = history.pop(); selected = null; update(); };
 $('#redoBtn').onclick = () => { if (!future.length) return; history.push(clone(state)); state = future.pop(); selected = null; update(); };
 $('#replayBtn').onclick = () => { renderCanvas(); $('#canvasPage').querySelectorAll('.anim-on-hover,.anim-on-click').forEach(replayNodeAnimation); };
 $('#previewBtn').onclick = () => { preview = !preview; selected = null; $('#phoneModal').classList.add('hidden'); render(); };
+$('#guideBtn').onclick = () => $('#guideDialog').classList.remove('hidden');
+$('#guideCloseBtn').onclick = () => $('#guideDialog').classList.add('hidden');
+$('#guideDialog').onclick = event => { if (event.target === $('#guideDialog')) $('#guideDialog').classList.add('hidden'); };
 $('#phoneMoreBtn').onclick = event => { event.stopPropagation(); if (preview) runHeaderAction(); else { selected = '__header__'; $('#phoneMoreMenu').classList.add('hidden'); render(); } };
 $('#phoneBackBtn').onclick = event => { event.stopPropagation(); goBack(); };
 $('#moreInfoBtn').onclick = () => { $('#phoneMoreMenu').classList.add('hidden'); phoneToast(state.headerActions[activePage].prompt || state.pageTitles[activePage]); };
@@ -912,6 +924,6 @@ $('#cutoutApplyBtn').onclick = async () => { const asset = state.assets[cutoutAs
 $('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.dataset.codeText || '').join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
 const presetStyle = document.createElement('style'); presetStyle.textContent = PRESET_CSS; document.head.append(presetStyle);
 renderTemplates(); renderEffects(); renderAssets(); render();

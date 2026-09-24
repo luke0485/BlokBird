@@ -22,7 +22,8 @@ const itemHtml = vm.runInContext("(function(){const item=makeItem('card','stat')
 assert.ok(itemHtml.includes('安全 &lt; 内容'));
 assert.ok(itemHtml.includes('anim-slide-left'));
 const page = fs.readFileSync(root + 'index.html', 'utf8');
-assert.ok(page.includes('id="guideTab"'));
+assert.ok(page.includes('id="guideBtn"') && page.includes('id="guideDialog"'));
+assert.ok(page.includes('智能识别纯色背景抠图'));
 assert.ok(!page.includes('id="lessonTab"') && !page.includes('id="checklist"'));
 assert.ok(page.includes('id="assetSearch"'));
 assert.ok(page.includes('id="templatesTab"'));
