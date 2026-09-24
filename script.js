@@ -23,7 +23,7 @@ const clone = value => JSON.parse(JSON.stringify(value));
 const uid = () => globalThis.crypto?.randomUUID?.() || `bb-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const svgData = body => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200">${body}</svg>`);
 
-const BUILTINS = [
+const LEGACY_BUILTINS = [
   { name: '几何封面', data: svgData('<rect width="360" height="200" fill="#FAF9F6"/><circle cx="278" cy="44" r="92" fill="#2A6B6B"/><path d="M0 200 142 25l138 175" fill="#E07A5F"/><rect x="23" y="118" width="82" height="82" fill="#2E2A27"/>') },
   { name: '柔和曲线', data: svgData('<rect width="360" height="200" fill="#FAF9F6"/><path d="M0 152Q90 35 180 145T360 120V200H0" fill="#2A6B6B"/><path d="M0 184Q90 65 180 175T360 150" fill="none" stroke="#E07A5F" stroke-width="20"/>') },
   { name: '卡片插画', data: svgData('<rect width="360" height="200" fill="#E8E4DF"/><rect x="55" y="24" width="250" height="152" rx="18" fill="#FFFFFF"/><circle cx="118" cy="87" r="32" fill="#E07A5F"/><rect x="173" y="69" width="91" height="13" rx="6" fill="#2E2A27"/><rect x="173" y="93" width="66" height="9" rx="4" fill="#6B6560"/><rect x="89" y="139" width="181" height="9" rx="4" fill="#E8E4DF"/>') },
@@ -50,6 +50,36 @@ const BUILTINS = [
   { name: '金属银灰', data: svgData('<defs><linearGradient id="m"><stop stop-color="#6F7782"/><stop offset=".5" stop-color="#E6E8EA"/><stop offset="1" stop-color="#7D8590"/></linearGradient></defs><rect width="360" height="200" fill="#1D2128"/><circle cx="180" cy="100" r="75" fill="url(#m)"/><circle cx="180" cy="100" r="44" fill="#1D2128"/><path d="M45 100h67m136 0h67" stroke="#DDE0E4" stroke-width="9"/>') },
   { name: '孟菲斯形状', data: svgData('<rect width="360" height="200" fill="#FFEBD7"/><circle cx="92" cy="70" r="44" fill="#FF6B6B"/><rect x="177" y="29" width="87" height="87" transform="rotate(18 220 72)" fill="#4C67C9"/><path d="M30 168q30-52 60 0t60 0t60 0t60 0t60 0" fill="none" stroke="#2E2A27" stroke-width="8"/><circle cx="309" cy="48" r="14" fill="#F6C644"/>') },
   { name: '禅意留白', data: svgData('<rect width="360" height="200" fill="#F6F3EA"/><circle cx="180" cy="93" r="55" fill="none" stroke="#2B2B2B" stroke-width="8" stroke-dasharray="300 50"/><path d="M52 162q75-35 145 0t119 0" fill="none" stroke="#777268" stroke-width="3"/><circle cx="253" cy="58" r="8" fill="#A9473E"/>') }
+];
+
+const productScene = (accent, body, surface = '#F7F8FA') => svgData(`<rect width="360" height="200" fill="${surface}"/><rect x="18" y="16" width="324" height="168" rx="18" fill="#fff"/><rect x="18" y="16" width="324" height="7" rx="3.5" fill="${accent}"/>${body}`);
+const BUILTINS = [
+  { name: '运动鞋商品图', data: productScene('#4C97FF', '<ellipse cx="181" cy="151" rx="112" ry="13" fill="#DDE4ED"/><path d="M76 124c30-5 58-42 78-64 12 31 31 47 81 57 24 5 41 16 40 28H84c-14 0-19-18-8-21Z" fill="#F5F7FA" stroke="#17233C" stroke-width="5"/><path d="m105 112 84 7m-65-30 54 21" stroke="#4C97FF" stroke-width="8"/><path d="M82 143h190" stroke="#17233C" stroke-width="7"/>') },
+  { name: '护肤品商品图', data: productScene('#FF6680', '<ellipse cx="181" cy="160" rx="92" ry="10" fill="#F0DDE2"/><rect x="96" y="70" width="61" height="84" rx="12" fill="#F7C9D3"/><rect x="108" y="46" width="37" height="28" rx="6" fill="#17233C"/><rect x="177" y="53" width="88" height="101" rx="16" fill="#FFF1E5" stroke="#FF6680" stroke-width="4"/><circle cx="221" cy="99" r="22" fill="#FF6680"/><path d="M207 99h28M221 85v28" stroke="#fff" stroke-width="5"/>') },
+  { name: '咖啡外卖主图', data: productScene('#FFAB19', '<ellipse cx="184" cy="159" rx="105" ry="10" fill="#E7DED3"/><path d="M105 61h126l-13 92h-99Z" fill="#EFE4D4" stroke="#5B3B2A" stroke-width="4"/><path d="M231 77q53-3 42 36-8 24-49 18" fill="none" stroke="#5B3B2A" stroke-width="10"/><ellipse cx="168" cy="61" rx="63" ry="16" fill="#73472F"/><path d="M145 112c18 12 37 12 55 0" fill="none" stroke="#FFAB19" stroke-width="6"/>') },
+  { name: '餐厅菜品主图', data: productScene('#59C059', '<ellipse cx="180" cy="118" rx="117" ry="53" fill="#E9EEF2"/><ellipse cx="180" cy="111" rx="94" ry="39" fill="#fff"/><path d="M113 115q32-45 64 0t66 0" fill="none" stroke="#F2A33A" stroke-width="15"/><circle cx="142" cy="95" r="16" fill="#E85555"/><circle cx="214" cy="99" r="13" fill="#59C059"/><path d="m180 82 10 27m-28-17 9 30" stroke="#356C3F" stroke-width="5"/>') },
+  { name: '服饰陈列主图', data: productScene('#9966FF', '<path d="m95 70 38-24 31 22 31-22 70 46-28 35-25-14v50H119v-50l-26 14-25-35Z" fill="#8BA7D9" stroke="#17233C" stroke-width="4"/><path d="M134 47q12 32 30 21 18 11 31-21" fill="none" stroke="#fff" stroke-width="7"/><rect x="137" y="98" width="55" height="8" rx="4" fill="#fff"/>') },
+  { name: '酒店房间主图', data: productScene('#4C97FF', '<rect x="50" y="48" width="125" height="82" rx="5" fill="#BFE1FF"/><path d="m56 119 45-39 29 27 23-21 16 15v25H56Z" fill="#78B36B"/><rect x="60" y="129" width="238" height="34" rx="6" fill="#D9C7AD"/><rect x="84" y="101" width="76" height="36" rx="9" fill="#fff"/><rect x="191" y="76" width="72" height="62" rx="7" fill="#F0B66A"/><path d="M180 58v80" stroke="#17233C" stroke-width="5"/>') },
+  { name: '旅行目的地主图', data: productScene('#00B6B6', '<rect x="44" y="43" width="272" height="119" rx="15" fill="#C8EEFF"/><circle cx="268" cy="72" r="24" fill="#FFD55C"/><path d="M44 135 118 72l52 45 48-37 98 82H44Z" fill="#5DB58C"/><path d="M44 151q70-27 136 0t136 0v11H44Z" fill="#3C8AC5"/><path d="M91 147q29-18 61-4" fill="none" stroke="#fff" stroke-width="5"/>') },
+  { name: '航班行程卡', data: productScene('#4C97FF', '<path d="M70 75h220v82H70z" fill="#F4F7FB" stroke="#B7C5D8" stroke-width="3"/><path d="M180 75v82" stroke="#B7C5D8" stroke-dasharray="7 6"/><text x="91" y="108" font-size="27" font-weight="700" fill="#17233C">SHA</text><text x="213" y="108" font-size="27" font-weight="700" fill="#17233C">CAN</text><path d="M139 119h80m-9-8 12 8-12 8" stroke="#4C97FF" stroke-width="4" fill="none"/><text x="91" y="143" font-size="12" fill="#66758A">08:35</text><text x="238" y="143" font-size="12" fill="#66758A">11:10</text>') },
+  { name: '地图路线卡', data: productScene('#59C059', '<path d="M52 50 122 35l64 18 68-18 55 17v110l-55-17-68 18-64-18-70 15Z" fill="#EDF3E9"/><path d="m122 35v110m64-92v110m68-128v110" stroke="#C1CFBA" stroke-width="3"/><path d="M82 128q55-86 111-22t86-29" fill="none" stroke="#4C97FF" stroke-width="7" stroke-dasharray="9 7"/><circle cx="82" cy="128" r="10" fill="#59C059"/><path d="m279 65 13 13-13 22-13-22Z" fill="#FF6680"/>') },
+  { name: '优惠活动横幅', data: productScene('#FF6680', '<rect x="46" y="49" width="268" height="112" rx="18" fill="#FF6680"/><circle cx="271" cy="105" r="45" fill="#FFCF3F"/><text x="68" y="93" font-size="17" font-weight="700" fill="#fff">限时好价</text><text x="66" y="128" font-size="33" font-weight="800" fill="#fff">满 199 减 40</text><path d="m268 83 8 15 17 2-12 12 3 17-16-8-15 8 3-17-12-12 17-2Z" fill="#fff"/>') },
+  { name: '午夜歌单封面', data: productScene('#9966FF', '<rect x="74" y="37" width="212" height="130" rx="8" fill="#171B35"/><circle cx="180" cy="102" r="48" fill="#6B52C7"/><circle cx="180" cy="102" r="27" fill="#171B35"/><circle cx="180" cy="102" r="7" fill="#fff"/><path d="M92 139c34-18 54-8 82 1s55 10 94-9" fill="none" stroke="#55D8FF" stroke-width="4"/><circle cx="253" cy="61" r="8" fill="#FFCF3F"/>') },
+  { name: '晨光歌单封面', data: productScene('#FFAB19', '<rect x="74" y="37" width="212" height="130" rx="8" fill="#FFE1A8"/><circle cx="180" cy="101" r="43" fill="#FF8B5C"/><path d="M74 142q45-36 89 0t85 0 38 0v25H74Z" fill="#4D9B86"/><path d="M111 67h35M111 78h53" stroke="#17233C" stroke-width="5"/>') },
+  { name: '歌单拼贴封面', data: productScene('#4C97FF', '<rect x="75" y="38" width="98" height="61" fill="#4C97FF"/><rect x="187" y="38" width="98" height="61" fill="#FF6680"/><rect x="75" y="107" width="98" height="60" fill="#FFCF3F"/><rect x="187" y="107" width="98" height="60" fill="#59C059"/><circle cx="236" cy="69" r="18" fill="#fff" opacity=".8"/><path d="m112 131 12 14 21-25" fill="none" stroke="#17233C" stroke-width="7"/>') },
+  { name: '播客节目封面', data: productScene('#9966FF', '<rect x="76" y="37" width="208" height="130" rx="12" fill="#EFE7FF"/><circle cx="180" cy="95" r="39" fill="#9966FF"/><rect x="167" y="69" width="26" height="54" rx="13" fill="#fff"/><path d="M148 101a32 32 0 0 0 64 0m-32 32v17m-22 0h44" fill="none" stroke="#17233C" stroke-width="5"/><path d="M99 73v45m162-45v45" stroke="#9966FF" stroke-width="6"/>') },
+  { name: '课程封面卡', data: productScene('#4C97FF', '<rect x="52" y="43" width="256" height="116" rx="14" fill="#E7F2FF"/><rect x="71" y="61" width="90" height="80" rx="9" fill="#4C97FF"/><path d="m91 111 20-20 15 15 17-23" fill="none" stroke="#fff" stroke-width="7"/><text x="181" y="87" font-size="13" fill="#66758A">前端入门</text><text x="181" y="116" font-size="23" font-weight="700" fill="#17233C">从界面到代码</text><rect x="181" y="130" width="74" height="8" rx="4" fill="#B8CDE8"/>') },
+  { name: '校园活动海报', data: productScene('#FF6680', '<rect x="77" y="35" width="206" height="132" rx="8" fill="#17233C"/><circle cx="239" cy="69" r="24" fill="#FFCF3F"/><text x="99" y="80" font-size="12" fill="#8FE8FF">CAMPUS DAY</text><text x="98" y="113" font-size="29" font-weight="800" fill="#fff">校园创意节</text><text x="99" y="140" font-size="12" fill="#fff">周六 14:00 · 中心广场</text><path d="M77 154h206" stroke="#FF6680" stroke-width="10"/>') },
+  { name: '图书馆推荐卡', data: productScene('#59C059', '<rect x="55" y="46" width="72" height="110" rx="5" fill="#335F54"/><rect x="143" y="38" width="70" height="118" rx="5" fill="#FFCF3F"/><rect x="229" y="55" width="76" height="101" rx="5" fill="#F1A2A2"/><path d="M70 70h42m46-8h40m46 18h46" stroke="#fff" stroke-width="5"/><path d="M70 132h42m46 0h40m46 0h46" stroke="#fff" stroke-width="3"/>') },
+  { name: '社团招新卡', data: productScene('#FFAB19', '<rect x="46" y="47" width="268" height="111" rx="14" fill="#FFF0CF"/><circle cx="105" cy="103" r="37" fill="#FFAB19"/><path d="M88 107q17-31 34 0m-37 12h41" fill="none" stroke="#17233C" stroke-width="6"/><text x="162" y="89" font-size="13" fill="#66758A">一起做有趣的事</text><text x="162" y="119" font-size="24" font-weight="700" fill="#17233C">设计社招新</text><rect x="162" y="132" width="81" height="8" rx="4" fill="#FFAB19"/>') },
+  { name: '用户头像·短发', data: productScene('#4C97FF', '<circle cx="180" cy="99" r="63" fill="#D9ECFF"/><circle cx="180" cy="89" r="31" fill="#F3C6A7"/><path d="M149 88q2-42 37-39 31 4 26 43-18-7-30-27-12 17-33 23Z" fill="#17233C"/><path d="M122 163q8-42 58-42t58 42" fill="#4C97FF"/>') },
+  { name: '用户头像·长发', data: productScene('#FF6680', '<circle cx="180" cy="99" r="63" fill="#FFE0E6"/><path d="M143 96q-5-52 38-52 42 0 37 55v44h-75Z" fill="#55392F"/><circle cx="180" cy="89" r="30" fill="#F3C6A7"/><path d="M123 163q9-42 57-42t57 42" fill="#FF6680"/>') },
+  { name: '群聊封面', data: productScene('#59C059', '<circle cx="133" cy="91" r="34" fill="#BFE2FF"/><circle cx="227" cy="91" r="34" fill="#FFE0E6"/><path d="M83 158q8-44 50-44t50 44m-6 0q8-44 50-44t50 44" fill="#4C97FF"/><circle cx="180" cy="72" r="30" fill="#FFF0CF"/><path d="M137 156q6-55 43-55t43 55" fill="#59C059"/>') },
+  { name: '订单状态卡', data: productScene('#59C059', '<circle cx="112" cy="99" r="42" fill="#DDF5DD"/><path d="m91 99 15 15 29-33" fill="none" stroke="#36A852" stroke-width="9"/><text x="176" y="91" font-size="14" fill="#66758A">订单已完成</text><text x="176" y="119" font-size="23" font-weight="700" fill="#17233C">感谢你的购买</text><rect x="176" y="133" width="94" height="9" rx="4.5" fill="#CFD8E3"/>') },
+  { name: '数据趋势图', data: productScene('#4C97FF', '<path d="M55 151h250M55 53v98" stroke="#CAD4E1" stroke-width="3"/><path d="m67 132 49-37 42 18 50-54 40 27 47-42" fill="none" stroke="#4C97FF" stroke-width="7"/><path d="M67 132 116 95l42 18 50-54 40 27 47-42v107H67Z" fill="#4C97FF" opacity=".12"/><g fill="#4C97FF"><circle cx="116" cy="95" r="7"/><circle cx="208" cy="59" r="7"/><circle cx="295" cy="44" r="7"/></g>') },
+  { name: '空状态插图', data: productScene('#4C97FF', '<rect x="91" y="65" width="178" height="86" rx="11" fill="#EFF4FA" stroke="#BAC8D8" stroke-width="3"/><path d="m121 126 34-31 26 22 28-33 31 42" fill="none" stroke="#4C97FF" stroke-width="6"/><circle cx="133" cy="88" r="11" fill="#FFCF3F"/><path d="M148 160h64" stroke="#BAC8D8" stroke-width="6"/>') },
+  { name: '加载进度插图', data: productScene('#9966FF', '<circle cx="180" cy="94" r="49" fill="none" stroke="#E6DEFA" stroke-width="15"/><path d="M180 45a49 49 0 0 1 46 66" fill="none" stroke="#9966FF" stroke-width="15" stroke-linecap="round"/><circle cx="180" cy="94" r="8" fill="#9966FF"/><rect x="118" y="157" width="124" height="8" rx="4" fill="#D7DDE7"/>') },
+  { name: '消息通知插图', data: productScene('#FFAB19', '<path d="M129 137h102l-13-22V84a38 38 0 0 0-76 0v31Z" fill="#FFF0CF" stroke="#17233C" stroke-width="4"/><path d="M165 143q15 22 30 0" fill="none" stroke="#17233C" stroke-width="5"/><circle cx="223" cy="62" r="19" fill="#FF6680"/><text x="217" y="69" font-size="18" font-weight="700" fill="#fff">3</text>') }
 ];
 
 const VARIANTS = {
@@ -167,6 +197,7 @@ let selected = null;
 let clipboard = null;
 let contextTarget = null;
 let selectedCategory = 'button';
+let cutoutAssetIndex = -1;
 let componentCategoryOpen = false;
 let preview = false;
 let history = [];
@@ -192,22 +223,22 @@ function initialState() {
   return { name: '未命名项目', pages: [...DEFAULT_PAGES], pageTitles: clone(PAGE_LABELS), pageIcons: clone(PAGE_ICONS), headerActions: { home: { icon: '•••', action: 'menu', prompt: '欢迎来到首页', targetPage: 'discover' }, discover: { icon: '•••', action: 'menu', prompt: '这里是发现页', targetPage: 'profile' }, profile: { icon: '•••', action: 'menu', prompt: '这里是我的页面', targetPage: 'home' } }, items: [homeTitle, homeText, homeButton, homeCard, discoverTitle, discoverText, profileTitle, profileCard], assets: [], styled: false };
 }
 const PAGE_TEMPLATES = [
-  { id: 'portfolio', name: '个人作品集', desc: '介绍自己、作品与联系方式', icon: '✦', cover: 22 },
+  { id: 'portfolio', name: '音乐播放器', desc: '歌单、正在播放与收藏路径', icon: '♪', cover: 11 },
   { id: 'shop', name: '商品详情', desc: '商品展示、价格与购买入口', icon: '◇', cover: 14 },
-  { id: 'dashboard', name: '数据概览', desc: '指标卡片、图表与趋势', icon: '▥', cover: 16 },
-  { id: 'event', name: '活动邀请', desc: '主题封面、介绍与报名', icon: '☼', cover: 17 },
-  { id: 'profile', name: '个人主页', desc: '头像、简介与常用入口', icon: '◉', cover: 7 },
-  { id: 'notes', name: '阅读列表', desc: '内容标题、文章和收藏入口', icon: '☷', cover: 11 },
+  { id: 'dashboard', name: '校园助手', desc: '课程、待办与校园服务入口', icon: '▥', cover: 15 },
+  { id: 'event', name: '校园活动', desc: '活动介绍、报名与完成状态', icon: '☼', cover: 16 },
+  { id: 'profile', name: '创作者主页', desc: '头像、简介与作品数据', icon: '◉', cover: 19 },
+  { id: 'notes', name: '内容阅读', desc: '封面、文章与收藏路径', icon: '☷', cover: 17 },
   { id: 'signup', name: '注册页面', desc: '输入框、开关与提交交互', icon: '✚', cover: 24 }
 ];
 function composeTemplate(id, page) {
   const items = [];
   const add = (type, variant, props = {}, layoutId = null) => { const item = Object.assign(makeItem(type, variant, page), props); item.layoutId = layoutId; items.push(item); return item; };
   const group = (variant, children) => { const layout = add('layout', variant); for (const [type, style, props] of children) add(type, style, props, layout.id); return layout; };
-  if (id === 'portfolio') { add('heading', 'eyebrow', { text: '个人作品' }); add('heading', 'display', { text: '你好，我是设计者。' }); add('text', 'lead', { text: '我喜欢把想法变成清晰、好用的数字产品。' }); add('image', 'builtin-22'); group('two', [['card', 'stat', { text: '12 个作品', detail: '持续探索与更新' }], ['card', 'feature', { text: '我的专长', detail: '界面设计与前端开发' }]]); add('button', 'dark', { text: '联系我', action: 'toast', prompt: '欢迎与我联系！' }); }
-  if (id === 'shop') { add('image', 'builtin-14'); add('heading', 'section', { text: '一杯好咖啡' }); add('text', 'body', { text: '香气与口感都刚刚好，给日常片刻温暖。' }); group('two', [['card', 'stat', { text: '¥ 39', detail: '单杯价格' }], ['card', 'warm', { text: '限时优惠', detail: '今日下单立享好价' }]]); add('button', 'wide', { text: '加入购物袋', action: 'toast', prompt: '已加入购物袋' }); }
-  if (id === 'dashboard') { add('heading', 'section', { text: '数据概览' }); add('text', 'caption', { text: '今天的表现，一眼掌握' }); group('three', [['card', 'stat', { text: '1.2k', detail: '访问' }], ['card', 'stat', { text: '86', detail: '收藏' }], ['card', 'stat', { text: '24', detail: '分享' }]]); add('image', 'builtin-16'); add('card', 'accent', { text: '趋势向好', detail: '本周的数据持续增长。' }); }
-  if (id === 'event') { add('image', 'builtin-17'); add('heading', 'hero', { text: '灵感之夜' }); add('text', 'lead', { text: '和有趣的人一起，分享设计、创作与新的可能。' }); add('card', 'ticket', { text: '本周六 · 19:00', detail: '城市创意空间，期待见到你。' }); add('button', 'gradient', { text: '立即报名', action: 'modal', prompt: '报名成功，期待见到你！' }); }
+  if (id === 'portfolio') { add('image', 'builtin-11'); add('heading', 'section', { text: '城市夜行' }); add('text', 'body', { text: '为专注时刻准备的电子与氛围音乐。' }); group('two', [['card', 'stat', { text: '12 首', detail: '完整歌单' }], ['card', 'feature', { text: '42 分钟', detail: '连续播放时长' }]]); add('button', 'dark', { text: '▶ 立即播放', action: 'toast', prompt: '开始播放《城市夜行》' }); }
+  if (id === 'shop') { add('image', 'builtin-0'); add('heading', 'section', { text: '轻量缓震跑鞋' }); add('text', 'body', { text: '透气鞋面与稳定缓震，适合日常通勤和轻运动。' }); group('two', [['card', 'stat', { text: '¥ 399', detail: '会员价格' }], ['card', 'warm', { text: '限时优惠', detail: '今日下单免运费' }]]); add('button', 'wide', { text: '加入购物袋', action: 'toast', prompt: '已加入购物袋' }); }
+  if (id === 'dashboard') { add('heading', 'section', { text: '今天的校园' }); add('text', 'caption', { text: '课程、任务和服务集中查看' }); group('three', [['card', 'stat', { text: '3', detail: '今日课程' }], ['card', 'stat', { text: '2', detail: '待交作业' }], ['card', 'stat', { text: '1', detail: '校园活动' }]]); add('image', 'builtin-15'); add('card', 'accent', { text: '前端基础 · 14:00', detail: '教学楼 A302，记得提前签到。' }); }
+  if (id === 'event') { add('image', 'builtin-16'); add('heading', 'hero', { text: '校园创意节' }); add('text', 'lead', { text: '展示作品、认识伙伴，把有趣的想法变成现实。' }); add('card', 'ticket', { text: '本周六 · 14:00', detail: '中心广场，报名后可收到日程提醒。' }); add('button', 'gradient', { text: '立即报名', action: 'modal', prompt: '报名成功，期待见到你！' }); }
   if (id === 'profile') { add('heading', 'center', { text: '我的主页' }); add('card', 'profile', { text: '你好，我是 Alex', detail: '喜欢记录生活、分享作品和探索新事物。' }); group('two', [['card', 'stat', { text: '36', detail: '动态' }], ['card', 'stat', { text: '128', detail: '收藏' }]]); add('button', 'teal', { text: '编辑资料', action: 'toast', prompt: '这里可以设置编辑资料流程' }); }
   if (id === 'notes') { add('heading', 'serif', { text: '阅读清单' }); add('text', 'caption', { text: '为好内容留一个位置' }); add('image', 'builtin-11'); add('card', 'minimal', { text: '从一杯咖啡开始', detail: '生活里细小而值得记录的瞬间。' }); add('divider', 'double'); add('card', 'minimal', { text: '设计的日常', detail: '重新观察我们熟悉的界面。' }); add('button', 'underline', { text: '查看全部 →', action: 'toast', prompt: '已显示全部内容' }); }
   if (id === 'signup') { add('heading', 'hero', { text: '创建你的账号' }); add('text', 'body', { text: '填写基本信息，开始探索。' }); add('input', 'email', { text: '邮箱地址' }); add('input', 'password', { text: '设置密码' }); add('switch', 'teal', { text: '接收产品更新', checked: true }); add('button', 'wide', { text: '创建账号', action: 'modal', prompt: '这里可以连接注册流程。' }); add('text', 'caption', { text: '继续即表示你了解此页面的示例交互。' }); }
@@ -716,6 +747,7 @@ function renderAssets() {
   const query = $('#assetSearch').value.trim().toLocaleLowerCase();
   state.assets.filter(asset => asset.name.toLocaleLowerCase().includes(query)).forEach(asset => addAssetButton(asset, uploaded));
   BUILTINS.filter(asset => asset.name.toLocaleLowerCase().includes(query)).forEach(asset => addAssetButton(asset, builtIn));
+  renderCutoutTool();
 }
 
 function download(filename, data, type) { const link = document.createElement('a'); link.href = URL.createObjectURL(new Blob([data], { type })); link.download = filename; link.click(); setTimeout(() => URL.revokeObjectURL(link.href), 1200); }
@@ -733,7 +765,36 @@ async function readImageAsset(file) {
   const blob = new Blob([bytes], { type: mime });
   const data = await new Promise((resolve, reject) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.onerror = () => reject(Error('图片读取失败')); reader.readAsDataURL(blob); });
   await new Promise((resolve, reject) => { const image = new Image(); image.onload = () => image.naturalWidth && image.naturalHeight ? resolve() : reject(Error('图片尺寸无效')); image.onerror = () => reject(Error('图片无法解码')); image.src = data; });
-  return { name: file.name, data };
+  return { id: uid(), name: file.name, data };
+}
+
+function loadImageData(data) {
+  return new Promise((resolve, reject) => { const image = new Image(); image.onload = () => resolve(image); image.onerror = () => reject(Error('图片无法解码')); image.src = data; });
+}
+function rgbToHex(red, green, blue) { return '#' + [red, green, blue].map(value => Math.max(0, Math.min(255, value)).toString(16).padStart(2, '0')).join(''); }
+function hexToRgb(hex) { const value = safeColor(hex, '#ffffff'); return [1, 3, 5].map(index => parseInt(value.slice(index, index + 2), 16)); }
+function backgroundAlpha(red, green, blue, target, tolerance, softness) {
+  const distance = Math.hypot(red - target[0], green - target[1], blue - target[2]);
+  if (distance <= tolerance) return 0;
+  if (!softness || distance >= tolerance + softness) return 255;
+  return Math.round(255 * (distance - tolerance) / softness);
+}
+async function sampleImageCorner(data) {
+  const image = await loadImageData(data); const canvas = document.createElement('canvas'); canvas.width = canvas.height = 1;
+  const context = canvas.getContext('2d', { willReadFrequently: true }); if (!context) throw Error('浏览器无法处理这张图片');
+  context.drawImage(image, 0, 0, 1, 1); const pixel = context.getImageData(0, 0, 1, 1).data; return rgbToHex(pixel[0], pixel[1], pixel[2]);
+}
+async function removeSolidBackground(data, color, tolerance, softness) {
+  const image = await loadImageData(data); const scale = Math.min(1, 1600 / Math.max(image.naturalWidth, image.naturalHeight));
+  const canvas = document.createElement('canvas'); canvas.width = Math.max(1, Math.round(image.naturalWidth * scale)); canvas.height = Math.max(1, Math.round(image.naturalHeight * scale));
+  const context = canvas.getContext('2d', { willReadFrequently: true }); if (!context) throw Error('浏览器无法处理这张图片');
+  context.drawImage(image, 0, 0, canvas.width, canvas.height); const pixels = context.getImageData(0, 0, canvas.width, canvas.height); const target = hexToRgb(color);
+  for (let index = 0; index < pixels.data.length; index += 4) pixels.data[index + 3] = Math.min(pixels.data[index + 3], backgroundAlpha(pixels.data[index], pixels.data[index + 1], pixels.data[index + 2], target, tolerance, softness));
+  context.putImageData(pixels, 0, 0); return canvas.toDataURL('image/png');
+}
+function renderCutoutTool() {
+  const tool = $('#cutoutTool'); if (!tool) return; const asset = state.assets[cutoutAssetIndex]; tool.classList.toggle('hidden', !asset); if (!asset) return;
+  $('#cutoutPreview').src = asset.data; $('#cutoutAssetName').textContent = asset.name;
 }
 async function readNavIcon(file) {
   if (!file || file.size > 512 * 1024) throw Error('导航图标请小于 512 KB');
@@ -844,8 +905,10 @@ $('#exportBtn').onclick = exportHtml;
 $('#importBtn').onclick = () => $('#projectInput').click();
 $('#projectInput').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { const imported = JSON.parse(await file.text()); if (!validProject(imported)) throw Error(); commit(); state = normalizeProject(imported); activePage = state.pages[0]; selected = null; update(); renderAssets(); editorToast('项目导入成功'); } catch { editorToast('项目文件格式不正确'); } event.target.value = ''; };
 $('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
-$('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); update(); renderAssets(); editorToast(`已导入 ${asset.name}`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
+$('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); cutoutAssetIndex = state.assets.length - 1; update(); renderAssets(); try { $('#cutoutColor').value = await sampleImageCorner(asset.data); } catch {} editorToast(`已导入 ${asset.name}，可选择快速抠图`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
+$('#cutoutSampleBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; try { $('#cutoutColor').value = await sampleImageCorner(asset.data); editorToast('已读取图片左上角的背景颜色'); } catch (error) { editorToast(error.message || '颜色读取失败'); } };
+$('#cutoutApplyBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; const button = $('#cutoutApplyBtn'); button.disabled = true; button.textContent = '处理中…'; try { const oldData = asset.data; const result = await removeSolidBackground(oldData, $('#cutoutColor').value, Number($('#cutoutTolerance').value), Number($('#cutoutSoftness').value)); commit(); asset.data = result; asset.name = asset.name.replace(/\.[^.]+$/, '') + '-透明.png'; for (const item of state.items) if (item.type === 'image' && item.src === oldData) item.src = result; update(); renderAssets(); editorToast('背景已移除，素材已替换为透明 PNG'); } catch (error) { editorToast(error.message || '背景移除失败'); } finally { button.disabled = false; button.textContent = '移除背景'; } };
 $('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.dataset.codeText || '').join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });

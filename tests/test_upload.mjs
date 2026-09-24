@@ -39,4 +39,8 @@ for (const [name, bytes] of [['unknown', Buffer.alloc(64)], ['corrupt.png', Buff
 }
 context.file = { name: 'large.png', size: 2 * 1024 * 1024 + 1, arrayBuffer: async () => { throw Error('must not read'); } };
 await assert.rejects(vm.runInContext('readImageAsset(file)', context));
-console.log('PNG, JPEG, WEBP upload pipeline, MIME detection, decode rejection, and size limit passed.');
+assert.equal(vm.runInContext("backgroundAlpha(255,255,255,hexToRgb('#ffffff'),30,20)", context), 0);
+assert.equal(vm.runInContext("backgroundAlpha(0,0,0,hexToRgb('#ffffff'),30,20)", context), 255);
+assert.ok(vm.runInContext("backgroundAlpha(215,215,215,hexToRgb('#ffffff'),60,30)", context) > 0);
+assert.equal(vm.runInContext("rgbToHex(47,107,79)", context), '#2f6b4f');
+console.log('Image upload validation and solid-background removal math passed.');
