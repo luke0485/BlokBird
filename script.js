@@ -1,4 +1,4 @@
-const KEY = 'blokbird-ui-design-v3';
+const KEY = 'blokbird-ui-design-v4';
 const OLD_KEYS = ['blokbird-studio-v2', 'blokbird-palette-v1', 'interface-lab-monochrome-v1'];
 const DEFAULT_PAGES = ['home', 'discover', 'profile'];
 const PAGE_LABELS = { home: '首页', discover: '发现', profile: '我的' };
@@ -55,7 +55,7 @@ const LEGACY_BUILTINS = [
 
 const productScene = (accent, body, surface = '#F7F8FA') => svgData(`<rect width="360" height="200" fill="${surface}"/><rect x="18" y="16" width="324" height="168" rx="18" fill="#fff"/><rect x="18" y="16" width="324" height="7" rx="3.5" fill="${accent}"/>${body}`);
 const BUILTINS = [
-  { name: '无品牌运动鞋商品图 · BlokBird 原创', data: 'assets/brand-free-sneaker.png' },
+  { name: '白色运动鞋商品图', data: 'assets/brand-free-sneaker.png' },
   { name: '护肤品商品图', data: productScene('#FF6680', '<ellipse cx="181" cy="160" rx="92" ry="10" fill="#F0DDE2"/><rect x="96" y="70" width="61" height="84" rx="12" fill="#F7C9D3"/><rect x="108" y="46" width="37" height="28" rx="6" fill="#17233C"/><rect x="177" y="53" width="88" height="101" rx="16" fill="#FFF1E5" stroke="#FF6680" stroke-width="4"/><circle cx="221" cy="99" r="22" fill="#FF6680"/><path d="M207 99h28M221 85v28" stroke="#fff" stroke-width="5"/>') },
   { name: '咖啡外卖主图', data: productScene('#FFAB19', '<ellipse cx="184" cy="159" rx="105" ry="10" fill="#E7DED3"/><path d="M105 61h126l-13 92h-99Z" fill="#EFE4D4" stroke="#5B3B2A" stroke-width="4"/><path d="M231 77q53-3 42 36-8 24-49 18" fill="none" stroke="#5B3B2A" stroke-width="10"/><ellipse cx="168" cy="61" rx="63" ry="16" fill="#73472F"/><path d="M145 112c18 12 37 12 55 0" fill="none" stroke="#FFAB19" stroke-width="6"/>') },
   { name: '餐厅菜品主图', data: productScene('#59C059', '<ellipse cx="180" cy="118" rx="117" ry="53" fill="#E9EEF2"/><ellipse cx="180" cy="111" rx="94" ry="39" fill="#fff"/><path d="M113 115q32-45 64 0t66 0" fill="none" stroke="#F2A33A" stroke-width="15"/><circle cx="142" cy="95" r="16" fill="#E85555"/><circle cx="214" cy="99" r="13" fill="#59C059"/><path d="m180 82 10 27m-28-17 9 30" stroke="#356C3F" stroke-width="5"/>') },
@@ -136,7 +136,7 @@ const VARIANTS = {
     ,{ id: 'loading', name: '加载状态', desc: '异步任务反馈', mini: '◌', props: { text: '处理中', radius: 8, background: '#E8EDF6', color: '#43546D', visualState: 'disabled' } }
   ],
   image: [
-    ...BUILTINS.map((asset, index) => ({ id: `builtin-${index}`, name: asset.name, desc: '原创 SVG 素材', mini: '▧', props: { src: asset.data, text: asset.name } })),
+    ...BUILTINS.map((asset, index) => ({ id: `builtin-${index}`, name: asset.name, desc: '内置设计素材', mini: '▧', props: { src: asset.data, text: asset.name } })),
     { id: 'upload', name: '我的图片', desc: '从素材页上传', mini: '↑', props: { src: '', text: '图片说明' } }
   ],
   divider: [
@@ -303,7 +303,7 @@ function normalizeProject(value) {
   result.pageParent = Object.fromEntries(result.pages.filter(page => result.pageModes[page] === 'detail' && result.pages.includes(result.pageParent?.[page]) && result.pageParent[page] !== page).map(page => [page, result.pageParent[page]]));
   result.headerActions = result.headerActions || {};
   for (const page of result.pages) { if (!result.pageTitles[page]) result.pageTitles[page] = '新页面'; if (!result.pageIcons[page]) result.pageIcons[page] = '□'; if (!result.headerActions[page]) result.headerActions[page] = { icon: '•••', action: 'menu', prompt: '这是' + result.pageTitles[page], targetPage: result.pages[0] }; }
-  result.items = result.items.map(item => ({ ...item, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', width: Math.max(10, Math.min(100, Number(item.width) || 100)), height: Math.max(0, Math.min(800, Number(item.height) || 0)), animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
+  result.items = result.items.map(item => ({ ...item, src: item.src === 'assets/white-sneaker-unsplash.jpg' ? 'assets/brand-free-sneaker.png' : item.src, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', width: Math.max(10, Math.min(100, Number(item.width) || 100)), height: Math.max(0, Math.min(800, Number(item.height) || 0)), animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
   if (!result.paletteVersion && !result.styled) {
     const previousDefaults = { '#e07a5f': '#2F6B4F', '#2a6b6b': '#2F6B4F', '#2e2a27': '#1F2A24', '#6b6560': '#66716A', '#faf9f6': '#F5F3EF', '#e8e4df': '#DFE2DB', '#2455c5': '#2F6B4F' };
     for (const item of result.items) for (const key of ['color', 'background', 'effectColor']) if (typeof item[key] === 'string') item[key] = previousDefaults[item[key].toLowerCase()] || item[key];
@@ -381,7 +381,16 @@ function renderNav() {
     const icon = navIconElement(state.pageIcons[page]); const settings = navIconSettings(page);
     button.style.setProperty('--icon-size', `${settings.size}px`); button.style.setProperty('--icon-stroke', settings.stroke); button.style.setProperty('--nav-active', settings.activeColor); button.style.setProperty('--nav-inactive', settings.inactiveColor);
     const label = document.createElement('span'); label.textContent = state.pageTitles[page]; button.append(icon, label);
-    button.onclick = () => switchPage(page); pages.append(button);
+    button.onclick = () => {
+      if (preview) { switchPage(page); return; }
+      activePage = page;
+      selected = '__nav__';
+      $('#canvasPage').scrollTop = 0;
+      $('#phoneMoreMenu').classList.add('hidden');
+      hideContextMenu();
+      render();
+    };
+    pages.append(button);
   }
   nav.append(pages); nav.classList.toggle('hidden', isDetailPage(activePage)); $('#phoneBackBtn').classList.toggle('hidden', !isDetailPage(activePage));
 }
@@ -581,6 +590,12 @@ function renderMotionFields(box, item) {
 }
 function renderInspector() {
   const box = $('#inspector'); box.replaceChildren();
+  if (selected === '__nav__') {
+    const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = '底部导航栏 / ' + state.pageTitles[activePage]; box.append(heading);
+    renderNavBarInspector(box);
+    renderNavIconInspector(box, activePage);
+    showCode(null); return;
+  }
   if (selected === '__header__') {
     const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = '右上角操作 / ' + state.pageTitles[activePage]; box.append(heading);
     const config = state.headerActions[activePage];

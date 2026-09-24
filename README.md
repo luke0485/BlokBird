@@ -34,7 +34,7 @@ npm test
 
 ## 技术与开源
 
-项目使用原生 HTML、CSS 和 JavaScript，可部署到任意静态网站服务。项目数据保存在浏览器 `localStorage` 中；内置视觉素材为 BlokBird 原创，不依赖商业品牌资源。
+项目使用原生 HTML、CSS 和 JavaScript，可部署到任意静态网站服务。项目数据保存在浏览器 `localStorage` 中。
 
 **作者：luke0485、GPT 5.6sol**
 本项目使用 [MIT License](LICENSE) 开源。
