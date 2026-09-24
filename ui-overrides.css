@@ -6,3 +6,5 @@
   width: 220px; padding: 9px 11px; border-radius: 6px; background: #172747; color: #fff;
   box-shadow: 0 8px 20px #17274733; font-size: 11px; font-weight: 500; line-height: 1.45; text-align: left;
 }
+.sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.language-picker{margin-left:8px;display:flex;align-items:center}.language-picker select{height:30px;border:1px solid rgba(255,255,255,.38);border-radius:6px;background:rgba(255,255,255,.14);color:#fff;padding:0 25px 0 9px;font-size:11px;font-weight:700;outline:none}.language-picker select option{color:#17203a;background:#fff}.phone-nav.nav-selected{outline:3px solid #4c97ff;outline-offset:-3px;box-shadow:0 0 0 2px rgba(76,151,255,.2)}

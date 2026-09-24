@@ -6,7 +6,7 @@
   <p><a href="https://luke0485.github.io/BlokBird/"><strong>在线体验</strong></a> · <a href="https://github.com/luke0485/BlokBird">查看源码</a> · <a href="LICENSE">MIT License</a></p>
 </div>
 
-![BlokBird 默认三栏学习界面](docs/blokbird-overview.svg)
+![BlokBird 默认三栏学习界面真实截图](docs/blokbird-interface.png)
 
 ## 为什么是 BlokBird
 

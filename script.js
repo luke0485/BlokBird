@@ -1,4 +1,4 @@
-const KEY = 'blokbird-ui-design-v4';
+const KEY = 'blokbird-ui-design-v5';
 const OLD_KEYS = ['blokbird-studio-v2', 'blokbird-palette-v1', 'interface-lab-monochrome-v1'];
 const DEFAULT_PAGES = ['home', 'discover', 'profile'];
 const PAGE_LABELS = { home: '首页', discover: '发现', profile: '我的' };
@@ -20,6 +20,29 @@ const NAV_ICONS = [
 const DEFAULT_NAV_ICON_STYLE = { size: 23, stroke: 1.9, activeColor: '#1F2A24', inactiveColor: '#7B857E' };
 const DEFAULT_NAV_STYLE = { background: '#FFFFFF', borderColor: '#DFE2DB', height: 72, radius: 0, shape: 'bar', activeState: 'icon' };
 const $ = selector => document.querySelector(selector);
+const LANGUAGE_KEY = 'blokbird-language-v1';
+let language = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'zh';
+const EN = {
+  'UI 学习工具':'UI Learning Tool','语言':'Language','中文':'Chinese','未命名项目':'Untitled Project','/ 设计项目':'/ Design Project',
+  '新建':'New','导入项目':'Import','保存':'Save','导出网页':'Export Webpage','创造你的 UI 设计':'Create Your UI Design','先选组件，再挑一个预设样式放入当前页面。':'Choose a component, then add a preset to the current page.',
+  '组件':'Components','模板':'Templates','动效':'Motion','素材':'Assets','基础元素':'Basic Elements','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
+  '从组件开始':'Start with a component','每类组件都有现成样式。放入画布后，在右侧修改内容和交互。':'Each component includes presets. Add one, then edit its content and behavior on the right.','应用流程':'App Flows','动画与效果':'Motion & Effects','动画':'Animation','视觉效果':'Visual Effects','图片素材':'Image Assets','上传图片':'Upload Images','智能识别纯色背景抠图':'Detect and remove solid backgrounds','应用成品素材':'Production-ready Assets','内置设计素材':'Built-in Design Asset',
+  '手机画布':'Phone Canvas','使用提示':'Guide','重播动画 ↺':'Replay Motion ↺','预览交互':'Preview','退出预览':'Exit Preview','代码理解':'Understand Code','选择画布元素开始理解':'Select an element to understand its code','复制代码':'Copy Code','界面':'Interface','代码':'Code','点击代码行查看中文解释':'Select a line for a detailed explanation','点击任意一行代码，聚焦并查看详细中文解释。':'Select any code line to focus it and see a detailed explanation.','属性与交互':'Properties & Interactions','修改属性，旁边立即看到对应代码。':'Edit a property and see the corresponding code immediately.',
+  '首页':'Home','发现':'Discover','我的':'Profile','页面信息':'Page Info','下一页':'Next Page','关闭菜单':'Close Menu','提示':'Notice','知道了':'Got it','自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面':'Autosaved · Click to select / right-click for menu · navigation switches pages',
+  '底部导航栏':'Bottom Navigation','导航栏外观':'Navigation Appearance','背景颜色':'Background','边框颜色':'Border','导航栏高度（px）':'Navigation height (px)','圆角（px）':'Corner radius (px)','导航栏形状':'Navigation shape','贴底横栏':'Full-width bar','悬浮卡片':'Floating card','胶囊栏':'Pill bar','选中状态':'Active state','图标填充':'Filled icon','颜色强调':'Color tint','底部线条':'Underline','当前页面图标':'Current page icon','图标大小（px）':'Icon size (px)','线条粗细':'Stroke width','选中颜色':'Active color','未选中颜色':'Inactive color','上传自定义图标':'Upload custom icon',
+  '这个页面还是空的':'This page is empty','从左侧选择组件和样式开始搭建。':'Choose a component and preset from the left to start building.','个当前页面元素':' elements on this page','页面':'Pages','+ 新建页':'+ New Page','右上角操作':'Header Action','当前页面名称':'Page Name','预设样式':'Preset','尺寸':'Size','宽度（%）':'Width (%)','高度（px，0 为自动）':'Height (px, 0 = auto)','内容':'Content','图片说明':'Image description','图片素材':'Image asset','按钮状态':'Button state','点击后的操作':'On click','交互方式':'Interaction','外观样式':'Appearance','字号（px）':'Font size (px)','文字颜色':'Text color','对齐方式':'Alignment','入场动画':'Entrance animation'
+};
+const originalText = new WeakMap();
+const originalAttributes = new WeakMap();
+function translateText(value) { const lead = value.match(/^\s*/)?.[0] || ''; const tail = value.match(/\s*$/)?.[0] || ''; const core = value.trim(); return EN[core] ? lead + EN[core] + tail : value; }
+function applyLanguage(root = document.body) {
+  document.documentElement.lang = language === 'en' ? 'en' : 'zh-CN';
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT); const nodes = []; while (walker.nextNode()) nodes.push(walker.currentNode);
+  for (const node of nodes) { if (!originalText.has(node)) originalText.set(node, node.nodeValue); const source = originalText.get(node); node.nodeValue = language === 'en' ? translateText(source) : source; }
+  for (const element of root.querySelectorAll?.('[title],[placeholder],[aria-label],[data-help]') || []) { let saved = originalAttributes.get(element); if (!saved) { saved = {}; for (const attr of ['title','placeholder','aria-label','data-help']) if (element.hasAttribute(attr)) saved[attr] = element.getAttribute(attr); originalAttributes.set(element, saved); } for (const [attr, source] of Object.entries(saved)) element.setAttribute(attr, language === 'en' ? (EN[source] || source) : source); }
+  const selector = $('#languageSelect'); if (selector) selector.value = language;
+}
+function setLanguage(value) { language = value === 'en' ? 'en' : 'zh'; localStorage.setItem(LANGUAGE_KEY, language); render(); renderTemplates(); renderEffects(); renderAssets(); applyLanguage(); }
 const clone = value => JSON.parse(JSON.stringify(value));
 const uid = () => globalThis.crypto?.randomUUID?.() || `bb-${Date.now()}-${Math.random().toString(36).slice(2)}`;
 const svgData = body => 'data:image/svg+xml;charset=utf-8,' + encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 360 200">${body}</svg>`);
@@ -303,7 +326,7 @@ function normalizeProject(value) {
   result.pageParent = Object.fromEntries(result.pages.filter(page => result.pageModes[page] === 'detail' && result.pages.includes(result.pageParent?.[page]) && result.pageParent[page] !== page).map(page => [page, result.pageParent[page]]));
   result.headerActions = result.headerActions || {};
   for (const page of result.pages) { if (!result.pageTitles[page]) result.pageTitles[page] = '新页面'; if (!result.pageIcons[page]) result.pageIcons[page] = '□'; if (!result.headerActions[page]) result.headerActions[page] = { icon: '•••', action: 'menu', prompt: '这是' + result.pageTitles[page], targetPage: result.pages[0] }; }
-  result.items = result.items.map(item => ({ ...item, src: item.src === 'assets/white-sneaker-unsplash.jpg' ? 'assets/brand-free-sneaker.png' : item.src, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', width: Math.max(10, Math.min(100, Number(item.width) || 100)), height: Math.max(0, Math.min(800, Number(item.height) || 0)), animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
+  result.items = result.items.map(item => ({ ...item, src: item.src === 'assets/white-sneaker-unsplash.jpg' ? 'assets/brand-free-sneaker.png' : item.src, text: item.src === 'assets/white-sneaker-unsplash.jpg' ? '白色运动鞋商品图' : item.text, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', width: Math.max(10, Math.min(100, Number(item.width) || 100)), height: Math.max(0, Math.min(800, Number(item.height) || 0)), animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
   if (!result.paletteVersion && !result.styled) {
     const previousDefaults = { '#e07a5f': '#2F6B4F', '#2a6b6b': '#2F6B4F', '#2e2a27': '#1F2A24', '#6b6560': '#66716A', '#faf9f6': '#F5F3EF', '#e8e4df': '#DFE2DB', '#2455c5': '#2F6B4F' };
     for (const item of result.items) for (const key of ['color', 'background', 'effectColor']) if (typeof item[key] === 'string') item[key] = previousDefaults[item[key].toLowerCase()] || item[key];
@@ -370,6 +393,7 @@ function renderNav() {
   const nav = $('#phoneNav'); nav.replaceChildren();
   const style = { ...DEFAULT_NAV_STYLE, ...(state.navStyle || {}) };
   nav.className = `phone-nav nav-shape-${style.shape} nav-state-${style.activeState}`;
+  nav.classList.toggle('nav-selected', selected === '__nav__' && !preview);
   nav.style.setProperty('--nav-background', safeColor(style.background, '#FFFFFF'));
   nav.style.setProperty('--nav-border', safeColor(style.borderColor, '#DFE2DB'));
   nav.style.setProperty('--nav-height', `${Math.max(56, Math.min(110, Number(style.height) || 72))}px`);
@@ -526,7 +550,7 @@ function render() {
   $('#previewBtn').textContent = preview ? '退出预览' : '预览交互';
   document.body.classList.toggle('previewing', preview);
   $('#undoBtn').disabled = !history.length; $('#redoBtn').disabled = !future.length;
-  renderNav(); renderPageManager(); renderCanvas(); renderInspector();
+  renderNav(); renderPageManager(); renderCanvas(); renderInspector(); applyLanguage();
 }
 
 function field(container, label, value, kind = 'text', options = []) {
@@ -974,6 +998,7 @@ $('#assetSearch').oninput = renderAssets;
 $('#cutoutSampleBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; try { $('#cutoutColor').value = await sampleImageCorner(asset.data); editorToast('已读取图片左上角的背景颜色'); } catch (error) { editorToast(error.message || '颜色读取失败'); } };
 $('#cutoutApplyBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; const button = $('#cutoutApplyBtn'); button.disabled = true; button.textContent = '处理中…'; try { const oldData = asset.data; const result = await removeSolidBackground(oldData, $('#cutoutColor').value, Number($('#cutoutTolerance').value), Number($('#cutoutSoftness').value)); commit(); asset.data = result; asset.name = asset.name.replace(/\.[^.]+$/, '') + '-透明.png'; for (const item of state.items) if (item.type === 'image' && item.src === oldData) item.src = result; update(); renderAssets(); editorToast('背景已移除，素材已替换为透明 PNG'); } catch (error) { editorToast(error.message || '背景移除失败'); } finally { button.disabled = false; button.textContent = '移除背景'; } };
 $('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.dataset.codeText || '').join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
+$('#languageSelect').onchange = event => setLanguage(event.target.value);
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
