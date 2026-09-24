@@ -18,6 +18,7 @@ const NAV_ICONS = [
   { id: 'settings', name: '设置', outline: '<circle cx="12" cy="12" r="3"/><path d="M12 2v3M12 19v3M2 12h3M19 12h3M4.9 4.9 7 7M17 17l2.1 2.1M19.1 4.9 17 7M7 17l-2.1 2.1"/>' }
 ];
 const DEFAULT_NAV_ICON_STYLE = { size: 23, stroke: 1.9, activeColor: '#1F2A24', inactiveColor: '#7B857E' };
+const DEFAULT_NAV_STYLE = { background: '#FFFFFF', borderColor: '#DFE2DB', height: 72, radius: 0, shape: 'bar', activeState: 'icon' };
 const $ = selector => document.querySelector(selector);
 const clone = value => JSON.parse(JSON.stringify(value));
 const uid = () => globalThis.crypto?.randomUUID?.() || `bb-${Date.now()}-${Math.random().toString(36).slice(2)}`;
@@ -54,7 +55,7 @@ const LEGACY_BUILTINS = [
 
 const productScene = (accent, body, surface = '#F7F8FA') => svgData(`<rect width="360" height="200" fill="${surface}"/><rect x="18" y="16" width="324" height="168" rx="18" fill="#fff"/><rect x="18" y="16" width="324" height="7" rx="3.5" fill="${accent}"/>${body}`);
 const BUILTINS = [
-  { name: '白色运动鞋摄影 · DK / Unsplash', data: 'assets/white-sneaker-unsplash.jpg' },
+  { name: '无品牌运动鞋商品图 · BlokBird 原创', data: 'assets/brand-free-sneaker.png' },
   { name: '护肤品商品图', data: productScene('#FF6680', '<ellipse cx="181" cy="160" rx="92" ry="10" fill="#F0DDE2"/><rect x="96" y="70" width="61" height="84" rx="12" fill="#F7C9D3"/><rect x="108" y="46" width="37" height="28" rx="6" fill="#17233C"/><rect x="177" y="53" width="88" height="101" rx="16" fill="#FFF1E5" stroke="#FF6680" stroke-width="4"/><circle cx="221" cy="99" r="22" fill="#FF6680"/><path d="M207 99h28M221 85v28" stroke="#fff" stroke-width="5"/>') },
   { name: '咖啡外卖主图', data: productScene('#FFAB19', '<ellipse cx="184" cy="159" rx="105" ry="10" fill="#E7DED3"/><path d="M105 61h126l-13 92h-99Z" fill="#EFE4D4" stroke="#5B3B2A" stroke-width="4"/><path d="M231 77q53-3 42 36-8 24-49 18" fill="none" stroke="#5B3B2A" stroke-width="10"/><ellipse cx="168" cy="61" rx="63" ry="16" fill="#73472F"/><path d="M145 112c18 12 37 12 55 0" fill="none" stroke="#FFAB19" stroke-width="6"/>') },
   { name: '餐厅菜品主图', data: productScene('#59C059', '<ellipse cx="180" cy="118" rx="117" ry="53" fill="#E9EEF2"/><ellipse cx="180" cy="111" rx="94" ry="39" fill="#fff"/><path d="M113 115q32-45 64 0t66 0" fill="none" stroke="#F2A33A" stroke-width="15"/><circle cx="142" cy="95" r="16" fill="#E85555"/><circle cx="214" cy="99" r="13" fill="#59C059"/><path d="m180 82 10 27m-28-17 9 30" stroke="#356C3F" stroke-width="5"/>') },
@@ -207,7 +208,7 @@ let state = load();
 
 function makeItem(type, variantId, page = activePage) {
   const variant = VARIANTS[type].find(v => v.id === variantId) || VARIANTS[type][0];
-  const base = { id: uid(), type, page, layoutId: null, variant: variant.id, text: '', detail: '', color: '#1F2A24', background: '#FFFFFF', size: type === 'button' ? 14 : 16, radius: 0, align: 'left', width: 100, src: '', href: '#', action: type === 'button' ? 'toast' : 'none', prompt: '操作成功', targetPage: 'profile', requiresInput: false, animation: 'none', animationDuration: 600, animationDelay: 0, animationEasing: 'ease', animationTrigger: 'enter', effect: 'none', effectColor: '#2F6B4F', opacity: 100, visualState: 'default', inputType: 'text', checked: false, columns: 1, gap: 10, padding: 10 };
+  const base = { id: uid(), type, page, layoutId: null, variant: variant.id, text: '', detail: '', color: '#1F2A24', background: '#FFFFFF', size: type === 'button' ? 14 : 16, radius: 0, align: 'left', width: 100, height: 0, src: '', href: '#', action: type === 'button' ? 'toast' : 'none', prompt: '操作成功', targetPage: 'profile', requiresInput: false, animation: 'none', animationDuration: 600, animationDelay: 0, animationEasing: 'ease', animationTrigger: 'enter', effect: 'none', effectColor: '#2F6B4F', opacity: 100, visualState: 'default', inputType: 'text', checked: false, columns: 1, gap: 10, padding: 10 };
   Object.assign(base, clone(variant.props)); if (type === 'card') base.detail = CARD_DETAILS[variant.id] || ''; return base;
 }
 
@@ -220,7 +221,7 @@ function initialState() {
   const discoverText = makeItem('text', 'body', 'discover'); discoverText.text = '这里可以放你的作品、内容或功能入口。';
   const profileTitle = makeItem('heading', 'section', 'profile'); profileTitle.text = '关于我';
   const profileCard = makeItem('card', 'profile', 'profile');
-  return { name: '未命名项目', pages: [...DEFAULT_PAGES], pageTitles: clone(PAGE_LABELS), pageIcons: clone(PAGE_ICONS), headerActions: { home: { icon: '•••', action: 'menu', prompt: '欢迎来到首页', targetPage: 'discover' }, discover: { icon: '•••', action: 'menu', prompt: '这里是发现页', targetPage: 'profile' }, profile: { icon: '•••', action: 'menu', prompt: '这里是我的页面', targetPage: 'home' } }, items: [homeTitle, homeText, homeButton, homeCard, discoverTitle, discoverText, profileTitle, profileCard], assets: [], styled: false };
+  return { name: '未命名项目', pages: [...DEFAULT_PAGES], pageTitles: clone(PAGE_LABELS), pageIcons: clone(PAGE_ICONS), navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '欢迎来到首页', targetPage: 'discover' }, discover: { icon: '•••', action: 'menu', prompt: '这里是发现页', targetPage: 'profile' }, profile: { icon: '•••', action: 'menu', prompt: '这里是我的页面', targetPage: 'home' } }, items: [homeTitle, homeText, homeButton, homeCard, discoverTitle, discoverText, profileTitle, profileCard], assets: [], styled: false };
 }
 const PAGE_TEMPLATES = [
   { id: 'portfolio', name: '音乐播放器', desc: '歌单、正在播放与收藏路径', icon: '♪', cover: 11 },
@@ -295,12 +296,14 @@ function normalizeProject(value) {
   result.pageIcons = { ...PAGE_ICONS, ...(result.pageIcons || {}) };
   for (const page of result.pages) result.pageIcons[page] = safeNavIcon(result.pageIcons[page]);
   result.pageIconSettings = Object.fromEntries(result.pages.map(page => { const style = result.pageIconSettings?.[page] || {}; return [page, { size: Math.max(16, Math.min(32, Number(style.size) || 23)), stroke: Math.max(1, Math.min(3, Number(style.stroke) || 1.9)), activeColor: safeColor(style.activeColor, '#1F2A24'), inactiveColor: safeColor(style.inactiveColor, '#7B857E') }]; }));
+  const navStyle = result.navStyle || {};
+  result.navStyle = { background: safeColor(navStyle.background, DEFAULT_NAV_STYLE.background), borderColor: safeColor(navStyle.borderColor, DEFAULT_NAV_STYLE.borderColor), height: Math.max(56, Math.min(110, Number(navStyle.height) || 72)), radius: Math.max(0, Math.min(40, Number(navStyle.radius) || 0)), shape: ['bar', 'floating', 'pill'].includes(navStyle.shape) ? navStyle.shape : 'bar', activeState: ['icon', 'tint', 'underline'].includes(navStyle.activeState) ? navStyle.activeState : 'icon' };
   result.pageModes = Object.fromEntries(result.pages.map(page => [page, result.pageModes?.[page] === 'detail' ? 'detail' : 'tab']));
   if (!result.pages.some(page => result.pageModes[page] === 'tab')) result.pageModes[result.pages[0]] = 'tab';
   result.pageParent = Object.fromEntries(result.pages.filter(page => result.pageModes[page] === 'detail' && result.pages.includes(result.pageParent?.[page]) && result.pageParent[page] !== page).map(page => [page, result.pageParent[page]]));
   result.headerActions = result.headerActions || {};
   for (const page of result.pages) { if (!result.pageTitles[page]) result.pageTitles[page] = '新页面'; if (!result.pageIcons[page]) result.pageIcons[page] = '□'; if (!result.headerActions[page]) result.headerActions[page] = { icon: '•••', action: 'menu', prompt: '这是' + result.pageTitles[page], targetPage: result.pages[0] }; }
-  result.items = result.items.map(item => ({ ...item, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
+  result.items = result.items.map(item => ({ ...item, page: result.pages.includes(item.page) ? item.page : result.pages[0], variant: item.variant || VARIANTS[item.type][0].id, detail: item.detail ?? CARD_DETAILS[item.variant] ?? '', width: Math.max(10, Math.min(100, Number(item.width) || 100)), height: Math.max(0, Math.min(800, Number(item.height) || 0)), animation: item.animation || 'none', animationDuration: item.animationDuration ?? 600, animationDelay: item.animationDelay ?? 0, animationEasing: item.animationEasing || 'ease', animationTrigger: item.animationTrigger || 'enter', effect: item.effect || 'none', effectColor: item.effectColor || '#2F6B4F', opacity: item.opacity ?? 100, visualState: item.visualState || 'default', inputType: item.inputType || 'text', checked: Boolean(item.checked), layoutId: item.type === 'layout' ? null : item.layoutId || null, columns: item.columns || 1, gap: item.gap ?? 10, padding: item.padding ?? 10, action: item.action || (item.type === 'button' ? 'toast' : 'none'), prompt: item.prompt || '操作成功', targetPage: item.targetPage || result.pages[0], requiresInput: Boolean(item.requiresInput) }));
   if (!result.paletteVersion && !result.styled) {
     const previousDefaults = { '#e07a5f': '#2F6B4F', '#2a6b6b': '#2F6B4F', '#2e2a27': '#1F2A24', '#6b6560': '#66716A', '#faf9f6': '#F5F3EF', '#e8e4df': '#DFE2DB', '#2455c5': '#2F6B4F' };
     for (const item of result.items) for (const key of ['color', 'background', 'effectColor']) if (typeof item[key] === 'string') item[key] = previousDefaults[item[key].toLowerCase()] || item[key];
@@ -365,6 +368,12 @@ function changeHeader(key, value) { commit(); state.headerActions[activePage][ke
 
 function renderNav() {
   const nav = $('#phoneNav'); nav.replaceChildren();
+  const style = { ...DEFAULT_NAV_STYLE, ...(state.navStyle || {}) };
+  nav.className = `phone-nav nav-shape-${style.shape} nav-state-${style.activeState}`;
+  nav.style.setProperty('--nav-background', safeColor(style.background, '#FFFFFF'));
+  nav.style.setProperty('--nav-border', safeColor(style.borderColor, '#DFE2DB'));
+  nav.style.setProperty('--nav-height', `${Math.max(56, Math.min(110, Number(style.height) || 72))}px`);
+  nav.style.setProperty('--nav-radius', `${Math.max(0, Math.min(40, Number(style.radius) || 0))}px`);
   const pages = document.createElement('div'); pages.className = 'nav-pages';
   for (const page of state.pages.filter(page => !isDetailPage(page))) {
     const button = document.createElement('button'); button.type = 'button'; button.className = page === activePage ? 'active' : '';
@@ -438,7 +447,7 @@ function createElementNode(item) {
   if (item.type === 'input') { node = document.createElement('input'); node.className = 'ui-input variant-input-' + item.variant; node.type = safeInputType(item.inputType); node.placeholder = item.text || '请输入内容'; node.readOnly = !preview; }
   if (item.type === 'switch') { node = document.createElement('button'); node.type = 'button'; node.className = 'ui-switch variant-switch-' + item.variant; node.setAttribute('role', 'switch'); node.setAttribute('aria-checked', String(Boolean(item.checked))); node.dataset.checked = String(Boolean(item.checked)); node.style.setProperty('--switch-color', safeColor(item.background, '#2F6B4F')); const label = document.createElement('span'); label.className = 'switch-label'; label.textContent = item.text || '开关'; const track = document.createElement('span'); track.className = 'switch-track'; const knob = document.createElement('i'); track.append(knob); node.append(label, track); node.onclick = event => { if (!preview) return; event.stopPropagation(); const next = node.dataset.checked !== 'true'; node.dataset.checked = String(next); node.setAttribute('aria-checked', String(next)); if (item.animationTrigger === 'click') replayNodeAnimation(node); }; }
   if (item.type === 'image') {
-    if (item.src) { node = document.createElement('img'); node.src = item.src; node.alt = item.text || '图片'; node.style.width = `${Math.max(10, Math.min(100, Number(item.width) || 100))}%`; }
+    if (item.src) { node = document.createElement('img'); node.src = item.src; node.alt = item.text || '图片'; node.style.width = '100%'; }
     else { node = document.createElement('div'); node.className = 'canvas-placeholder'; node.textContent = '到“素材”上传图片'; }
   }
   if (item.type === 'divider') {
@@ -468,7 +477,10 @@ function createElementNode(item) {
 function buildCanvasWrapper(item) {
   const wrapper = document.createElement('div'); wrapper.className = 'canvas-element' + (selected === item.id && !preview ? ' selected' : '');
   wrapper.dataset.label = TYPE_LABELS[item.type]; wrapper.dataset.type = item.type; wrapper.dataset.id = item.id;
+  wrapper.style.width = `${Math.max(10, Math.min(100, Number(item.width) || 100))}%`;
+  if (Number(item.height) > 0) { wrapper.style.height = `${Math.max(28, Math.min(800, Number(item.height)))}px`; wrapper.classList.add('has-custom-height'); }
   wrapper.append(createElementNode(item));
+  if (selected === item.id && !preview) for (const direction of ['nw', 'ne', 'sw', 'se']) { const handle = document.createElement('span'); handle.className = `resize-handle resize-${direction}`; handle.setAttribute('aria-hidden', 'true'); handle.onpointerdown = event => beginResize(event, item, wrapper, direction); wrapper.append(handle); }
   wrapper.onclick = event => { event.stopPropagation(); if (preview) { if (item.animationTrigger === 'click') replayNodeAnimation(wrapper.firstElementChild); return; } selected = item.id; render(); };
   wrapper.oncontextmenu = event => { if (preview) return; event.preventDefault(); event.stopPropagation(); selected = item.id; renderInspector(); openContextMenu(event.clientX, event.clientY, 'item', item.id); };
   wrapper.draggable = !preview;
@@ -477,6 +489,14 @@ function buildCanvasWrapper(item) {
   wrapper.ondragleave = () => wrapper.classList.remove('drag-over');
   wrapper.ondrop = event => { if (preview) return; event.preventDefault(); event.stopPropagation(); wrapper.classList.remove('drag-over'); const dragged = event.dataTransfer.getData('text/plain'); if (item.type === 'layout' && dragged !== item.id) moveIntoLayout(dragged, item.id); else reorderItem(dragged, item.id); };
   return wrapper;
+}
+function beginResize(event, item, wrapper, direction) {
+  event.preventDefault(); event.stopPropagation();
+  const page = $('#canvasPage'); const pageRect = page.getBoundingClientRect(); const start = wrapper.getBoundingClientRect(); const startX = event.clientX; const startY = event.clientY;
+  commit(); wrapper.setPointerCapture?.(event.pointerId);
+  const move = current => { const horizontal = direction.includes('e') ? current.clientX - startX : startX - current.clientX; const vertical = direction.includes('s') ? current.clientY - startY : startY - current.clientY; const widthPx = Math.max(56, Math.min(pageRect.width, start.width + horizontal)); const heightPx = Math.max(28, Math.min(800, start.height + vertical)); wrapper.style.width = `${widthPx / pageRect.width * 100}%`; wrapper.style.height = `${heightPx}px`; wrapper.classList.add('has-custom-height', 'is-resizing'); };
+  const finish = current => { move(current); const rect = wrapper.getBoundingClientRect(); item.width = Math.round(Math.max(10, Math.min(100, rect.width / pageRect.width * 100)) * 10) / 10; item.height = Math.round(Math.max(28, Math.min(800, rect.height))); wrapper.releasePointerCapture?.(event.pointerId); window.removeEventListener('pointermove', move); window.removeEventListener('pointerup', finish); update(); };
+  window.addEventListener('pointermove', move); window.addEventListener('pointerup', finish, { once: true });
 }
 function renderCanvas() {
   const page = $('#canvasPage'); const scroll = page.scrollTop; page.replaceChildren();
@@ -527,6 +547,17 @@ function renderNavIconInspector(box, page) {
   colorField(box, '选中颜色', settings.activeColor, value => changeSetting('activeColor', value));
   colorField(box, '未选中颜色', settings.inactiveColor, value => changeSetting('inactiveColor', value));
 }
+function renderNavBarInspector(box) {
+  section(box, '底部导航栏');
+  const current = { ...DEFAULT_NAV_STYLE, ...(state.navStyle || {}) };
+  const changeNav = (key, value) => { commit(); state.navStyle = { ...current, [key]: value }; update(); };
+  colorField(box, '导航栏背景', current.background, value => changeNav('background', value));
+  colorField(box, '顶部分割线', current.borderColor, value => changeNav('borderColor', value));
+  const shape = field(box, '导航栏形状', current.shape, 'select', [['bar', '通栏'], ['floating', '悬浮卡片'], ['pill', '胶囊']]); shape.onchange = () => changeNav('shape', shape.value);
+  const active = field(box, '选中状态', current.activeState, 'select', [['icon', '填充图标'], ['tint', '浅色底'], ['underline', '下划线']]); active.onchange = () => changeNav('activeState', active.value);
+  const height = field(box, '导航栏高度（px）', current.height, 'number'); height.min = '56'; height.max = '110'; height.onchange = () => changeNav('height', Math.max(56, Math.min(110, Number(height.value) || 72)));
+  const radius = field(box, '外形圆角（px）', current.radius, 'number'); radius.max = '40'; radius.onchange = () => changeNav('radius', Math.max(0, Math.min(40, Number(radius.value) || 0)));
+}
 function change(key, value) { const item = state.items.find(entry => entry.id === selected); if (!item) return; commit(); item[key] = value; if (['color', 'background', 'radius'].includes(key)) state.styled = true; update(); }
 function applyVariant(value) { const item = state.items.find(entry => entry.id === selected); if (!item) return; const preset = VARIANTS[item.type].find(variant => variant.id === value); if (!preset) return; commit(); const text = item.text; Object.assign(item, { color: '#1F2A24', background: '#FFFFFF', size: item.type === 'button' ? 14 : 16, radius: 0, align: 'left' }, clone(preset.props)); item.text = text; if (item.type === 'card') item.detail = CARD_DETAILS[value] || ''; item.variant = value; state.styled = true; update(); }
 function moveIntoLayout(itemId, layoutId) { const item = state.items.find(entry => entry.id === itemId && entry.page === activePage); if (!item || item.type === 'layout') return; if (layoutId && !state.items.some(entry => entry.id === layoutId && entry.type === 'layout' && entry.page === activePage)) return; commit(); item.layoutId = layoutId || null; selected = item.id; update(); }
@@ -563,13 +594,16 @@ function renderInspector() {
   if (!item) {
     const intro = document.createElement('div'); intro.className = 'inspector-empty'; intro.innerHTML = '<span>◇</span>先选择画布元素<br>或设置当前页面名称'; box.append(intro);
     const title = field(box, '当前页面名称', state.pageTitles[activePage]); title.onchange = () => { commit(); state.pageTitles[activePage] = title.value.trim().slice(0, 16) || PAGE_LABELS[activePage] || '新页面'; update(); };
-    if (!isDetailPage(activePage)) renderNavIconInspector(box, activePage);
+    if (!isDetailPage(activePage)) { renderNavBarInspector(box); renderNavIconInspector(box, activePage); }
     showCode(null); return;
   }
   const heading = document.createElement('div'); heading.className = 'section-label'; heading.textContent = TYPE_LABELS[item.type] + ' / ' + activePage; box.append(heading);
   const actions = document.createElement('div'); actions.className = 'element-actions';
   for (const [label, handler] of [['上移', () => move(-1)], ['下移', () => move(1)], ['复制', duplicate], ['删除', () => deleteItem(item.id)]]) { const button = document.createElement('button'); button.textContent = label; if (label === '删除') button.className = 'delete'; button.onclick = handler; actions.append(button); } box.append(actions);
   const variant = field(box, '预设样式', item.variant, 'select', VARIANTS[item.type].map(option => [option.id, option.name])); variant.onchange = () => applyVariant(variant.value);
+  section(box, '尺寸');
+  const width = field(box, '宽度（%）', item.width ?? 100, 'number'); width.min = '10'; width.max = '100'; width.onchange = () => change('width', Math.max(10, Math.min(100, Number(width.value) || 100)));
+  const height = field(box, '高度（px，0 为自动）', item.height ?? 0, 'number'); height.max = '800'; height.onchange = () => change('height', Math.max(0, Math.min(800, Number(height.value) || 0)));
   if (item.type === 'layout') {
     const name = field(box, '布局名称', item.text); name.onchange = () => change('text', name.value.slice(0, 30));
     const columns = field(box, '列数', item.columns, 'number'); columns.onchange = () => change('columns', Math.max(1, Math.min(4, Number(columns.value) || 1)));
@@ -590,7 +624,6 @@ function renderInspector() {
     const alt = field(box, '图片说明', item.text); alt.onchange = () => change('text', alt.value);
     const images = [['', '请选择图片'], ...BUILTINS.map(asset => [asset.data, asset.name]), ...state.assets.map(asset => [asset.data, asset.name])];
     const source = field(box, '图片素材', item.src, 'select', images); source.onchange = () => change('src', source.value);
-    const width = field(box, '宽度（%）', item.width, 'number'); width.onchange = () => change('width', Math.max(10, Math.min(100, Number(width.value) || 100)));
   }
   if (item.type === 'button') {
     const visualState = field(box, '按钮状态', item.visualState || 'default', 'select', [['default', '默认'], ['hover', '悬停'], ['pressed', '按下'], ['disabled', '禁用']]); visualState.onchange = () => change('visualState', visualState.value);
@@ -832,7 +865,8 @@ function presentationCss(item) { return `--effect-color:${safeColor(item.effectC
 function presentationTrigger(item) { return item.animation && item.animation !== 'none' && safeTrigger(item.animationTrigger) === 'click' ? ' data-animation-trigger="click"' : ''; }
 function exportElement(item) {
   const text = escapeHtml(item.text); const color = safeColor(item.color); const bg = safeColor(item.background, '#FFFFFF');
-  const base = `color:${color};font-size:${Math.max(8, Math.min(100, Number(item.size) || 16))}px;border-radius:${Math.max(0, Math.min(99, Number(item.radius) || 0))}px;text-align:${item.align || 'left'};background:${bg};${presentationCss(item)}`;
+  const dimensions = `width:${Math.max(10, Math.min(100, Number(item.width) || 100))}%;${Number(item.height) > 0 ? `height:${Math.max(28, Math.min(800, Number(item.height)))}px;overflow:auto;` : ''}`;
+  const base = `${dimensions}color:${color};font-size:${Math.max(8, Math.min(100, Number(item.size) || 16))}px;border-radius:${Math.max(0, Math.min(99, Number(item.radius) || 0))}px;text-align:${item.align || 'left'};background:${bg};${presentationCss(item)}`;
   const classes = presentationClasses(item); const trigger = presentationTrigger(item);
   if (item.type === 'layout') { const children = state.items.filter(child => child.page === item.page && child.layoutId === item.id).map(exportElement).join(''); const style = `--layout-columns:${Math.max(1, Math.min(4, Number(item.columns) || 1))};gap:${Math.max(0, Math.min(40, Number(item.gap) || 0))}px;padding:${Math.max(0, Math.min(50, Number(item.padding) || 0))}px;border-radius:${Math.max(0, Math.min(99, Number(item.radius) || 0))}px;background:${bg};${presentationCss(item)}`; return `<div class="item ui-layout variant-layout-${escapeHtml(item.variant)}${classes}" style="${style}"${trigger}>${children}</div>`; }
   if (item.type === 'heading') return `<h2 class="item ui-heading variant-heading-${escapeHtml(item.variant)}${classes}" style="${base}"${trigger}>${text}</h2>`;
@@ -840,7 +874,7 @@ function exportElement(item) {
   if (item.type === 'button') return `<div class="item"><button data-action-id="${escapeHtml(item.id)}" class="ui-button variant-button-${escapeHtml(item.variant)} state-${escapeHtml(item.visualState || 'default')}${classes}" style="${base}"${trigger}${item.visualState === 'disabled' ? ' disabled' : ''}>${text}</button></div>`;
   if (item.type === 'input') return `<input class="item ui-input variant-input-${escapeHtml(item.variant)}${classes}" type="${safeInputType(item.inputType)}" placeholder="${text}" style="${base}"${trigger}>`;
   if (item.type === 'switch') return `<button class="item ui-switch variant-switch-${escapeHtml(item.variant)}${classes}" type="button" role="switch" aria-checked="${Boolean(item.checked)}" data-checked="${Boolean(item.checked)}" style="--switch-color:${bg};color:${color};font-size:${Math.max(8, Math.min(100, Number(item.size) || 16))}px;${presentationCss(item)}"${trigger}><span class="switch-label">${text}</span><span class="switch-track"><i></i></span></button>`;
-  if (item.type === 'image') return safeSrc(item.src) ? `<img class="item${classes}" src="${escapeHtml(safeSrc(item.src))}" alt="${text}" style="width:${Math.max(10, Math.min(100, Number(item.width) || 100))}%;${presentationCss(item)}"${trigger}>` : '';
+  if (item.type === 'image') return safeSrc(item.src) ? `<img class="item${classes}" src="${escapeHtml(safeSrc(item.src))}" alt="${text}" style="${dimensions}object-fit:cover;${presentationCss(item)}"${trigger}>` : '';
   if (item.type === 'divider') return item.variant === 'wave' ? `<svg class="item ui-wave${classes}" style="${presentationCss(item)}"${trigger} viewBox="0 0 320 27"><path d="M0 15 Q40 1 80 15 T160 15 T240 15 T320 15" fill="none" stroke="#DFE2DB" stroke-width="3"/></svg>` : `<hr class="item ui-divider variant-divider-${escapeHtml(item.variant)}${classes}" style="${presentationCss(item)}"${trigger}>`;
   const avatar = item.variant === 'profile' ? '<span class="avatar">我</span>' : '';
   const kicker = item.variant === 'accent' ? '<span class="card-kicker">精选</span>' : '';
@@ -873,12 +907,15 @@ function exportHtml() {
   const pageIdsJson = JSON.stringify(state.pages).replace(/</g, '\\u003c');
   const pageModesJson = JSON.stringify(state.pageModes || {}).replace(/</g, '\\u003c');
   const pageParentJson = JSON.stringify(state.pageParent || {}).replace(/</g, '\\u003c');
+  const navStyle = { ...DEFAULT_NAV_STYLE, ...(state.navStyle || {}) };
+  const navClass = `nav-shape-${navStyle.shape} nav-state-${navStyle.activeState}`;
+  const navInline = `--nav-background:${safeColor(navStyle.background, '#FFFFFF')};--nav-border:${safeColor(navStyle.borderColor, '#DFE2DB')};--nav-height:${Math.max(56, Math.min(110, Number(navStyle.height) || 72))}px;--nav-radius:${Math.max(0, Math.min(40, Number(navStyle.radius) || 0))}px`;
   const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(state.name)}</title><style>
   *{box-sizing:border-box}body{margin:0;background:#F5F3EF;color:#1F2A24;font-family:"Microsoft YaHei UI","Microsoft YaHei",system-ui,sans-serif}.app{width:min(100%,468px);height:100dvh;min-height:650px;margin:auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 30px #1F2A2418}.status{height:38px;flex:none;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.header{height:56px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #DFE2DB;font-size:20px;font-weight:700}main{flex:1;overflow:auto;padding:24px 22px}nav{height:72px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DFE2DB}nav button{border:0;background:#fff;color:#66716A;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:22px}nav button.active{color:#2F6B4F}.app-page{display:none}.app-page.active{display:block}.item{display:block;margin:0 0 17px;max-width:100%}.btn{padding:10px 18px;border:1px solid transparent;font-weight:700;cursor:pointer}.btn.outline{border-color:#2F6B4F}.btn.text-button{padding-left:0;padding-right:0}.btn:active{transform:scale(.96)}.card{padding:20px;border:1px solid #DFE2DB}.card.accent{border-left:4px solid #2F6B4F}.card.outline{border-color:#2F6B4F}.card small{display:block;margin-top:7px;color:#66716A;font-size:12px}hr{border:0;border-top:1px solid #DFE2DB}.dashed{border-top-style:dashed}.wave{height:27px;width:100%}.toast{position:fixed;left:50%;bottom:91px;transform:translateX(-50%);display:none;padding:10px 18px;background:#1F2A24;color:#fff;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#1F2A2470;display:none;place-items:center;padding:20px}.modal>div{max-width:320px;width:100%;background:#fff;border-radius:15px;padding:24px;text-align:center}.modal button{background:#2F6B4F;color:#fff;border:0;border-radius:8px;padding:10px 24px}.bb-fade{animation:fade .5s ease both}.bb-rise{animation:rise .5s ease both}.bb-pop{animation:pop .4s ease both}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1}}
   .header{justify-content:space-between}.header button{border:0;background:transparent;color:#66716A;font-size:16px;cursor:pointer}nav{display:flex;grid-template-columns:none;overflow-x:auto;scrollbar-width:none}nav button{min-width:74px;flex:1 0 74px}.more-menu{position:fixed;right:max(12px,calc((100vw - 468px)/2 + 20px));top:88px;width:145px;background:#fff;border:1px solid #DFE2DB;border-radius:9px;box-shadow:0 10px 25px #1F2A2420;display:none}.more-menu button{display:block;width:100%;padding:10px;background:#fff;border:0;text-align:left;color:#1F2A24}
   #back[hidden],nav[hidden]{display:none}.header #back{font-size:23px;color:#1F2A24}
-  nav{height:72px;padding:4px 12px 0;box-shadow:0 -6px 18px #1F2A2408}nav button{min-width:76px;gap:3px;padding:5px 4px 3px;border-radius:10px;color:var(--nav-inactive,#7B857E);font-size:10px;font-weight:550}nav button.active{color:var(--nav-active,#1F2A24);font-weight:750}nav .nav-icon{width:26px;height:26px;display:grid;place-items:center}nav .nav-icon svg,nav .nav-icon img{width:var(--icon-size,23px);height:var(--icon-size,23px);display:block;object-fit:contain}nav .nav-icon svg{stroke:currentColor;stroke-width:var(--icon-stroke,1.9);stroke-linecap:round;stroke-linejoin:round;fill:none}nav .nav-icon .icon-filled{display:none;fill:currentColor;stroke:none}nav button.active .nav-icon svg.has-fill .icon-outline{display:none}nav button.active .nav-icon svg.has-fill .icon-filled{display:block}nav button:not(.active) .nav-icon img{opacity:.58}
-  ${PRESET_CSS}</style></head><body><div class="app"><div class="status"><span>9:41</span><span>●●● ▰</span></div><div class="header"><button id="back" aria-label="返回上一页" hidden>←</button><span id="title"></span><button id="more" aria-label="页面操作">•••</button></div><main>${pages}</main><nav>${nav}</nav></div><div class="more-menu" id="moreMenu"><button id="moreInfo">页面信息</button><button id="moreNext">下一页</button><button id="moreClose">关闭菜单</button></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div><strong>提示</strong><p id="message"></p><button id="close">知道了</button></div></div><script>
+  nav{height:var(--nav-height,72px);padding:4px 12px 0;border-color:var(--nav-border,#DFE2DB);background:var(--nav-background,#fff);border-radius:var(--nav-radius,0);box-shadow:0 -6px 18px #1F2A2408}nav button{min-width:76px;gap:3px;padding:5px 4px 3px;border-radius:10px;color:var(--nav-inactive,#7B857E);background:transparent;font-size:10px;font-weight:550}nav button.active{color:var(--nav-active,#1F2A24);font-weight:750}nav.nav-shape-floating{margin:0 12px 10px;border:1px solid var(--nav-border);box-shadow:0 8px 24px #1F2A2420}.nav-shape-pill{margin:0 18px 12px;border:1px solid var(--nav-border);border-radius:999px}.nav-state-tint button.active{background:color-mix(in srgb,var(--nav-active) 13%,transparent)}.nav-state-underline button.active:after{content:'';width:22px;height:3px;border-radius:3px;background:currentColor}.nav-state-underline button.active .nav-icon .icon-filled{display:none}.nav-state-underline button.active .nav-icon .icon-outline{display:block}nav .nav-icon{width:26px;height:26px;display:grid;place-items:center}nav .nav-icon svg,nav .nav-icon img{width:var(--icon-size,23px);height:var(--icon-size,23px);display:block;object-fit:contain}nav .nav-icon svg{stroke:currentColor;stroke-width:var(--icon-stroke,1.9);stroke-linecap:round;stroke-linejoin:round;fill:none}nav .nav-icon .icon-filled{display:none;fill:currentColor;stroke:none}nav button.active .nav-icon svg.has-fill .icon-outline{display:none}nav button.active .nav-icon svg.has-fill .icon-filled{display:block}nav button:not(.active) .nav-icon img{opacity:.58}
+  ${PRESET_CSS}</style></head><body><div class="app"><div class="status"><span>9:41</span><span>●●● ▰</span></div><div class="header"><button id="back" aria-label="返回上一页" hidden>←</button><span id="title"></span><button id="more" aria-label="页面操作">•••</button></div><main>${pages}</main><nav class="${navClass}" style="${navInline}">${nav}</nav></div><div class="more-menu" id="moreMenu"><button id="moreInfo">页面信息</button><button id="moreNext">下一页</button><button id="moreClose">关闭菜单</button></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div><strong>提示</strong><p id="message"></p><button id="close">知道了</button></div></div><script>
   const titles=${titlesJson},actions=${actionsJson},headers=${headerJson},pageIds=${pageIdsJson},pageModes=${pageModesJson},pageParent=${pageParentJson};
   let current=pageIds[0],pageHistory=[];
   function hideMore(){document.getElementById('moreMenu').style.display='none'}
@@ -916,7 +953,7 @@ $('#saveBtn').onclick = () => { const name = prompt('项目名称', state.name);
 $('#exportBtn').onclick = exportHtml;
 $('#importBtn').onclick = () => $('#projectInput').click();
 $('#projectInput').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { const imported = JSON.parse(await file.text()); if (!validProject(imported)) throw Error(); commit(); state = normalizeProject(imported); activePage = state.pages[0]; selected = null; update(); renderAssets(); editorToast('项目导入成功'); } catch { editorToast('项目文件格式不正确'); } event.target.value = ''; };
-$('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
+$('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
 $('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); cutoutAssetIndex = state.assets.length - 1; update(); renderAssets(); try { $('#cutoutColor').value = await sampleImageCorner(asset.data); } catch {} editorToast(`已导入 ${asset.name}，可选择快速抠图`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
 $('#cutoutSampleBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; try { $('#cutoutColor').value = await sampleImageCorner(asset.data); editorToast('已读取图片左上角的背景颜色'); } catch (error) { editorToast(error.message || '颜色读取失败'); } };
