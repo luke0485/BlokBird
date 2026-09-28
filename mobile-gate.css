@@ -12,8 +12,21 @@
   padding:20px;
   background:#fff;
   color:#1f2a37;
-  font:600 clamp(13px,3.6vw,16px)/1.5 "Microsoft YaHei","Noto Sans SC",sans-serif;
+  font:600 clamp(17px,4.8vw,19px)/1.5 "Microsoft YaHei","Noto Sans SC",sans-serif;
   letter-spacing:.01em;
   text-align:center;
   white-space:nowrap;
 }
+.phone-visitor .phone-visitor-gate::before{
+  content:"";
+  position:absolute;
+  left:50%;
+  top:50%;
+  width:min(92vw,480px);
+  height:250px;
+  transform:translate(-50%,-50%);
+  background:radial-gradient(ellipse,rgba(76,151,255,.36) 0%,rgba(169,207,255,.25) 38%,rgba(255,255,255,0) 76%);
+  filter:blur(24px);
+  pointer-events:none;
+}
+.phone-visitor .phone-visitor-gate span{position:relative}
