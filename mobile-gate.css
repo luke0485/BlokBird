@@ -6,16 +6,14 @@
   position:fixed;
   inset:0;
   z-index:10000;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+  display:grid;
+  place-items:center;
   padding:20px;
   background:#fff;
   color:#1f2a37;
   font:600 clamp(17px,4.8vw,19px)/1.5 "Microsoft YaHei","Noto Sans SC",sans-serif;
-  letter-spacing:.01em;
+  letter-spacing:0;
   text-align:center;
-  white-space:nowrap;
 }
 .phone-visitor .phone-visitor-gate::before{
   content:"";
@@ -29,4 +27,11 @@
   filter:blur(24px);
   pointer-events:none;
 }
-.phone-visitor .phone-visitor-gate span{position:relative}
+.phone-visitor .phone-visitor-gate span{
+  position:relative;
+  display:block;
+  max-width:min(100%,360px);
+  margin-inline:auto;
+  text-align:center;
+  text-wrap:balance;
+}
