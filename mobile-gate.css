@@ -1,7 +1,7 @@
 .phone-visitor-gate{display:none}
 
 .phone-visitor body{overflow:hidden}
-.phone-visitor .topbar,.phone-visitor .workspace{pointer-events:none;user-select:none}
+.phone-visitor .topbar,.phone-visitor .workspace{visibility:hidden;pointer-events:none;user-select:none}
 .phone-visitor .phone-visitor-gate{
   position:fixed;
   inset:0;
@@ -10,9 +10,7 @@
   align-items:center;
   justify-content:center;
   padding:20px;
-  background:rgba(242,246,255,.44);
-  -webkit-backdrop-filter:blur(9px);
-  backdrop-filter:blur(9px);
+  background:#fff;
   color:#1f2a37;
   font:600 clamp(13px,3.6vw,16px)/1.5 "Microsoft YaHei","Noto Sans SC",sans-serif;
   letter-spacing:.01em;
