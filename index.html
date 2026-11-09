@@ -3,15 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <link rel="preload" href="fonts/fusion-pixel-12px-sc.woff2" as="font" type="font/woff2" crossorigin />
   <meta name="description" content="自由拼接手机界面、设计交互并学习前端的可视化工具" />
   <title>BlokBird · UI Design</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg?v=20260924" />
-  <link rel="stylesheet" href="styles.css?v=20261109c" />
-  <link rel="stylesheet" href="phone.css?v=20261109c" />
-  <link rel="stylesheet" href="theme.css?v=20261109c" />
-  <link rel="stylesheet" href="ui-overrides.css?v=20261109c" />
-  <link rel="stylesheet" href="mobile-gate.css?v=20261109c" />
+  <link rel="stylesheet" href="styles.css?v=20261109d" />
+  <link rel="stylesheet" href="phone.css?v=20261109d" />
+  <link rel="stylesheet" href="theme.css?v=20261109d" />
+  <link rel="stylesheet" href="ui-overrides.css?v=20261109d" />
+  <link rel="stylesheet" href="mobile-gate.css?v=20261109d" />
   <script>
     if (navigator.userAgentData?.mobile || /Android.*Mobile|iPhone|iPod|Windows Phone|Mobile/i.test(navigator.userAgent)) {
       document.documentElement.classList.add('phone-visitor');
@@ -74,6 +73,6 @@
   <div id="guideDialog" class="guide-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="guideTitle"><div class="guide-dialog-card"><div class="guide-dialog-head"><strong id="guideTitle">使用提示</strong><button id="guideCloseBtn" type="button" aria-label="关闭提示">×</button></div><div class="guide-dialog-grid"><div class="guide-card"><strong>从任意组件开始</strong><p>挑选左侧预设放入手机页面，再从右侧修改文字、颜色、动画和行为。</p></div><div class="guide-card"><strong>设计真实操作路径</strong><p>新建页面并给按钮设置切换页面，把首页、详情和完成状态连接起来。</p></div><div class="guide-card"><strong>直接操作画布</strong><p>点击选中，拖动调整顺序，右键打开复制、粘贴和移动菜单。</p></div><div class="guide-card"><strong>一边设计一边学代码</strong><p>选中组件后点击代码行，查看当前值如何产生手机里的真实效果。</p></div></div></div></div>
   <div id="exportDialog" class="guide-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="exportTitle"><div class="guide-dialog-card export-card"><div class="guide-dialog-head"><strong id="exportTitle">导出网页</strong><button id="exportCloseBtn" type="button" aria-label="关闭导出提示">×</button></div><div class="export-body"><p>将生成一个独立的 <code>blokbird-app.html</code> 文件，保存到你的电脑。</p><ul><li>只在本地生成，不会上传，也不会发布到公网。</li><li>双击就能在浏览器打开，也可以把文件发给别人。</li></ul><p class="export-meta">预计大小：<span id="exportSize">—</span></p></div><div class="export-actions"><button id="exportCancelBtn" type="button">取消</button><button id="exportDownloadBtn" class="primary" type="button">下载 HTML</button></div></div></div>
   <div class="phone-visitor-gate" role="status" aria-live="polite"><span>请在电脑上使用浏览器打开</span></div>
-  <script src="script.js?v=20261109c"></script>
+  <script src="script.js?v=20261109d"></script>
 </body>
 </html>
