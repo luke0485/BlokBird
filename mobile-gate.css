@@ -9,9 +9,11 @@
   display:grid;
   place-items:center;
   padding:20px;
-  background:#fff;
-  color:#1f2a37;
-  font:600 clamp(17px,4.8vw,19px)/1.5 "Microsoft YaHei","Noto Sans SC",sans-serif;
+  background:#0B0B10;
+  background-image:linear-gradient(#FFFFFF08 1px,transparent 1px),linear-gradient(90deg,#FFFFFF08 1px,transparent 1px);
+  background-size:24px 24px;
+  color:#F2F2F7;
+  font:400 clamp(17px,4.8vw,19px)/1.5 "Fusion Pixel","Microsoft YaHei","Noto Sans SC",monospace;
   letter-spacing:0;
   text-align:center;
 }
@@ -23,7 +25,7 @@
   width:min(92vw,480px);
   height:250px;
   transform:translate(-50%,-50%);
-  background:radial-gradient(ellipse,rgba(76,151,255,.36) 0%,rgba(169,207,255,.25) 38%,rgba(255,255,255,0) 76%);
+  background:radial-gradient(ellipse,rgba(124,92,255,.38) 0%,rgba(124,92,255,.18) 38%,rgba(11,11,16,0) 76%);
   filter:blur(24px);
   pointer-events:none;
 }

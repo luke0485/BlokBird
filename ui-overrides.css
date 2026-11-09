@@ -1,11 +1,28 @@
-.top-actions { overflow: visible; }
-.top-actions button { position: relative; }
+/* Small UI fixes that intentionally load after theme.css. */
+.top-actions{overflow:visible}
+.top-actions button{position:relative}
 .top-actions button[data-help]:hover::after,
-.top-actions button[data-help]:focus-visible::after {
-  content: attr(data-help); position: absolute; right: 0; top: calc(100% + 9px); z-index: 30;
-  width: 220px; padding: 9px 11px; border-radius: 6px; background: #172747; color: #fff;
-  box-shadow: 0 8px 20px #17274733; font-size: 11px; font-weight: 500; line-height: 1.45; text-align: left;
+.top-actions button[data-help]:focus-visible::after{
+  content:attr(data-help);position:absolute;right:0;top:calc(100% + 9px);z-index:30;
+  width:220px;padding:9px 11px;border-radius:0;background:var(--ink);color:var(--text);
+  border:2px solid var(--primary);box-shadow:4px 4px 0 #000;
+  font-size:12px;font-weight:400;line-height:1.5;text-align:left
 }
 .sr-only{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
-.language-picker{margin-left:8px;display:flex;align-items:center}.language-picker select{height:30px;border:1px solid rgba(255,255,255,.38);border-radius:6px;background:rgba(255,255,255,.14);color:#fff;padding:0 25px 0 9px;font-size:11px;font-weight:700;outline:none}.language-picker select option{color:#17203a;background:#fff}.phone-nav.nav-selected{outline:3px solid #4c97ff;outline-offset:-3px;box-shadow:0 0 0 2px rgba(76,151,255,.2)}
-.project-name{width:150px;border:0;background:transparent;color:inherit;padding:5px 7px;border-radius:5px;font-size:inherit;font-weight:700;text-align:center;cursor:text}.project-name:hover,.project-name:focus{background:#ffffff24;outline:1px solid #ffffff60}.phone-nav.nav-state-icon button.active,.phone-nav.nav-state-underline button.active{background:transparent}.phone-nav.nav-state-icon button.active .icon-filled{display:block}.phone-nav.nav-state-icon button.active .icon-outline{display:none}.phone-nav.nav-state-tint button.active{background:color-mix(in srgb,var(--nav-active) 18%,var(--nav-background));border-radius:12px}.phone-nav.nav-state-tint button.active .icon-filled{display:none!important}.phone-nav.nav-state-tint button.active .icon-outline{display:block!important}.phone-nav.nav-state-underline button.active:after{content:'';position:absolute;bottom:2px;width:26px;height:3px;border-radius:3px;background:currentColor}.phone-nav.nav-state-underline button{position:relative}.phone-nav.nav-state-underline button.active .icon-filled{display:none}.phone-nav.nav-state-underline button.active .icon-outline{display:block}
+.language-picker{margin-left:8px;display:flex;align-items:center}
+.language-picker select{height:30px;border:2px solid var(--line);border-radius:0;background:var(--surface);color:var(--text);padding:0 25px 0 9px;font-size:12px;font-weight:400;outline:none;font-family:inherit}
+.language-picker select option{color:var(--ink);background:var(--paper)}
+.phone-nav.nav-selected{outline:3px solid var(--primary);outline-offset:-3px;box-shadow:0 0 0 2px #7C5CFF33}
+.project-name{width:150px;border:0;background:transparent;color:inherit;padding:5px 7px;border-radius:0;font-size:inherit;font-weight:400;text-align:center;cursor:text;font-family:inherit}
+.project-name:hover,.project-name:focus{background:var(--surface-2);outline:2px dashed var(--primary)}
+.phone-nav.nav-state-icon button.active,
+.phone-nav.nav-state-underline button.active{background:transparent}
+.phone-nav.nav-state-icon button.active .icon-filled{display:block}
+.phone-nav.nav-state-icon button.active .icon-outline{display:none}
+.phone-nav.nav-state-tint button.active{background:color-mix(in srgb,var(--nav-active) 22%,var(--nav-background));border-radius:0}
+.phone-nav.nav-state-tint button.active .icon-filled{display:none!important}
+.phone-nav.nav-state-tint button.active .icon-outline{display:block!important}
+.phone-nav.nav-state-underline button{position:relative}
+.phone-nav.nav-state-underline button.active:after{content:'';position:absolute;bottom:2px;width:26px;height:3px;border-radius:0;background:currentColor}
+.phone-nav.nav-state-underline button.active .icon-filled{display:none}
+.phone-nav.nav-state-underline button.active .icon-outline{display:block}
