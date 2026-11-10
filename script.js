@@ -444,6 +444,57 @@ function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } c
 function update() { persist(); render(); }
 
 function editorToast(message) { const box = $('#toast'); box.textContent = message; box.classList.add('show'); clearTimeout(editorToast.timer); editorToast.timer = setTimeout(() => box.classList.remove('show'), 2400); }
+function safeFileName(value) {
+  return String(value || '未命名项目').trim().replace(/[\\/:*?"<>|]+/g, '-').replace(/\s+/g, ' ').slice(0, 60) || '未命名项目';
+}
+
+async function saveFile(filename, data, mime) {
+  const blob = data instanceof Blob ? data : new Blob([data], { type: mime });
+  if (window.showSaveFilePicker) {
+    try {
+      const ext = filename.split('.').pop();
+      const handle = await window.showSaveFilePicker({ suggestedName: filename, startIn: 'desktop', types: [{ description: ext.toUpperCase(), accept: { [mime.split(';')[0]]: ['.' + ext] } }] });
+      const writable = await handle.createWritable();
+      await writable.write(blob); await writable.close();
+      return true;
+    } catch (error) { if (error && error.name === 'AbortError') return false; }
+  }
+  download(filename, data, mime); return true;
+}
+
+function inPageDialog({ title, message, label, value = '', confirmText = '确定', onConfirm }) {
+  const overlay = document.createElement('div'); overlay.className = 'guide-dialog';
+  const card = document.createElement('div'); card.className = 'guide-dialog-card prompt-card';
+  const head = document.createElement('div'); head.className = 'guide-dialog-head';
+  const heading = document.createElement('strong'); heading.textContent = title;
+  const close = document.createElement('button'); close.type = 'button'; close.textContent = '×'; close.setAttribute('aria-label', '关闭');
+  head.append(heading, close);
+  const body = document.createElement('div'); body.className = 'prompt-body';
+  if (message) { const msg = document.createElement('p'); msg.textContent = message; body.append(msg); }
+  let input = null;
+  if (label) {
+    const field = document.createElement('div'); field.className = 'prompt-field';
+    const caption = document.createElement('label'); caption.textContent = label;
+    input = document.createElement('input'); input.value = value; input.maxLength = 60; input.type = 'text';
+    field.append(caption, input); body.append(field);
+  }
+  const actions = document.createElement('div'); actions.className = 'export-actions';
+  const cancel = document.createElement('button'); cancel.type = 'button'; cancel.textContent = '取消';
+  const confirm = document.createElement('button'); confirm.type = 'button'; confirm.className = 'primary'; confirm.textContent = confirmText;
+  actions.append(cancel, confirm); card.append(head, body, actions); overlay.append(card); document.body.append(overlay);
+  const onKey = event => { if (event.key === 'Escape') { event.preventDefault(); closeDialog(); } };
+  const closeDialog = () => { overlay.remove(); document.removeEventListener('keydown', onKey); };
+  close.onclick = cancel.onclick = closeDialog;
+  confirm.onclick = async () => { const result = await onConfirm?.(input ? input.value.trim() : undefined); if (result !== false) closeDialog(); };
+  overlay.onclick = event => { if (event.target === overlay) closeDialog(); };
+  document.addEventListener('keydown', onKey);
+  (input || confirm).focus(); if (input) input.select();
+  return overlay;
+}
+
+function showPromptDialog(options) { return inPageDialog(options); }
+function showConfirmDialog(options) { return inPageDialog(options); }
+
 function phoneToast(message) { const box = $('#phoneToast'); box.textContent = message; box.classList.add('show'); clearTimeout(phoneToast.timer); phoneToast.timer = setTimeout(() => box.classList.remove('show'), 2700); }
 function showModal(message) { $('#modalMessage').textContent = message; $('#phoneModal').classList.remove('hidden'); }
 function safeHref(value) { return typeof value === 'string' && /^(https?:\/\/|mailto:|#)/i.test(value) ? value : '#'; }
@@ -471,10 +522,25 @@ function isDetailPage(page) { return state.pageModes?.[page] === 'detail'; }
 function switchPage(page, remember = false) { if (!state.pages.includes(page)) return; if (remember && page !== activePage) pageHistory.push(activePage); else if (!remember) pageHistory = []; activePage = page; selected = null; $('#canvasPage').scrollTop = 0; $('#phoneMoreMenu').classList.add('hidden'); hideContextMenu(); render(); }
 function goBack() { const fromHistory = pageHistory.pop(); const parent = state.pageParent?.[activePage]; const target = [fromHistory, parent, state.pages.find(page => !isDetailPage(page))].find(page => page && page !== activePage && state.pages.includes(page)); if (target) { const remaining = pageHistory; switchPage(target, false); pageHistory = remaining; } }
 function setPageMode(page, mode) { if (mode === 'detail' && state.pages.filter(id => !isDetailPage(id)).length <= 1 && !isDetailPage(page)) { editorToast('至少保留一个主导航页面'); return; } commit(); state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[page] = mode; if (mode === 'detail') state.pageParent[page] = state.pages.find(id => id !== page && !isDetailPage(id)) || state.pages[0]; else delete state.pageParent[page]; update(); }
-function addPage() { const title = prompt('新页面名称', `新页面 ${state.pages.length + 1}`); if (title === null) return; commit(); const page = `page-${uid()}`; state.pages.push(page); state.pageTitles[page] = title.trim().slice(0, 16) || `新页面 ${state.pages.length}`; state.pageIcons[page] = '□'; state.pageModes ||= {}; state.pageModes[page] = 'tab'; state.headerActions[page] = { icon: '•••', action: 'menu', prompt: `这是${state.pageTitles[page]}`, targetPage: state.pages[0] }; activePage = page; selected = null; update(); }
-function renamePage(page) { const title = prompt('页面名称', state.pageTitles[page]); if (title === null) return; commit(); state.pageTitles[page] = title.trim().slice(0, 16) || state.pageTitles[page]; update(); }
+function addPage() {
+  showPromptDialog({ title: '新建页面', label: '页面名称', value: `新页面 ${state.pages.length + 1}`, confirmText: '新建', onConfirm: title => {
+    if (!title) return false;
+    commit(); const page = `page-${uid()}`; state.pages.push(page); state.pageTitles[page] = title.trim().slice(0, 16) || `新页面 ${state.pages.length}`; state.pageIcons[page] = '□'; state.pageModes ||= {}; state.pageModes[page] = 'tab'; state.headerActions[page] = { icon: '•••', action: 'menu', prompt: `这是${state.pageTitles[page]}`, targetPage: state.pages[0] }; activePage = page; selected = null; update();
+  }});
+}
+function renamePage(page) {
+  showPromptDialog({ title: '重命名页面', label: '页面名称', value: state.pageTitles[page], confirmText: '保存', onConfirm: title => {
+    if (!title) return false;
+    commit(); state.pageTitles[page] = title.trim().slice(0, 16) || state.pageTitles[page]; update();
+  }});
+}
 function duplicatePage(page) { commit(); const copy = `page-${uid()}`; const index = state.pages.indexOf(page); state.pages.splice(index + 1, 0, copy); state.pageTitles[copy] = `${state.pageTitles[page]} 副本`; state.pageIcons[copy] = state.pageIcons[page]; state.pageIconSettings ||= {}; state.pageIconSettings[copy] = clone(navIconSettings(page)); state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[copy] = isDetailPage(page) ? 'detail' : 'tab'; if (state.pageParent[page]) state.pageParent[copy] = state.pageParent[page]; state.headerActions[copy] = clone(state.headerActions[page]); const originals = state.items.filter(item => item.page === page); const ids = Object.fromEntries(originals.map(item => [item.id, uid()])); const items = originals.map(item => ({ ...clone(item), id: ids[item.id], page: copy, layoutId: item.layoutId ? ids[item.layoutId] || null : null })); state.items.push(...items); activePage = copy; selected = null; update(); }
-function deletePage(page) { if (state.pages.length <= 1) { editorToast('至少保留一个页面'); return; } if (!confirm(`删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复。`)) return; commit(); state.pages = state.pages.filter(id => id !== page); state.items = state.items.filter(item => item.page !== page); delete state.pageTitles[page]; delete state.pageIcons[page]; if (state.pageIconSettings) delete state.pageIconSettings[page]; delete state.headerActions[page]; if (state.pageModes) delete state.pageModes[page]; const promoted = !state.pages.some(id => !isDetailPage(id)); if (promoted) { state.pageModes ||= {}; state.pageModes[state.pages[0]] = 'tab'; } if (state.pageParent) { delete state.pageParent[page]; if (promoted) delete state.pageParent[state.pages[0]]; for (const [child, parent] of Object.entries(state.pageParent)) if (parent === page) state.pageParent[child] = state.pages.find(id => !isDetailPage(id)) || state.pages[0]; } for (const item of state.items) if (item.targetPage === page) item.targetPage = state.pages[0]; for (const action of Object.values(state.headerActions)) if (action.targetPage === page) action.targetPage = state.pages[0]; if (activePage === page) activePage = state.pages[0]; pageHistory = []; selected = null; update(); }
+function deletePage(page) {
+  if (state.pages.length <= 1) { editorToast('至少保留一个页面'); return; }
+  showConfirmDialog({ title: '删除页面', message: `删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复。`, confirmText: '删除', onConfirm: () => {
+    commit(); state.pages = state.pages.filter(id => id !== page); state.items = state.items.filter(item => item.page !== page); delete state.pageTitles[page]; delete state.pageIcons[page]; if (state.pageIconSettings) delete state.pageIconSettings[page]; delete state.headerActions[page]; if (state.pageModes) delete state.pageModes[page]; const promoted = !state.pages.some(id => !isDetailPage(id)); if (promoted) { state.pageModes ||= {}; state.pageModes[state.pages[0]] = 'tab'; } if (state.pageParent) { delete state.pageParent[page]; if (promoted) delete state.pageParent[state.pages[0]]; for (const [child, parent] of Object.entries(state.pageParent)) if (parent === page) state.pageParent[child] = state.pages.find(id => !isDetailPage(id)) || state.pages[0]; } for (const item of state.items) if (item.targetPage === page) item.targetPage = state.pages[0]; for (const action of Object.values(state.headerActions)) if (action.targetPage === page) action.targetPage = state.pages[0]; if (activePage === page) activePage = state.pages[0]; pageHistory = []; selected = null; update();
+  }});
+}
 function runAction(item) {
   if (item.visualState === 'disabled') return;
   if (item.requiresInput) { const inputs = [...$('#canvasPage').querySelectorAll('input.ui-input')]; const invalid = inputs.find(input => !input.value.trim() || !input.checkValidity()); if (!inputs.length || invalid) { phoneToast(!inputs.length ? '请先在当前页面添加输入框' : '请填写有效的输入内容'); invalid?.focus(); return; } }
@@ -1151,11 +1217,11 @@ function buildExportHtml(fontFace = '') {
   const navClass = `nav-shape-${navStyle.shape} nav-state-${navStyle.activeState}`;
   const navInline = `--nav-background:${safeColor(navStyle.background, '#FFFFFF')};--nav-border:${safeColor(navStyle.borderColor, '#DFE2DB')};--nav-height:${Math.max(56, Math.min(110, Number(navStyle.height) || 72))}px;--nav-radius:${Math.max(0, Math.min(40, Number(navStyle.radius) || 0))}px`;
   const html = `<!doctype html><html lang="zh-CN"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>${escapeHtml(state.name)}</title><style>
-  ${fontFace}*{box-sizing:border-box}body{margin:0;background:#F5F3EF;color:#1F2A24;font-family:'Fusion Pixel','Microsoft YaHei UI','Microsoft YaHei',monospace}.app{width:min(100%,468px);height:100dvh;min-height:650px;margin:auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 30px #1F2A2418}.status{height:38px;flex:none;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.status .signals{display:flex;align-items:center;gap:4px;font-size:0}.dot-menu{display:inline-flex;align-items:center;gap:1px}.dot-menu i{width:4px;height:4px;border-radius:50%;background:currentColor;display:block}.status .signals svg{width:16px;height:11px;display:block;fill:currentColor;stroke:currentColor}.status .signals svg:nth-child(2){fill:none;stroke-width:1.6}.header{height:56px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #DFE2DB;font-size:20px;font-weight:700}main{flex:1;overflow:auto;padding:24px 22px}nav{height:72px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DFE2DB}nav button{border:0;background:#fff;color:#66716A;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:22px}nav button.active{color:#2F6B4F}.app-page{display:none}.app-page.active{display:block}.item{display:block;margin:0 0 17px;max-width:100%}.btn{padding:10px 18px;border:1px solid transparent;font-weight:700;cursor:pointer}.btn.outline{border-color:#2F6B4F}.btn.text-button{padding-left:0;padding-right:0}.btn:active{transform:scale(.96)}.card{padding:20px;border:1px solid #DFE2DB}.card.accent{border-left:4px solid #2F6B4F}.card.outline{border-color:#2F6B4F}.card small{display:block;margin-top:7px;color:#66716A;font-size:12px}hr{border:0;border-top:1px solid #DFE2DB}.dashed{border-top-style:dashed}.wave{height:27px;width:100%}.toast{position:fixed;left:50%;bottom:91px;transform:translateX(-50%);display:none;padding:10px 18px;background:#1F2A24;color:#fff;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#1F2A2470;display:none;place-items:center;padding:20px}.modal>div{max-width:320px;width:100%;background:#fff;border-radius:15px;padding:24px;text-align:center}.modal button{background:#2F6B4F;color:#fff;border:0;border-radius:8px;padding:10px 24px}.bb-fade{animation:fade .5s ease both}.bb-rise{animation:rise .5s ease both}.bb-pop{animation:pop .4s ease both}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1}}
+  ${fontFace}*{box-sizing:border-box}body{margin:0;background:#F5F3EF;color:#1F2A24;font-family:'Fusion Pixel','Microsoft YaHei UI','Microsoft YaHei',monospace}.app{width:min(100%,468px);height:100dvh;min-height:650px;margin:auto;background:#fff;display:flex;flex-direction:column;box-shadow:0 0 30px #1F2A2418}.status{height:38px;flex:none;padding:14px 20px 0;display:flex;justify-content:space-between;font-size:11px;font-weight:700}.status .signals{display:flex;align-items:center;gap:4px;font-size:0}.project-label{flex:none;padding:0 22px 6px;font-size:11px;color:#66716A;font-family:'Fusion Pixel','Microsoft YaHei UI',monospace;text-rendering:geometricPrecision}.dot-menu{display:inline-flex;align-items:center;gap:1px}.dot-menu i{width:4px;height:4px;border-radius:50%;background:currentColor;display:block}.status .signals svg{width:16px;height:11px;display:block;fill:currentColor;stroke:currentColor}.status .signals svg:nth-child(2){fill:none;stroke-width:1.6}.header{height:56px;flex:none;display:flex;align-items:center;padding:0 22px;border-bottom:1px solid #DFE2DB;font-size:20px;font-weight:700}main{flex:1;overflow:auto;padding:24px 22px}nav{height:72px;flex:none;display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid #DFE2DB}nav button{border:0;background:#fff;color:#66716A;font:600 11px system-ui;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:3px}nav button span{font-size:22px}nav button.active{color:#2F6B4F}.app-page{display:none}.app-page.active{display:block}.item{display:block;margin:0 0 17px;max-width:100%}.btn{padding:10px 18px;border:1px solid transparent;font-weight:700;cursor:pointer}.btn.outline{border-color:#2F6B4F}.btn.text-button{padding-left:0;padding-right:0}.btn:active{transform:scale(.96)}.card{padding:20px;border:1px solid #DFE2DB}.card.accent{border-left:4px solid #2F6B4F}.card.outline{border-color:#2F6B4F}.card small{display:block;margin-top:7px;color:#66716A;font-size:12px}hr{border:0;border-top:1px solid #DFE2DB}.dashed{border-top-style:dashed}.wave{height:27px;width:100%}.toast{position:fixed;left:50%;bottom:91px;transform:translateX(-50%);display:none;padding:10px 18px;background:#1F2A24;color:#fff;border-radius:9px;font-size:12px}.modal{position:fixed;inset:0;background:#1F2A2470;display:none;place-items:center;padding:20px}.modal>div{max-width:320px;width:100%;background:#fff;border-radius:15px;padding:24px;text-align:center}.modal button{background:#2F6B4F;color:#fff;border:0;border-radius:8px;padding:10px 24px}.bb-fade{animation:fade .5s ease both}.bb-rise{animation:rise .5s ease both}.bb-pop{animation:pop .4s ease both}@keyframes fade{from{opacity:0}to{opacity:1}}@keyframes rise{from{opacity:0;transform:translateY(15px)}to{opacity:1;transform:translateY(0)}}@keyframes pop{from{opacity:0;transform:scale(.9)}to{opacity:1}}
   .header{justify-content:space-between}.header button{border:0;background:transparent;color:#66716A;font-size:16px;cursor:pointer}nav{display:flex;grid-template-columns:none;overflow-x:auto;scrollbar-width:none}nav button{min-width:74px;flex:1 0 74px}.more-menu{position:fixed;right:max(12px,calc((100vw - 468px)/2 + 20px));top:88px;width:145px;background:#fff;border:1px solid #DFE2DB;border-radius:9px;box-shadow:0 10px 25px #1F2A2420;display:none}.more-menu button{display:block;width:100%;padding:10px;background:#fff;border:0;text-align:left;color:#1F2A24}
   #back[hidden],nav[hidden]{display:none}.header #back{font-size:23px;color:#1F2A24}
   nav{height:var(--nav-height,72px);padding:4px 12px 0;border-color:var(--nav-border,#DFE2DB);background:var(--nav-background,#fff);border-radius:var(--nav-radius,0);box-shadow:0 -6px 18px #1F2A2408}nav button{min-width:76px;gap:3px;padding:5px 4px 3px;border-radius:10px;color:var(--nav-inactive,#7B857E);background:transparent;font-size:10px;font-weight:550}nav button.active{color:var(--nav-active,#1F2A24);font-weight:750}nav.nav-shape-floating{margin:0 12px 10px;border:1px solid var(--nav-border);box-shadow:0 8px 24px #1F2A2420}.nav-shape-pill{margin:0 18px 12px;border:1px solid var(--nav-border);border-radius:999px}.nav-state-icon button.active,.nav-state-underline button.active{background:transparent}.nav-state-tint button.active{background:color-mix(in srgb,var(--nav-active) 18%,var(--nav-background))}.nav-state-tint button.active .icon-filled{display:none!important}.nav-state-tint button.active .icon-outline{display:block!important}.nav-state-underline button{position:relative}.nav-state-underline button.active:after{content:'';position:absolute;bottom:2px;width:22px;height:3px;border-radius:3px;background:currentColor}.nav-state-underline button.active .nav-icon .icon-filled{display:none}.nav-state-underline button.active .nav-icon .icon-outline{display:block}nav .nav-icon{width:26px;height:26px;display:grid;place-items:center}nav .nav-icon svg,nav .nav-icon img{width:var(--icon-size,23px);height:var(--icon-size,23px);display:block;object-fit:contain}nav .nav-icon svg{stroke:currentColor;stroke-width:var(--icon-stroke,1.9);stroke-linecap:round;stroke-linejoin:round;fill:none}nav .nav-icon .icon-filled{display:none;fill:currentColor;stroke:none}nav button.active .nav-icon svg.has-fill .icon-outline{display:none}nav button.active .nav-icon svg.has-fill .icon-filled{display:block}nav button:not(.active) .nav-icon img{opacity:.58}
-  ${PRESET_CSS}</style></head><body><div class="app"><div class="status"><span class="phone-time">9:41</span><span class="signals" aria-hidden="true"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4"/><rect x="5" y="6" width="3" height="6"/><rect x="10" y="3" width="3" height="9"/><rect x="15" y="0" width="3" height="12"/></svg><svg viewBox="0 0 16 12"><path d="M1 3.5a10 10 0 0 1 14 0M4 6.5a6 6 0 0 1 8 0M7 9.5a2 2 0 0 1 2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><svg viewBox="0 0 24 12"><rect x="1" y="1" width="19" height="10" rx="2" fill="none" stroke="currentColor"/><rect x="3" y="3" width="13" height="6"/><rect x="22" y="4" width="2" height="4"/></svg></span></div><div class="header"><button id="back" aria-label="返回上一页" hidden>←</button><span id="title"></span><button id="more" aria-label="页面操作">•••</button></div><main>${pages}</main><nav class="${navClass}" style="${navInline}">${nav}</nav></div><div class="more-menu" id="moreMenu"><button id="moreInfo">页面信息</button><button id="moreNext">下一页</button><button id="moreClose">关闭菜单</button></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div><strong>提示</strong><p id="message"></p><button id="close">知道了</button></div></div><script>
+  ${PRESET_CSS}</style></head><body><div class="app"><div class="status"><span class="phone-time">9:41</span><span class="signals" aria-hidden="true"><svg viewBox="0 0 18 12"><rect x="0" y="8" width="3" height="4"/><rect x="5" y="6" width="3" height="6"/><rect x="10" y="3" width="3" height="9"/><rect x="15" y="0" width="3" height="12"/></svg><svg viewBox="0 0 16 12"><path d="M1 3.5a10 10 0 0 1 14 0M4 6.5a6 6 0 0 1 8 0M7 9.5a2 2 0 0 1 2 0" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"/></svg><svg viewBox="0 0 24 12"><rect x="1" y="1" width="19" height="10" rx="2" fill="none" stroke="currentColor"/><rect x="3" y="3" width="13" height="6"/><rect x="22" y="4" width="2" height="4"/></svg></span></div><div class="project-label">${escapeHtml(state.name)}</div><div class="header"><button id="back" aria-label="返回上一页" hidden>←</button><span id="title"></span><button id="more" aria-label="页面操作">•••</button></div><main>${pages}</main><nav class="${navClass}" style="${navInline}">${nav}</nav></div><div class="more-menu" id="moreMenu"><button id="moreInfo">页面信息</button><button id="moreNext">下一页</button><button id="moreClose">关闭菜单</button></div><div class="toast" id="toast"></div><div class="modal" id="modal"><div><strong>提示</strong><p id="message"></p><button id="close">知道了</button></div></div><script>
   const titles=${titlesJson},actions=${actionsJson},headers=${headerJson},pageIds=${pageIdsJson},pageModes=${pageModesJson},pageParent=${pageParentJson};
   let current=pageIds[0],pageHistory=[];
   function updatePhoneTime(){const el=document.querySelector('.phone-time');if(!el)return;const d=new Date();el.textContent=String(d.getHours()).padStart(2,'0')+':'+String(d.getMinutes()).padStart(2,'0')}
@@ -1195,7 +1261,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110f';
+    script.src = 'export-font.js?v=20261110g';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1204,12 +1270,15 @@ function loadExportFontFace() {
 
 async function openExportDialog() {
   pendingExportHtml = null;
+  $('#exportFileName').textContent = `${safeFileName(state.name)}.html`;
   $('#exportSize').textContent = '计算中…';
+  $('#exportDownloadBtn').disabled = true;
   $('#exportDialog').classList.remove('hidden');
   $('#exportDownloadBtn').focus();
   const face = await loadExportFontFace();
   pendingExportHtml = buildExportHtml(face);
   $('#exportSize').textContent = formatBytes(new Blob([pendingExportHtml]).size);
+  $('#exportDownloadBtn').disabled = false;
 }
 
 function closeExportDialog() {
@@ -1218,9 +1287,10 @@ function closeExportDialog() {
 
 async function confirmExport() {
   const face = await loadExportFontFace();
-  download('blokbird-app.html', buildExportHtml(face), 'text/html;charset=utf-8');
+  const ok = await saveFile(`${safeFileName(state.name)}.html`, buildExportHtml(face), 'text/html;charset=utf-8');
+  if (!ok) return;
   pendingExportHtml = null;
-  editorToast('可交互网页已导出');
+  editorToast('网页已保存');
   closeExportDialog();
 }
 
@@ -1239,7 +1309,15 @@ $('#moreInfoBtn').onclick = () => { $('#phoneMoreMenu').classList.add('hidden');
 $('#moreNextBtn').onclick = () => { const index = state.pages.indexOf(activePage); switchPage(state.pages[(index + 1) % state.pages.length]); };
 $('#moreCloseBtn').onclick = () => $('#phoneMoreMenu').classList.add('hidden');
 $('#modalCloseBtn').onclick = () => $('#phoneModal').classList.add('hidden');
-$('#saveBtn').onclick = () => { const name = prompt('项目名称', state.name); if (name === null) return; commit(); state.name = name.trim().slice(0, 60) || '未命名项目'; update(); download('blokbird-project.json', JSON.stringify(state, null, 2), 'application/json'); editorToast('项目文件已保存'); };
+$('#saveBtn').onclick = () => {
+  showPromptDialog({ title: '保存项目', label: '项目名称', value: state.name, confirmText: '保存', onConfirm: async name => {
+    if (!name) return false;
+    commit(); state.name = name.trim().slice(0, 60) || '未命名项目'; update();
+    const ok = await saveFile(`${safeFileName(state.name)}.json`, JSON.stringify(state, null, 2), 'application/json');
+    if (ok) editorToast('项目文件已保存');
+    return ok;
+  }});
+};
 $('#exportBtn').onclick = openExportDialog;
 $('#exportCloseBtn').onclick = closeExportDialog;
 $('#exportCancelBtn').onclick = closeExportDialog;
@@ -1247,7 +1325,11 @@ $('#exportDownloadBtn').onclick = confirmExport;
 $('#exportDialog').onclick = event => { if (event.target === $('#exportDialog')) closeExportDialog(); };
 $('#importBtn').onclick = () => $('#projectInput').click();
 $('#projectInput').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { const imported = JSON.parse(await file.text()); if (!validProject(imported)) throw Error(); commit(); state = normalizeProject(imported); activePage = state.pages[0]; selected = null; update(); renderAssets(); editorToast('项目导入成功'); } catch { editorToast('项目文件格式不正确'); } event.target.value = ''; };
-$('#newBtn').onclick = () => { if (!confirm('新建项目会清空当前画布。建议先保存项目文件。继续吗？')) return; commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets(); };
+$('#newBtn').onclick = () => {
+  showConfirmDialog({ title: '新建项目', message: '新建项目会清空当前画布。建议先保存项目文件。', confirmText: '继续', onConfirm: () => {
+    commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets();
+  }});
+};
 $('#assetInput').onchange = async event => { for (const file of [...event.target.files]) { try { const asset = await readImageAsset(file); commit(); state.assets.push(asset); cutoutAssetIndex = state.assets.length - 1; update(); renderAssets(); try { $('#cutoutColor').value = await sampleImageCorner(asset.data); } catch {} editorToast(`已导入 ${asset.name}，可选择快速抠图`); } catch (error) { editorToast(error.message || '图片导入失败'); } } event.target.value = ''; };
 $('#assetSearch').oninput = renderAssets;
 $('#cutoutSampleBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; try { $('#cutoutColor').value = await sampleImageCorner(asset.data); editorToast('已读取图片左上角的背景颜色'); } catch (error) { editorToast(error.message || '颜色读取失败'); } };

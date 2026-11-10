@@ -14,11 +14,19 @@ body{font-family:inherit}
 .export-body{padding:18px 20px 2px}
 .export-body p{margin:0 0 10px;font-size:12px;line-height:1.7;color:#2E2A27}
 .export-body code{padding:2px 5px;border-radius:4px;background:#E5F0FF;color:#3373CC;font-size:11px}
-.export-body ul{margin:0 0 12px;padding-left:18px}
-.export-body li{margin:2px 0;font-size:11px;line-height:1.8;color:#66716A}
-.export-meta{margin-bottom:0!important;font-size:11px;color:#66716A}
+
+
+
 .export-actions{display:flex;justify-content:flex-end;gap:8px;padding:12px 20px 18px;border-top:1px solid #DEE3EA}
 .export-actions button{padding:8px 16px;border:1px solid #C7D0DF;border-radius:5px;background:#fff;color:#43546D;font-size:12px;font-weight:700;font-family:inherit}
 .export-actions button:hover{border-color:#4C97FF;color:#3373CC}
 .export-actions .primary{background:#4C97FF;border-color:#4C97FF;color:#fff}
 .export-actions .primary:hover{background:#3373CC;color:#fff}
+
+/* In-page prompt / confirm dialog */
+.prompt-card{width:min(400px,92vw)}
+.prompt-body{padding:18px 20px 4px}
+.prompt-body p{margin:0 0 10px;font-size:12px;line-height:1.7;color:var(--text)}
+.prompt-field label{display:block;font-size:12px;color:var(--muted);margin-bottom:6px}
+.prompt-field input{width:100%;padding:9px 10px;border:1px solid var(--line);border-radius:5px;background:#fff;color:var(--text);font-size:12px;font-family:inherit;outline:none}
+.prompt-field input:focus{border-color:var(--primary);box-shadow:0 0 0 2px #4C97FF22}
