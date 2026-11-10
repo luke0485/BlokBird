@@ -463,7 +463,7 @@ async function saveFile(filename, data, mime) {
   download(filename, data, mime); return true;
 }
 
-function inPageDialog({ title, message, label, value = '', confirmText = '确定', onConfirm }) {
+function inPageDialog({ title, message, label, value = '', confirmText = '确定', onConfirm, onCancel }) {
   const overlay = document.createElement('div'); overlay.className = 'guide-dialog';
   const card = document.createElement('div'); card.className = 'guide-dialog-card prompt-card';
   const head = document.createElement('div'); head.className = 'guide-dialog-head';
@@ -483,11 +483,12 @@ function inPageDialog({ title, message, label, value = '', confirmText = '确定
   const cancel = document.createElement('button'); cancel.type = 'button'; cancel.textContent = '取消';
   const confirm = document.createElement('button'); confirm.type = 'button'; confirm.className = 'primary'; confirm.textContent = confirmText;
   actions.append(cancel, confirm); card.append(head, body, actions); overlay.append(card); document.body.append(overlay);
-  const onKey = event => { if (event.key === 'Escape') { event.preventDefault(); closeDialog(); } };
+  const onKey = event => { if (event.key === 'Escape') { event.preventDefault(); cancelDialog(); } };
   const closeDialog = () => { overlay.remove(); document.removeEventListener('keydown', onKey); };
-  close.onclick = cancel.onclick = closeDialog;
+  const cancelDialog = () => { onCancel?.(); closeDialog(); };
+  close.onclick = cancel.onclick = cancelDialog;
   confirm.onclick = async () => { const result = await onConfirm?.(input ? input.value.trim() : undefined); if (result !== false) closeDialog(); };
-  overlay.onclick = event => { if (event.target === overlay) closeDialog(); };
+  overlay.onclick = event => { if (event.target === overlay) cancelDialog(); };
   document.addEventListener('keydown', onKey);
   (input || confirm).focus(); if (input) input.select();
   return overlay;
@@ -1280,7 +1281,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110i';
+    script.src = 'export-font.js?v=20261110j';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1354,7 +1355,12 @@ $('#assetSearch').oninput = renderAssets;
 $('#cutoutSampleBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; try { $('#cutoutColor').value = await sampleImageCorner(asset.data); editorToast('已读取图片左上角的背景颜色'); } catch (error) { editorToast(error.message || '颜色读取失败'); } };
 $('#cutoutApplyBtn').onclick = async () => { const asset = state.assets[cutoutAssetIndex]; if (!asset) return; const button = $('#cutoutApplyBtn'); button.disabled = true; button.textContent = '处理中…'; try { const oldData = asset.data; const result = await removeSolidBackground(oldData, $('#cutoutColor').value, Number($('#cutoutTolerance').value), Number($('#cutoutSoftness').value)); commit(); asset.data = result; asset.name = asset.name.replace(/\.[^.]+$/, '') + '-透明.png'; for (const item of state.items) if (item.type === 'image' && item.src === oldData) item.src = result; update(); renderAssets(); editorToast('背景已移除，素材已替换为透明 PNG'); } catch (error) { editorToast(error.message || '背景移除失败'); } finally { button.disabled = false; button.textContent = '移除背景'; } };
 $('#copyCssBtn').onclick = async () => { try { const code = [...$('#cssPreview').querySelectorAll('.code-line')].map(line => line.dataset.codeText || '').join('\n'); await navigator.clipboard.writeText(code); editorToast('代码已复制'); } catch { editorToast('请手动选择并复制代码'); } };
-$('#languageSelect').onchange = event => setLanguage(event.target.value);
+$('#languageSelect').onchange = event => {
+  const next = event.target.value;
+  if (next === language) return;
+  const label = next === 'en' ? 'English' : '中文';
+  showConfirmDialog({ title: '切换语言', message: `切换为 ${label}？`, confirmText: '切换', onCancel: () => { event.target.value = language; }, onConfirm: () => { setLanguage(next); } });
+};
 $('#projectName').onchange = event => { commit(); state.name = event.target.value.trim().slice(0, 60) || (language === 'en' ? 'Untitled Project' : '未命名项目'); update(); };
 $('#projectName').onkeydown = event => { if (event.key === 'Enter') event.target.blur(); };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
