@@ -892,6 +892,24 @@ function showCode(item) {
   document.querySelectorAll('[data-code]').forEach(button => button.classList.toggle('active', button.dataset.code === codeMode));
 }
 
+function openAssetsPanel() {
+  componentCategoryOpen = false;
+  $('#componentsTab').classList.remove('category-open');
+  $('#componentsTab').classList.add('hidden');
+  $('#templatesTab').classList.add('hidden');
+  $('#effectsTab').classList.add('hidden');
+  $('#assetsTab').classList.remove('hidden');
+  document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab.dataset.lefttab === 'components'));
+  document.querySelectorAll('[data-add]').forEach(button => button.classList.toggle('active', button.dataset.add === 'image'));
+  renderAssets();
+}
+
+function closeAssetsPanel() {
+  $('#assetsTab').classList.add('hidden');
+  $('#componentsTab').classList.remove('hidden');
+  document.querySelectorAll('[data-add]').forEach(button => button.classList.remove('active'));
+}
+
 function renderVariants() {
   componentCategoryOpen = true;
   $('#componentsTab').classList.add('category-open');
@@ -1128,7 +1146,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261109d';
+    script.src = 'export-font.js?v=20261110a';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1157,7 +1175,7 @@ async function confirmExport() {
   closeExportDialog();
 }
 
-document.querySelectorAll('[data-add]').forEach(button => button.onclick = () => { selectedCategory = button.dataset.add; renderVariants(); });
+document.querySelectorAll('[data-add]').forEach(button => button.onclick = () => { selectedCategory = button.dataset.add; if (selectedCategory === 'image') { openAssetsPanel(); return; } renderVariants(); });
 document.querySelectorAll('[data-lefttab]').forEach(button => button.onclick = () => { document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab === button)); for (const tab of ['components', 'templates', 'effects', 'assets']) $('#' + tab + 'Tab').classList.toggle('hidden', tab !== button.dataset.lefttab); });
 $('#undoBtn').onclick = () => { if (!history.length) return; future.push(clone(state)); state = history.pop(); selected = null; update(); };
 $('#redoBtn').onclick = () => { if (!future.length) return; history.push(clone(state)); state = future.pop(); selected = null; update(); };
@@ -1191,6 +1209,6 @@ $('#projectName').onchange = event => { commit(); state.name = event.target.valu
 $('#projectName').onkeydown = event => { if (event.key === 'Enter') event.target.blur(); };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } if (!$('#assetsTab').classList.contains('hidden')) { event.preventDefault(); closeAssetsPanel(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
 const presetStyle = document.createElement('style'); presetStyle.textContent = PRESET_CSS; document.head.append(presetStyle);
 renderTemplates(); renderEffects(); renderAssets(); render();
