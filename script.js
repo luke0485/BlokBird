@@ -608,7 +608,12 @@ function buildCanvasWrapper(item) {
   const wrapper = document.createElement('div'); wrapper.className = 'canvas-element' + (selected === item.id && !preview ? ' selected' : '');
   wrapper.dataset.label = TYPE_LABELS[item.type]; wrapper.dataset.type = item.type; wrapper.dataset.id = item.id;
   wrapper.style.width = `${Math.max(10, Math.min(100, Number(item.width) || 100))}%`;
-  if (Number(item.height) > 0) { wrapper.style.height = `${Math.max(28, Math.min(800, Number(item.height)))}px`; wrapper.classList.add('has-custom-height'); }
+  if (Number(item.height) > 0) {
+    const fixedHeight = `${Math.max(28, Math.min(800, Number(item.height)))}px`;
+    if (item.type === 'heading' || item.type === 'text') wrapper.style.minHeight = fixedHeight;
+    else wrapper.style.height = fixedHeight;
+    wrapper.classList.add('has-custom-height');
+  }
   wrapper.append(createElementNode(item));
   if (selected === item.id && !preview) for (const direction of ['nw', 'ne', 'sw', 'se']) { const handle = document.createElement('span'); handle.className = `resize-handle resize-${direction}`; handle.setAttribute('aria-hidden', 'true'); handle.onpointerdown = event => beginResize(event, item, wrapper, direction); wrapper.append(handle); }
   wrapper.onclick = event => { event.stopPropagation(); if (preview) { if (item.animationTrigger === 'click') replayNodeAnimation(wrapper.firstElementChild); return; } selected = item.id; render(); };
@@ -1050,7 +1055,8 @@ function presentationCss(item) { return `--effect-color:${safeColor(item.effectC
 function presentationTrigger(item) { return item.animation && item.animation !== 'none' && safeTrigger(item.animationTrigger) === 'click' ? ' data-animation-trigger="click"' : ''; }
 function exportElement(item) {
   const text = escapeHtml(item.text); const color = safeColor(item.color); const bg = safeColor(item.background, '#FFFFFF');
-  const dimensions = `width:${Math.max(10, Math.min(100, Number(item.width) || 100))}%;${Number(item.height) > 0 ? `height:${Math.max(28, Math.min(800, Number(item.height)))}px;overflow:auto;` : ''}`;
+  const sizeStyle = Number(item.height) > 0 ? (item.type === 'heading' || item.type === 'text' ? `min-height:${Math.max(28, Math.min(800, Number(item.height)))}px;` : `height:${Math.max(28, Math.min(800, Number(item.height)))}px;overflow:auto;`) : '';
+  const dimensions = `width:${Math.max(10, Math.min(100, Number(item.width) || 100))}%;${sizeStyle}`;
   const base = `${dimensions}color:${color};font-size:${Math.max(8, Math.min(100, Number(item.size) || 16))}px;border-radius:${Math.max(0, Math.min(99, Number(item.radius) || 0))}px;text-align:${item.align || 'left'};background:${bg};${presentationCss(item)}`;
   const classes = presentationClasses(item); const trigger = presentationTrigger(item);
   if (item.type === 'layout') { const children = state.items.filter(child => child.page === item.page && child.layoutId === item.id).map(exportElement).join(''); const style = `--layout-columns:${Math.max(1, Math.min(4, Number(item.columns) || 1))};gap:${Math.max(0, Math.min(40, Number(item.gap) || 0))}px;padding:${Math.max(0, Math.min(50, Number(item.padding) || 0))}px;border-radius:${Math.max(0, Math.min(99, Number(item.radius) || 0))}px;background:${bg};${presentationCss(item)}`; return `<div class="item ui-layout variant-layout-${escapeHtml(item.variant)}${classes}" style="${style}"${trigger}>${children}</div>`; }
@@ -1146,7 +1152,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110b';
+    script.src = 'export-font.js?v=20261110c';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
