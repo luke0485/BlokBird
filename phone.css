@@ -16,7 +16,7 @@
 .phone-app-header{height:56px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 22px;border-bottom:1px solid var(--line);color:var(--text)}
 .phone-app-header .phone-back{border:0;background:transparent;color:var(--text);font-size:25px;line-height:1;padding:6px 12px 6px 0;cursor:pointer}.phone-app-header .phone-back:hover{color:var(--primary)}
 .phone-app-header .phone-back:not(.hidden)+strong{margin-right:auto}
-.phone-app-header strong{font-size:20px}.phone-header-dot{font-size:14px;letter-spacing:2px;color:var(--muted)}
+.phone-app-header strong{font-size:20px}.phone-header-dot{font-size:14px;letter-spacing:0;color:var(--muted)}
 .phone-header-dot{border:0;background:transparent;padding:8px 4px;cursor:pointer;font-weight:700}.phone-header-dot:hover{color:var(--selected)}.phone-header-dot.selected{outline:1px solid var(--selected);border-radius:6px}
 .phone-more-menu{position:absolute;z-index:5;right:20px;top:90px;width:145px;background:var(--surface);border:1px solid var(--line);border-radius:9px;box-shadow:0 10px 25px #1F2A2420;overflow:hidden}
 .phone-more-menu button{display:block;width:100%;padding:11px 13px;border:0;background:var(--surface);text-align:left;color:var(--text);font-size:12px}.phone-more-menu button:hover{background:var(--page)}
