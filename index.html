@@ -6,11 +6,11 @@
   <meta name="description" content="自由拼接手机界面、设计交互并学习前端的可视化工具" />
   <title>BlokBird · UI Design</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg?v=20260924" />
-  <link rel="stylesheet" href="styles.css?v=20261110g" />
-  <link rel="stylesheet" href="phone.css?v=20261110g" />
-  <link rel="stylesheet" href="theme.css?v=20261110g" />
-  <link rel="stylesheet" href="ui-overrides.css?v=20261110g" />
-  <link rel="stylesheet" href="mobile-gate.css?v=20261110g" />
+  <link rel="stylesheet" href="styles.css?v=20261110h" />
+  <link rel="stylesheet" href="phone.css?v=20261110h" />
+  <link rel="stylesheet" href="theme.css?v=20261110h" />
+  <link rel="stylesheet" href="ui-overrides.css?v=20261110h" />
+  <link rel="stylesheet" href="mobile-gate.css?v=20261110h" />
   <script>
     if (navigator.userAgentData?.mobile || /Android.*Mobile|iPhone|iPod|Windows Phone|Mobile/i.test(navigator.userAgent)) {
       document.documentElement.classList.add('phone-visitor');
@@ -27,7 +27,7 @@
     <aside class="sidebar left-panel">
       <div class="sidebar-head"><h2>创造你的 UI 设计</h2><p>先选组件，再挑一个预设样式放入当前页面。</p></div>
       <div id="pageManager" class="page-manager"></div>
-      <div class="panel-tabs"><button class="tab active" data-lefttab="components">组件</button><button class="tab" data-lefttab="templates">模板</button><button class="tab" data-lefttab="effects">动效</button></div>
+      <div class="panel-tabs"><button class="tab active" data-lefttab="components">组件</button><button class="tab" data-lefttab="templates">模板</button></div>
       <section id="componentsTab" class="tab-body">
         <div class="section-label component-home-label">基础元素</div>
         <div class="component-grid">
@@ -40,12 +40,13 @@
           <button class="component-card" data-add="layout"><span class="component-preview preview-columns"><i></i><i></i><i></i></span><strong>布局</strong><small>排列组件</small></button>
           <button class="component-card" data-add="input"><span class="component-preview preview-field">请输入内容</span><strong>输入框</strong><small>接收输入</small></button>
           <button class="component-card" data-add="switch"><span class="component-preview preview-toggle"><i></i></span><strong>开关</strong><small>切换状态</small></button>
+          <button class="component-card" data-add="effects"><span class="component-preview preview-effects"><b>✦</b><i>动画 · 视觉</i></span><strong>效果</strong><small>动画与视觉</small></button>
         </div>
         <div id="variantPanel" class="variant-panel"></div>
         <div class="tip"><span>✦</span><div><strong>从组件开始</strong><p>每类组件都有现成样式。放入画布后，在右侧修改内容和交互。</p></div></div>
       </section>
       <section id="templatesTab" class="tab-body hidden"><div class="section-label">应用流程</div><p class="template-intro">选择一个场景，会加入互相关联的手机页面。按钮已连接下一步，你可以继续修改内容、状态和跳转。</p><div id="templateList" class="template-list"></div></section>
-      <section id="effectsTab" class="tab-body hidden"><div class="section-label">动画与效果</div><p class="template-intro">先选中手机画布中的元素，再点击一种动画或视觉效果。更多参数在右侧调整。</p><div class="section-label">动画</div><div id="animationList" class="effect-list"></div><div class="section-label asset-heading">视觉效果</div><div id="effectList" class="effect-list"></div></section>
+      <section id="effectsTab" class="tab-body hidden"><div class="section-label">效果</div><p class="template-intro">先选中手机画布中的元素，再点击一种动画或视觉效果。更多参数在右侧调整。</p><div class="section-label">动画</div><div id="animationList" class="effect-list"></div><div class="section-label asset-heading">视觉效果</div><div id="effectList" class="effect-list"></div></section>
       <section id="assetsTab" class="tab-body hidden"><div class="section-label">图片素材</div><label class="upload-zone" for="assetInput"><span>↑</span><strong>上传图片</strong><small>支持 PNG、JPG、WEBP，单张不超过 2 MB</small><small class="upload-cutout-note">智能识别纯色背景抠图</small></label><input id="assetInput" type="file" accept="image/png,image/jpeg,image/webp" multiple hidden /><div id="cutoutTool" class="cutout-tool hidden"><div class="cutout-head"><div><strong>纯色背景快速抠图</strong><small id="cutoutAssetName">处理刚上传的图片</small></div><span>本地处理</span></div><img id="cutoutPreview" alt="待处理图片预览"/><div class="cutout-fields"><label>背景颜色<input id="cutoutColor" type="color" value="#ffffff" /></label><label>识别范围<input id="cutoutTolerance" type="range" min="5" max="160" value="48" /></label><label>边缘柔化<input id="cutoutSoftness" type="range" min="0" max="80" value="18" /></label></div><div class="cutout-actions"><button id="cutoutSampleBtn" type="button">读取左上角颜色</button><button id="cutoutApplyBtn" class="primary" type="button">移除背景</button></div><p>适合白底、纯色摄影背景；复杂头发、透明玻璃等图片建议使用专业抠图工具。</p></div><input id="assetSearch" class="library-search" type="search" placeholder="搜索图片素材" aria-label="搜索图片素材" /><div id="assetList" class="asset-list"></div><div class="section-label asset-heading">应用成品素材</div><div id="builtInAssets" class="asset-list"></div></section>
     </aside>
     <section class="stage">
@@ -73,6 +74,6 @@
   <div id="guideDialog" class="guide-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="guideTitle"><div class="guide-dialog-card"><div class="guide-dialog-head"><strong id="guideTitle">使用提示</strong><button id="guideCloseBtn" type="button" aria-label="关闭提示">×</button></div><div class="guide-dialog-grid"><div class="guide-card"><strong>从任意组件开始</strong><p>挑选左侧预设放入手机页面，再从右侧修改文字、颜色、动画和行为。</p></div><div class="guide-card"><strong>设计真实操作路径</strong><p>新建页面并给按钮设置切换页面，把首页、详情和完成状态连接起来。</p></div><div class="guide-card"><strong>直接操作画布</strong><p>点击选中，拖动调整顺序，右键打开复制、粘贴和移动菜单。</p></div><div class="guide-card"><strong>一边设计一边学代码</strong><p>选中组件后点击代码行，查看当前值如何产生手机里的真实效果。</p></div></div></div></div>
   <div id="exportDialog" class="guide-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="exportTitle"><div class="guide-dialog-card export-card"><div class="guide-dialog-head"><strong id="exportTitle">导出网页</strong><button id="exportCloseBtn" type="button" aria-label="关闭导出提示">×</button></div><div class="export-body"><p>将生成 <code id="exportFileName">blokbird-app.html</code>（约 <span id="exportSize">—</span>），保存到本机桌面；不会上传或发布。</p></div><div class="export-actions"><button id="exportCancelBtn" type="button">取消</button><button id="exportDownloadBtn" class="primary" type="button">保存到桌面</button></div></div></div>
   <div class="phone-visitor-gate" role="status" aria-live="polite"><span>请在电脑上使用浏览器打开</span></div>
-  <script src="script.js?v=20261110g"></script>
+  <script src="script.js?v=20261110h"></script>
 </body>
 </html>

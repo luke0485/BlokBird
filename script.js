@@ -25,7 +25,7 @@ let language = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'zh';
 const EN = {
   'UI 学习工具':'UI Learning Tool','语言':'Language','中文':'Chinese','未命名项目':'Untitled Project','/ 设计项目':'/ Design Project',
   '新建':'New','导入项目':'Import','保存':'Save','导出网页':'Export Webpage','创造你的 UI 设计':'Create Your UI Design','先选组件，再挑一个预设样式放入当前页面。':'Choose a component, then add a preset to the current page.',
-  '组件':'Components','模板':'Templates','动效':'Motion','素材':'Assets','基础元素':'Basic Elements','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
+  '组件':'Components','模板':'Templates','效果':'Effects','素材':'Assets','基础元素':'Basic Elements','动画与视觉':'Animation & effects','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
   '从组件开始':'Start with a component','每类组件都有现成样式。放入画布后，在右侧修改内容和交互。':'Each component includes presets. Add one, then edit its content and behavior on the right.','应用流程':'App Flows','动画与效果':'Motion & Effects','动画':'Animation','视觉效果':'Visual Effects','图片素材':'Image Assets','上传图片':'Upload Images','智能识别纯色背景抠图':'Detect and remove solid backgrounds','应用成品素材':'Production-ready Assets','内置设计素材':'Built-in Design Asset',
   '手机画布':'Phone Canvas','使用提示':'Guide','重播动画 ↺':'Replay Motion ↺','预览交互':'Preview','退出预览':'Exit Preview','代码理解':'Understand Code','选择画布元素开始理解':'Select an element to understand its code','复制代码':'Copy Code','界面':'Interface','代码':'Code','点击代码行查看中文解释':'Select a line for a detailed explanation','点击任意一行代码，聚焦并查看详细中文解释。':'Select any code line to focus it and see a detailed explanation.','属性与交互':'Properties & Interactions','修改属性，旁边立即看到对应代码。':'Edit a property and see the corresponding code immediately.',
   '首页':'Home','发现':'Discover','我的':'Profile','页面信息':'Page Info','下一页':'Next Page','关闭菜单':'Close Menu','提示':'Notice','知道了':'Got it','自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面':'Autosaved · Click to select / right-click for menu · navigation switches pages',
@@ -1001,6 +1001,24 @@ function showCode(item) {
   document.querySelectorAll('[data-code]').forEach(button => button.classList.toggle('active', button.dataset.code === codeMode));
 }
 
+function openEffectsPanel() {
+  componentCategoryOpen = false;
+  $('#componentsTab').classList.remove('category-open');
+  $('#componentsTab').classList.add('hidden');
+  $('#templatesTab').classList.add('hidden');
+  $('#assetsTab').classList.add('hidden');
+  $('#effectsTab').classList.remove('hidden');
+  document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab.dataset.lefttab === 'components'));
+  document.querySelectorAll('[data-add]').forEach(button => button.classList.toggle('active', button.dataset.add === 'effects'));
+  renderEffects();
+}
+
+function closeEffectsPanel() {
+  $('#effectsTab').classList.add('hidden');
+  $('#componentsTab').classList.remove('hidden');
+  document.querySelectorAll('[data-add]').forEach(button => button.classList.remove('active'));
+}
+
 function openAssetsPanel() {
   componentCategoryOpen = false;
   $('#componentsTab').classList.remove('category-open');
@@ -1261,7 +1279,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110g';
+    script.src = 'export-font.js?v=20261110h';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1294,7 +1312,7 @@ async function confirmExport() {
   closeExportDialog();
 }
 
-document.querySelectorAll('[data-add]').forEach(button => button.onclick = () => { selectedCategory = button.dataset.add; if (selectedCategory === 'image') { openAssetsPanel(); return; } renderVariants(); });
+document.querySelectorAll('[data-add]').forEach(button => button.onclick = () => { selectedCategory = button.dataset.add; if (selectedCategory === 'image') { openAssetsPanel(); return; } if (selectedCategory === 'effects') { openEffectsPanel(); return; } renderVariants(); });
 document.querySelectorAll('[data-lefttab]').forEach(button => button.onclick = () => { document.querySelectorAll('[data-lefttab]').forEach(tab => tab.classList.toggle('active', tab === button)); for (const tab of ['components', 'templates', 'effects', 'assets']) $('#' + tab + 'Tab').classList.toggle('hidden', tab !== button.dataset.lefttab); });
 $('#undoBtn').onclick = () => { if (!history.length) return; future.push(clone(state)); state = history.pop(); selected = null; update(); };
 $('#redoBtn').onclick = () => { if (!future.length) return; history.push(clone(state)); state = future.pop(); selected = null; update(); };
@@ -1340,7 +1358,7 @@ $('#projectName').onchange = event => { commit(); state.name = event.target.valu
 $('#projectName').onkeydown = event => { if (event.key === 'Enter') event.target.blur(); };
 document.querySelectorAll('[data-code]').forEach(button => button.onclick = () => { codeMode = button.dataset.code; const item = state.items.find(entry => entry.id === selected && entry.page === activePage); showCode(item); });
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
-document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } if (!$('#assetsTab').classList.contains('hidden')) { event.preventDefault(); closeAssetsPanel(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
+document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } if (!$('#assetsTab').classList.contains('hidden')) { event.preventDefault(); closeAssetsPanel(); } if (!$('#effectsTab').classList.contains('hidden')) { event.preventDefault(); closeEffectsPanel(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
 const presetStyle = document.createElement('style'); presetStyle.textContent = PRESET_CSS; document.head.append(presetStyle);
 function updatePhoneTime() { const el = $('.phone-time'); if (!el) return; const d = new Date(); el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 updatePhoneTime(); setInterval(updatePhoneTime, 30000);
