@@ -12,7 +12,7 @@
 }
 .canvas-frame.mobile::before{content:"";position:absolute;top:5px;left:50%;transform:translateX(-50%);width:72px;height:5px;border-radius:8px;background:var(--muted)}
 .phone-status{height:35px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:10px 21px 0;font-size:11px;font-weight:700;color:var(--text)}
-.phone-signals{font-size:9px;letter-spacing:1px}
+.phone-signals{display:flex;align-items:center;gap:4px;font-size:0}.phone-signals svg{width:16px;height:11px;display:block;fill:currentColor;stroke:currentColor}.phone-signals svg:nth-child(2){fill:none;stroke-width:1.6}
 .phone-app-header{height:56px;flex:none;display:flex;justify-content:space-between;align-items:center;padding:0 22px;border-bottom:1px solid var(--line);color:var(--text)}
 .phone-app-header .phone-back{border:0;background:transparent;color:var(--text);font-size:25px;line-height:1;padding:6px 12px 6px 0;cursor:pointer}.phone-app-header .phone-back:hover{color:var(--primary)}
 .phone-app-header .phone-back:not(.hidden)+strong{margin-right:auto}
