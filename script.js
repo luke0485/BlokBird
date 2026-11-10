@@ -21,11 +21,12 @@ const DEFAULT_NAV_ICON_STYLE = { size: 23, stroke: 1.9, activeColor: '#1F2A24', 
 const DEFAULT_NAV_STYLE = { background: '#FFFFFF', borderColor: '#DFE2DB', height: 60, radius: 0, shape: 'bar', activeState: 'icon' };
 const $ = selector => document.querySelector(selector);
 const LANGUAGE_KEY = 'blokbird-language-v1';
+const GUIDE_KEY = 'blokbird-guide-seen-v1';
 let language = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'zh';
 const EN = {
   'UI 学习工具':'UI Learning Tool','语言':'Language','中文':'Chinese','未命名项目':'Untitled Project','/ 设计项目':'/ Design Project',
   '新建':'New','导入项目':'Import','保存':'Save','导出网页':'Export Webpage','创造你的 UI 设计':'Create Your UI Design','先选组件，再挑一个预设样式放入当前页面。':'Choose a component, then add a preset to the current page.',
-  '组件':'Components','模板':'Templates','效果':'Effects','素材':'Assets','基础元素':'Basic Elements','动画与视觉':'Animation & effects','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
+  '组件':'Components','模板':'Templates','效果':'Effects','素材':'Assets','基础元素':'Basic Elements','自动保存':'Auto-saved','动画与视觉':'Animation & effects','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
   '从组件开始':'Start with a component','每类组件都有现成样式。放入画布后，在右侧修改内容和交互。':'Each component includes presets. Add one, then edit its content and behavior on the right.','应用流程':'App Flows','动画与效果':'Motion & Effects','动画':'Animation','视觉效果':'Visual Effects','图片素材':'Image Assets','上传图片':'Upload Images','智能识别纯色背景抠图':'Detect and remove solid backgrounds','应用成品素材':'Production-ready Assets','内置设计素材':'Built-in Design Asset',
   '手机画布':'Phone Canvas','使用提示':'Guide','重播动画 ↺':'Replay Motion ↺','预览交互':'Preview','退出预览':'Exit Preview','代码理解':'Understand Code','选择画布元素开始理解':'Select an element to understand its code','复制代码':'Copy Code','界面':'Interface','代码':'Code','点击代码行查看中文解释':'Select a line for a detailed explanation','点击任意一行代码，聚焦并查看详细中文解释。':'Select any code line to focus it and see a detailed explanation.','属性与交互':'Properties & Interactions','修改属性，旁边立即看到对应代码。':'Edit a property and see the corresponding code immediately.',
   '首页':'Home','发现':'Discover','我的':'Profile','页面信息':'Page Info','下一页':'Next Page','关闭菜单':'Close Menu','提示':'Notice','知道了':'Got it','自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面':'Autosaved · Click to select / right-click for menu · navigation switches pages',
@@ -320,6 +321,8 @@ let contextTarget = null;
 let selectedCategory = 'button';
 let cutoutAssetIndex = -1;
 let componentCategoryOpen = false;
+let codeCollapsed = false;
+let pageManagerCollapsed = false;
 let preview = false;
 let history = [];
 let future = [];
@@ -443,6 +446,8 @@ function load() {
 function commit() { history.push(clone(state)); if (history.length > 50) history.shift(); future = []; }
 function persist() { try { localStorage.setItem(KEY, JSON.stringify(state)); } catch { editorToast('浏览器空间不足，请导出项目备份'); } }
 function update() { persist(); render(); }
+
+function markGuideSeen() { try { localStorage.setItem(GUIDE_KEY, '1'); } catch {} }
 
 function editorToast(message) { const box = $('#toast'); box.textContent = message; box.classList.add('show'); clearTimeout(editorToast.timer); editorToast.timer = setTimeout(() => box.classList.remove('show'), 2400); }
 function safeFileName(value) {
@@ -585,8 +590,8 @@ function renderNav() {
 }
 function renderPageManager() {
   const manager = $('#pageManager'); manager.replaceChildren();
-  const heading = document.createElement('div'); heading.className = 'page-manager-head'; const name = document.createElement('span'); name.textContent = language === 'en' ? `${state.pages.length} Pages` : `页面 ${state.pages.length}`; const add = document.createElement('button'); add.type = 'button'; add.textContent = language === 'en' ? '+ New Page' : '+ 新建页'; add.onclick = addPage; heading.append(name, add); manager.append(heading);
-  const list = document.createElement('div'); list.className = 'page-manager-list';
+  const heading = document.createElement('div'); heading.className = 'page-manager-head'; const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'page-manager-toggle'; toggle.setAttribute('aria-expanded', String(!pageManagerCollapsed)); toggle.textContent = `${pageManagerCollapsed ? '▸' : '▾'} ${language === 'en' ? `${state.pages.length} Pages` : `页面 ${state.pages.length}`}`; toggle.onclick = () => { pageManagerCollapsed = !pageManagerCollapsed; renderPageManager(); }; const add = document.createElement('button'); add.type = 'button'; add.textContent = language === 'en' ? '+ New Page' : '+ 新建页'; add.onclick = addPage; heading.append(toggle, add); manager.append(heading);
+  const list = document.createElement('div'); list.className = 'page-manager-list' + (pageManagerCollapsed ? ' hidden' : '');
   state.pages.forEach((page, index) => { const row = document.createElement('div'); row.className = 'page-manager-row'; const select = document.createElement('button'); select.type = 'button'; select.className = 'page-select' + (page === activePage ? ' active' : ''); const pageTitle = language === 'en' ? (EN[state.pageTitles[page]] || state.pageTitles[page]) : state.pageTitles[page]; select.textContent = `${isDetailPage(page) ? '↳' : index + 1 + '.'} ${pageTitle}${isDetailPage(page) ? (language === 'en' ? ' · Detail' : ' · 子页面') : ''}`; select.onclick = () => switchPage(page); select.oncontextmenu = event => { event.preventDefault(); event.stopPropagation(); openContextMenu(event.clientX, event.clientY, 'page', page); }; const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'page-edit'; edit.title = language === 'en' ? 'Rename page' : '重命名页面'; edit.textContent = '✎'; edit.onclick = () => renamePage(page); row.append(select, edit); list.append(row); }); manager.append(list);
 }
 function hideContextMenu() { $('#contextMenu').classList.add('hidden'); contextTarget = null; }
@@ -1281,7 +1286,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110j';
+    script.src = 'export-font.js?v=20261110k';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1321,8 +1326,8 @@ $('#redoBtn').onclick = () => { if (!future.length) return; history.push(clone(s
 $('#replayBtn').onclick = () => { renderCanvas(); $('#canvasPage').querySelectorAll('.anim-on-hover,.anim-on-click').forEach(replayNodeAnimation); };
 $('#previewBtn').onclick = () => { preview = !preview; selected = null; $('#phoneModal').classList.add('hidden'); render(); };
 $('#guideBtn').onclick = () => $('#guideDialog').classList.remove('hidden');
-$('#guideCloseBtn').onclick = () => $('#guideDialog').classList.add('hidden'); $('#exportDialog').classList.add('hidden'); pendingExportHtml = null;
-$('#guideDialog').onclick = event => { if (event.target === $('#guideDialog')) $('#guideDialog').classList.add('hidden'); };
+$('#guideCloseBtn').onclick = () => { $('#guideDialog').classList.add('hidden'); markGuideSeen(); }; $('#exportDialog').classList.add('hidden'); pendingExportHtml = null;
+$('#guideDialog').onclick = event => { if (event.target === $('#guideDialog')) { $('#guideDialog').classList.add('hidden'); markGuideSeen(); } };
 $('#phoneMoreBtn').onclick = event => { event.stopPropagation(); if (preview) runHeaderAction(); else { selected = '__header__'; $('#phoneMoreMenu').classList.add('hidden'); render(); } };
 $('#phoneBackBtn').onclick = event => { event.stopPropagation(); goBack(); };
 $('#moreInfoBtn').onclick = () => { $('#phoneMoreMenu').classList.add('hidden'); phoneToast(state.headerActions[activePage].prompt || state.pageTitles[activePage]); };
@@ -1367,6 +1372,17 @@ document.querySelectorAll('[data-code]').forEach(button => button.onclick = () =
 document.addEventListener('click', event => { if (!$('#contextMenu').contains(event.target)) hideContextMenu(); if (!$('#phoneMoreMenu').contains(event.target) && event.target !== $('#phoneMoreBtn')) $('#phoneMoreMenu').classList.add('hidden'); });
 document.addEventListener('keydown', event => { if (event.key === 'Escape') { hideContextMenu(); $('#phoneMoreMenu').classList.add('hidden'); $('#guideDialog').classList.add('hidden'); if (componentCategoryOpen) { event.preventDefault(); closeComponentCategory(); } if (!$('#assetsTab').classList.contains('hidden')) { event.preventDefault(); closeAssetsPanel(); } if (!$('#effectsTab').classList.contains('hidden')) { event.preventDefault(); closeEffectsPanel(); } } const editing = ['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName); if (editing) return; if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'z') { event.preventDefault(); $('#undoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'y') { event.preventDefault(); $('#redoBtn').click(); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'c' && selected && selected !== '__header__') { event.preventDefault(); copyItem(selected); } if ((event.ctrlKey || event.metaKey) && event.key.toLowerCase() === 'v' && clipboard) { event.preventDefault(); pasteItem(); } if (event.key === 'Delete' && selected && selected !== '__header__') { event.preventDefault(); deleteItem(selected); } });
 const presetStyle = document.createElement('style'); presetStyle.textContent = PRESET_CSS; document.head.append(presetStyle);
+function applyCodePanel() {
+  const workbench = $('#learningWorkbench'); if (!workbench) return;
+  workbench.classList.toggle('code-collapsed', codeCollapsed);
+  const toggle = $('#codeToggleBtn'); if (toggle) { toggle.textContent = codeCollapsed ? '显示代码' : '隐藏代码'; toggle.setAttribute('aria-pressed', String(codeCollapsed)); }
+}
+function toggleCodePanel() { codeCollapsed = !codeCollapsed; applyCodePanel(); }
+$('#codeToggleBtn')?.addEventListener('click', toggleCodePanel);
+$('#codeCollapseBtn')?.addEventListener('click', toggleCodePanel);
+applyCodePanel();
+let guideSeen = false; try { guideSeen = localStorage.getItem(GUIDE_KEY) === '1'; } catch {}
+if (!guideSeen) $('#guideDialog').classList.remove('hidden');
 function updatePhoneTime() { const el = $('.phone-time'); if (!el) return; const d = new Date(); el.textContent = String(d.getHours()).padStart(2, '0') + ':' + String(d.getMinutes()).padStart(2, '0'); }
 updatePhoneTime(); setInterval(updatePhoneTime, 30000);
 renderTemplates(); renderEffects(); renderAssets(); render();
