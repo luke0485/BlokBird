@@ -25,17 +25,17 @@ const GUIDE_KEY = 'blokbird-guide-seen-v1';
 let language = localStorage.getItem(LANGUAGE_KEY) === 'en' ? 'en' : 'zh';
 const EN = {
   'UI 学习工具':'UI Learning Tool','语言':'Language','中文':'Chinese','未命名项目':'Untitled Project','/ 设计项目':'/ Design Project',
-  '新建':'New','导入项目':'Import','保存':'Save','导出网页':'Export Webpage','创造你的 UI 设计':'Create Your UI Design','先选组件，再挑一个预设样式放入当前页面。':'Choose a component, then add a preset to the current page.',
+  '新建':'New','导入项目':'Import','保存':'Save','导出网页':'Export Webpage','创造你的 UI 设计':'Create Your UI Design','先选组件，再挑一个预设样式放入当前页面 ':'Choose a component, then add a preset to the current page',
   '组件':'Components','模板':'Templates','效果':'Effects','素材':'Assets','基础元素':'Basic Elements','自动保存':'Auto-saved','动画与视觉':'Animation & effects','页面标题':'Page title','副标题':'Subtitle','标题':'Heading','信息层级':'Hierarchy','文本':'Text','正文说明':'Body copy','按钮':'Button','触发操作':'Action','图片':'Image','视觉内容':'Visual content','分隔线':'Divider','划分区域':'Separate content','卡片':'Card','组合信息':'Grouped content','布局':'Layout','排列组件':'Arrange items','输入框':'Input','接收输入':'User input','开关':'Switch','切换状态':'Toggle state',
-  '从组件开始':'Start with a component','每类组件都有现成样式。放入画布后，在右侧修改内容和交互。':'Each component includes presets. Add one, then edit its content and behavior on the right.','应用流程':'App Flows','动画与效果':'Motion & Effects','动画':'Animation','视觉效果':'Visual Effects','图片素材':'Image Assets','上传图片':'Upload Images','智能识别纯色背景抠图':'Detect and remove solid backgrounds','应用成品素材':'Production-ready Assets','内置设计素材':'Built-in Design Asset',
-  '手机画布':'Phone Canvas','使用提示':'Guide','重播动画 ↺':'Replay Motion ↺','预览交互':'Preview','退出预览':'Exit Preview','代码理解':'Understand Code','选择画布元素开始理解':'Select an element to understand its code','复制代码':'Copy Code','界面':'Interface','代码':'Code','点击代码行查看中文解释':'Select a line for a detailed explanation','点击任意一行代码，聚焦并查看详细中文解释。':'Select any code line to focus it and see a detailed explanation.','属性与交互':'Properties & Interactions','修改属性，旁边立即看到对应代码。':'Edit a property and see the corresponding code immediately.',
+  '从组件开始':'Start with a component','每类组件都有现成样式 放入画布后，在右侧修改内容和交互 ':'Each component includes presets Add one, then edit its content and behavior on the right','应用流程':'App Flows','动画与效果':'Motion & Effects','动画':'Animation','视觉效果':'Visual Effects','图片素材':'Image Assets','上传图片':'Upload Images','智能识别纯色背景抠图':'Detect and remove solid backgrounds','应用成品素材':'Production-ready Assets','内置设计素材':'Built-in Design Asset',
+  '手机画布':'Phone Canvas','使用提示':'Guide','重播动画 ↺':'Replay Motion ↺','预览交互':'Preview','退出预览':'Exit Preview','代码理解':'Understand Code','选择画布元素开始理解':'Select an element to understand its code','复制代码':'Copy Code','界面':'Interface','代码':'Code','点击代码行查看中文解释':'Select a line for a detailed explanation','点击任意一行代码，聚焦并查看详细中文解释 ':'Select any code line to focus it and see a detailed explanation','属性与交互':'Properties & Interactions','修改属性，旁边立即看到对应代码 ':'Edit a property and see the corresponding code immediately',
   '首页':'Home','发现':'Discover','我的':'Profile','页面信息':'Page Info','下一页':'Next Page','关闭菜单':'Close Menu','提示':'Notice','知道了':'Got it','自动保存 · 点击选中 / 右键打开菜单 · 主导航切换页面':'Autosaved · Click to select / right-click for menu · navigation switches pages',
   '底部导航栏':'Bottom Navigation','导航栏外观':'Navigation Appearance','背景颜色':'Background','边框颜色':'Border','导航栏高度（px）':'Navigation height (px)','圆角（px）':'Corner radius (px)','导航栏形状':'Navigation shape','贴底横栏':'Full-width bar','悬浮卡片':'Floating card','胶囊栏':'Pill bar','选中状态':'Active state','图标填充':'Filled icon','颜色强调':'Color tint','底部线条':'Underline','当前页面图标':'Current page icon','图标大小（px）':'Icon size (px)','线条粗细':'Stroke width','选中颜色':'Active color','未选中颜色':'Inactive color','上传自定义图标':'Upload custom icon',
-  '这个页面还是空的':'This page is empty','从左侧选择组件和样式开始搭建。':'Choose a component and preset from the left to start building.','个当前页面元素':' elements on this page','页面':'Pages','+ 新建页':'+ New Page','右上角操作':'Header Action','当前页面名称':'Page Name','预设样式':'Preset','尺寸':'Size','宽度（%）':'Width (%)','高度（px，0 为自动）':'Height (px, 0 = auto)','内容':'Content','图片说明':'Image description','图片素材':'Image asset','按钮状态':'Button state','点击后的操作':'On click','交互方式':'Interaction','外观样式':'Appearance','字号（px）':'Font size (px)','文字颜色':'Text color','对齐方式':'Alignment','入场动画':'Entrance animation'
-  ,'欢迎来到我的应用':'Welcome to My App','选择左侧预设，拼出你自己的手机界面。':'Choose presets from the left to build your own mobile interface.','看看发现页':'Explore Discover','精选':'Featured','从一个组件开始':'Start with a Component','值得关注的精选内容。':'Curated content worth exploring.','发现灵感':'Discover Ideas','这里可以放你的作品、内容或功能入口。':'Add your work, content, or feature entry points here.','关于我':'About Me','个人资料':'Profile','在这里介绍自己，展示个人资料。':'Introduce yourself and present your profile here.',
-  '欢迎来到首页':'Welcome to Home','这里是发现页':'This is the Discover page','这里是我的页面':'This is the Profile page','操作成功':'Action completed','CSS 控制布局、颜色和动画效果。':'CSS controls layout, color, and motion.','HTML 描述页面有哪些元素。':'HTML describes the elements on the page.','JavaScript 负责点击、页面切换与提示。':'JavaScript handles clicks, navigation, and feedback.','点击手机中的任意元素，再点击代码行查看详细中文解释。':'Select any phone element, then select a code line for a detailed explanation.','选择一个组件查看它的样式':'Select a component to inspect its styles','选择组件后查看生成的 HTML':'Select a component to inspect its generated HTML','选择可交互组件后查看点击逻辑。':'Select an interactive component to inspect its click logic.','页面操作按钮':'Page action button','属性与代码已连接':'properties and code are linked','选择画布元素开始理解':'Select a canvas element to start learning','先选择画布元素':'Select a canvas element first','或设置当前页面名称':'or edit the current page name',
-  '导航栏背景':'Navigation background','顶部分割线':'Top divider','通栏':'Full-width bar','胶囊':'Pill','填充图标':'Filled icon','浅色底':'Tinted background','下划线':'Underline','外形圆角（px）':'Outer corner radius (px)','底部导航图标':'Bottom navigation icons','上传自己的图标':'Upload your icon','内置图标可改颜色和线条；上传的 SVG、PNG、JPG、WEBP 会随项目保存。':'Built-in icons support custom colors and strokes. Uploaded SVG, PNG, JPG, and WEBP icons are saved with the project.'
-  ,'这是一段正文内容，用来说明页面信息。':'This is body text used to explain the page.','继续':'Continue','内容标题':'Content title','简短说明文字':'Short supporting copy','请输入内容':'Enter content','点击修改项目名称':'Click to rename project','项目名称':'Project name','撤销':'Undo','重做':'Redo','重播当前页面动画':'Replay current page animation','页面操作':'Page actions','手机页面':'Phone pages','重命名页面':'Rename page','个当前页面元素':' elements on this page','搜索':'Search','喜欢':'Favorites','音乐':'Music','资料库':'Library','消息':'Notifications','日程':'Calendar','购物':'Shopping','播放':'Play','设置':'Settings','使用首页图标':'Use Home icon','使用发现图标':'Use Discover icon','使用我的图标':'Use Profile icon','使用搜索图标':'Use Search icon','使用喜欢图标':'Use Favorites icon','使用音乐图标':'Use Music icon','使用资料库图标':'Use Library icon','使用消息图标':'Use Notifications icon','使用日程图标':'Use Calendar icon','使用购物图标':'Use Shopping icon','使用播放图标':'Use Play icon','使用设置图标':'Use Settings icon'
+  '这个页面还是空的':'This page is empty','从左侧选择组件和样式开始搭建 ':'Choose a component and preset from the left to start building','个当前页面元素':' elements on this page','页面':'Pages','+ 新建页':'+ New Page','右上角操作':'Header Action','当前页面名称':'Page Name','预设样式':'Preset','尺寸':'Size','宽度（%）':'Width (%)','高度（px，0 为自动）':'Height (px, 0 = auto)','内容':'Content','图片说明':'Image description','图片素材':'Image asset','按钮状态':'Button state','点击后的操作':'On click','交互方式':'Interaction','外观样式':'Appearance','字号（px）':'Font size (px)','文字颜色':'Text color','对齐方式':'Alignment','入场动画':'Entrance animation'
+  ,'欢迎来到我的应用':'Welcome to My App','选择左侧预设，拼出你自己的手机界面 ':'Choose presets from the left to build your own mobile interface','看看发现页':'Explore Discover','精选':'Featured','从一个组件开始':'Start with a Component','值得关注的精选内容 ':'Curated content worth exploring','发现灵感':'Discover Ideas','这里可以放你的作品、内容或功能入口 ':'Add your work, content, or feature entry points here','关于我':'About Me','个人资料':'Profile','在这里介绍自己，展示个人资料 ':'Introduce yourself and present your profile here',
+  '欢迎来到首页':'Welcome to Home','这里是发现页':'This is the Discover page','这里是我的页面':'This is the Profile page','操作成功':'Action completed','CSS 控制布局、颜色和动画效果 ':'CSS controls layout, color, and motion','HTML 描述页面有哪些元素 ':'HTML describes the elements on the page','JavaScript 负责点击、页面切换与提示 ':'JavaScript handles clicks, navigation, and feedback','点击手机中的任意元素，再点击代码行查看详细中文解释 ':'Select any phone element, then select a code line for a detailed explanation','选择一个组件查看它的样式':'Select a component to inspect its styles','选择组件后查看生成的 HTML':'Select a component to inspect its generated HTML','选择可交互组件后查看点击逻辑 ':'Select an interactive component to inspect its click logic','页面操作按钮':'Page action button','属性与代码已连接':'properties and code are linked','选择画布元素开始理解':'Select a canvas element to start learning','先选择画布元素':'Select a canvas element first','或设置当前页面名称':'or edit the current page name',
+  '导航栏背景':'Navigation background','顶部分割线':'Top divider','通栏':'Full-width bar','胶囊':'Pill','填充图标':'Filled icon','浅色底':'Tinted background','下划线':'Underline','外形圆角（px）':'Outer corner radius (px)','底部导航图标':'Bottom navigation icons','上传自己的图标':'Upload your icon','内置图标可改颜色和线条；上传的 SVG、PNG、JPG、WEBP 会随项目保存 ':'Built-in icons support custom colors and strokes Uploaded SVG, PNG, JPG, and WEBP icons are saved with the project'
+  ,'这是一段正文内容，用来说明页面信息 ':'This is body text used to explain the page','继续':'Continue','内容标题':'Content title','简短说明文字':'Short supporting copy','请输入内容':'Enter content','点击修改项目名称':'Click to rename project','项目名称':'Project name','撤销':'Undo','重做':'Redo','重播当前页面动画':'Replay current page animation','页面操作':'Page actions','手机页面':'Phone pages','重命名页面':'Rename page','个当前页面元素':' elements on this page','搜索':'Search','喜欢':'Favorites','音乐':'Music','资料库':'Library','消息':'Notifications','日程':'Calendar','购物':'Shopping','播放':'Play','设置':'Settings','使用首页图标':'Use Home icon','使用发现图标':'Use Discover icon','使用我的图标':'Use Profile icon','使用搜索图标':'Use Search icon','使用喜欢图标':'Use Favorites icon','使用音乐图标':'Use Music icon','使用资料库图标':'Use Library icon','使用消息图标':'Use Notifications icon','使用日程图标':'Use Calendar icon','使用购物图标':'Use Shopping icon','使用播放图标':'Use Play icon','使用设置图标':'Use Settings icon'
 };
 const originalText = new WeakMap();
 const originalAttributes = new WeakMap();
@@ -218,11 +218,11 @@ const VARIANTS = {
     { id: 'marker', name: '色块标题', desc: '强调关键词', mini: '▰', props: { text: '值得关注', size: 23, color: '#1F2A24', background: '#F1D59D', radius: 4 } }
   ],
   text: [
-    { id: 'body', name: '正文', desc: '常规说明文字', mini: '☷', props: { text: '在这里写下你的内容。', size: 15, color: '#66716A' } },
-    { id: 'lead', name: '引导文案', desc: '更醒目的介绍', mini: '¶', props: { text: '用自己的想法，搭建一款小应用。', size: 18, color: '#1F2A24' } },
+    { id: 'body', name: '正文', desc: '常规说明文字', mini: '☷', props: { text: '在这里写下你的内容 ', size: 15, color: '#66716A' } },
+    { id: 'lead', name: '引导文案', desc: '更醒目的介绍', mini: '¶', props: { text: '用自己的想法，搭建一款小应用 ', size: 18, color: '#1F2A24' } },
     { id: 'caption', name: '辅助说明', desc: '时间、提示与注释', mini: '···', props: { text: '点击下方按钮继续', size: 12, color: '#66716A' } },
-    { id: 'quote', name: '引用文本', desc: '展示一句观点', mini: '“”', props: { text: '好设计从清晰的表达开始。', size: 19, color: '#1F2A24' } },
-    { id: 'note', name: '提示说明', desc: '帮助用户理解操作', mini: 'ⓘ', props: { text: '你可以随时修改这里的内容。', size: 13, color: '#2F6B4F', background: '#EAF0E8', radius: 8 } },
+    { id: 'quote', name: '引用文本', desc: '展示一句观点', mini: '“”', props: { text: '好设计从清晰的表达开始 ', size: 19, color: '#1F2A24' } },
+    { id: 'note', name: '提示说明', desc: '帮助用户理解操作', mini: 'ⓘ', props: { text: '你可以随时修改这里的内容 ', size: 13, color: '#2F6B4F', background: '#EAF0E8', radius: 8 } },
     { id: 'label', name: '小标签', desc: '分类和状态文字', mini: 'TAG', props: { text: '新内容', size: 11, color: '#2F6B4F', background: '#EAF0E8', radius: 99 } },
     { id: 'number', name: '数字强调', desc: '展示数据和统计', mini: '42', props: { text: '1,280', size: 34, color: '#1F2A24' } },
     { id: 'muted', name: '弱化文本', desc: '次要信息与日期', mini: 'abc', props: { text: '更新于今天', size: 12, color: '#66716A' } },
@@ -310,7 +310,7 @@ const VARIANTS = {
 };
 
 const TYPE_LABELS = { heading: '标题', text: '文本', button: '按钮', image: '图片', divider: '分隔线', card: '卡片', layout: '布局', input: '输入框', switch: '开关' };
-const CARD_DETAILS = { basic: '在这里介绍内容。', outline: '为重要信息留出空间。', profile: '在这里介绍自己，展示个人资料。', accent: '值得关注的精选内容。', shadow: '及时了解最新消息。', stat: '比昨天有新的增长。', feature: '简单几步，探索更多可能。', dark: '解锁更多专属内容。', warm: '本周值得一看的内容。', horizontal: '从上次的位置继续。', ticket: '领取你的专属权益。', minimal: '内容简洁，一目了然。', gradient: '从这里开始新的探索。' };
+const CARD_DETAILS = { basic: '在这里介绍内容 ', outline: '为重要信息留出空间 ', profile: '在这里介绍自己，展示个人资料 ', accent: '值得关注的精选内容 ', shadow: '及时了解最新消息 ', stat: '比昨天有新的增长 ', feature: '简单几步，探索更多可能 ', dark: '解锁更多专属内容 ', warm: '本周值得一看的内容 ', horizontal: '从上次的位置继续 ', ticket: '领取你的专属权益 ', minimal: '内容简洁，一目了然 ', gradient: '从这里开始新的探索 ' };
 const MOTIONS = [['none', '无动画', '保持静止'], ['fade', '淡入', '柔和出现'], ['rise', '上滑', '从下方进入'], ['pop', '弹出', '轻快放大'], ['slide-left', '左侧滑入', '横向移动'], ['slide-right', '右侧滑入', '横向移动'], ['drop', '向下落入', '从上方进入'], ['zoom', '缩放进入', '由大变小'], ['blur', '清晰浮现', '模糊到清晰'], ['rotate', '轻微旋入', '旋转入场'], ['bounce', '弹跳进入', '有弹性的移动']];
 const EFFECTS = [['none', '无效果', '保持原样'], ['soft-shadow', '柔和阴影', '增加层次'], ['deep-shadow', '深色投影', '突出悬浮感'], ['glow', '彩色发光', '适合强调入口'], ['glass', '玻璃质感', '半透明与背景模糊'], ['gradient', '渐变表面', '由主色过渡到效果色'], ['outline', '强调描边', '清晰划出边界']];
 let activePage = 'home';
@@ -337,11 +337,11 @@ function makeItem(type, variantId, page = activePage) {
 
 function initialState() {
   const homeTitle = makeItem('heading', 'hero', 'home');
-  const homeText = makeItem('text', 'body', 'home'); homeText.text = '选择左侧预设，拼出你自己的手机界面。';
+  const homeText = makeItem('text', 'body', 'home'); homeText.text = '选择左侧预设，拼出你自己的手机界面 ';
   const homeButton = makeItem('button', 'rounded', 'home'); homeButton.text = '看看发现页'; homeButton.action = 'page'; homeButton.targetPage = 'discover';
   const homeCard = makeItem('card', 'accent', 'home'); homeCard.text = '从一个组件开始';
   const discoverTitle = makeItem('heading', 'section', 'discover'); discoverTitle.text = '发现灵感';
-  const discoverText = makeItem('text', 'body', 'discover'); discoverText.text = '这里可以放你的作品、内容或功能入口。';
+  const discoverText = makeItem('text', 'body', 'discover'); discoverText.text = '这里可以放你的作品、内容或功能入口 ';
   const profileTitle = makeItem('heading', 'section', 'profile'); profileTitle.text = '关于我';
   const profileCard = makeItem('card', 'profile', 'profile');
   return { name: '未命名项目', pages: [...DEFAULT_PAGES], pageTitles: clone(PAGE_LABELS), pageIcons: clone(PAGE_ICONS), navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '欢迎来到首页', targetPage: 'discover' }, discover: { icon: '•••', action: 'menu', prompt: '这里是发现页', targetPage: 'profile' }, profile: { icon: '•••', action: 'menu', prompt: '这里是我的页面', targetPage: 'home' } }, items: [homeTitle, homeText, homeButton, homeCard, discoverTitle, discoverText, profileTitle, profileCard], assets: [], styled: false };
@@ -359,13 +359,13 @@ function composeTemplate(id, page) {
   const items = [];
   const add = (type, variant, props = {}, layoutId = null) => { const item = Object.assign(makeItem(type, variant, page), props); item.layoutId = layoutId; items.push(item); return item; };
   const group = (variant, children) => { const layout = add('layout', variant); for (const [type, style, props] of children) add(type, style, props, layout.id); return layout; };
-  if (id === 'portfolio') { add('image', 'builtin-11'); add('heading', 'section', { text: '城市夜行' }); add('text', 'body', { text: '为专注时刻准备的电子与氛围音乐。' }); group('two', [['card', 'stat', { text: '12 首', detail: '完整歌单' }], ['card', 'feature', { text: '42 分钟', detail: '连续播放时长' }]]); add('button', 'dark', { text: '▶ 立即播放', action: 'toast', prompt: '开始播放《城市夜行》' }); }
-  if (id === 'shop') { add('image', 'builtin-0'); add('heading', 'section', { text: '轻量缓震跑鞋' }); add('text', 'body', { text: '透气鞋面与稳定缓震，适合日常通勤和轻运动。' }); group('two', [['card', 'stat', { text: '¥ 399', detail: '会员价格' }], ['card', 'warm', { text: '限时优惠', detail: '今日下单免运费' }]]); add('button', 'wide', { text: '加入购物袋', action: 'toast', prompt: '已加入购物袋' }); }
-  if (id === 'dashboard') { add('heading', 'section', { text: '今天的校园' }); add('text', 'caption', { text: '课程、任务和服务集中查看' }); group('three', [['card', 'stat', { text: '3', detail: '今日课程' }], ['card', 'stat', { text: '2', detail: '待交作业' }], ['card', 'stat', { text: '1', detail: '校园活动' }]]); add('image', 'builtin-15'); add('card', 'accent', { text: '前端基础 · 14:00', detail: '教学楼 A302，记得提前签到。' }); }
-  if (id === 'event') { add('image', 'builtin-16'); add('heading', 'hero', { text: '校园创意节' }); add('text', 'lead', { text: '展示作品、认识伙伴，把有趣的想法变成现实。' }); add('card', 'ticket', { text: '本周六 · 14:00', detail: '中心广场，报名后可收到日程提醒。' }); add('button', 'gradient', { text: '立即报名', action: 'modal', prompt: '报名成功，期待见到你！' }); }
-  if (id === 'profile') { add('heading', 'center', { text: '我的主页' }); add('card', 'profile', { text: '你好，我是 Alex', detail: '喜欢记录生活、分享作品和探索新事物。' }); group('two', [['card', 'stat', { text: '36', detail: '动态' }], ['card', 'stat', { text: '128', detail: '收藏' }]]); add('button', 'teal', { text: '编辑资料', action: 'toast', prompt: '这里可以设置编辑资料流程' }); }
-  if (id === 'notes') { add('heading', 'serif', { text: '阅读清单' }); add('text', 'caption', { text: '为好内容留一个位置' }); add('image', 'builtin-11'); add('card', 'minimal', { text: '从一杯咖啡开始', detail: '生活里细小而值得记录的瞬间。' }); add('divider', 'double'); add('card', 'minimal', { text: '设计的日常', detail: '重新观察我们熟悉的界面。' }); add('button', 'underline', { text: '查看全部 →', action: 'toast', prompt: '已显示全部内容' }); }
-  if (id === 'signup') { add('heading', 'hero', { text: '创建你的账号' }); add('text', 'body', { text: '填写基本信息，开始探索。' }); add('input', 'email', { text: '邮箱地址' }); add('input', 'password', { text: '设置密码' }); add('switch', 'teal', { text: '接收产品更新', checked: true }); add('button', 'wide', { text: '创建账号', action: 'modal', prompt: '这里可以连接注册流程。' }); add('text', 'caption', { text: '继续即表示你了解此页面的示例交互。' }); }
+  if (id === 'portfolio') { add('image', 'builtin-11'); add('heading', 'section', { text: '城市夜行' }); add('text', 'body', { text: '为专注时刻准备的电子与氛围音乐 ' }); group('two', [['card', 'stat', { text: '12 首', detail: '完整歌单' }], ['card', 'feature', { text: '42 分钟', detail: '连续播放时长' }]]); add('button', 'dark', { text: '▶ 立即播放', action: 'toast', prompt: '开始播放《城市夜行》' }); }
+  if (id === 'shop') { add('image', 'builtin-0'); add('heading', 'section', { text: '轻量缓震跑鞋' }); add('text', 'body', { text: '透气鞋面与稳定缓震，适合日常通勤和轻运动 ' }); group('two', [['card', 'stat', { text: '¥ 399', detail: '会员价格' }], ['card', 'warm', { text: '限时优惠', detail: '今日下单免运费' }]]); add('button', 'wide', { text: '加入购物袋', action: 'toast', prompt: '已加入购物袋' }); }
+  if (id === 'dashboard') { add('heading', 'section', { text: '今天的校园' }); add('text', 'caption', { text: '课程、任务和服务集中查看' }); group('three', [['card', 'stat', { text: '3', detail: '今日课程' }], ['card', 'stat', { text: '2', detail: '待交作业' }], ['card', 'stat', { text: '1', detail: '校园活动' }]]); add('image', 'builtin-15'); add('card', 'accent', { text: '前端基础 · 14:00', detail: '教学楼 A302，记得提前签到 ' }); }
+  if (id === 'event') { add('image', 'builtin-16'); add('heading', 'hero', { text: '校园创意节' }); add('text', 'lead', { text: '展示作品、认识伙伴，把有趣的想法变成现实 ' }); add('card', 'ticket', { text: '本周六 · 14:00', detail: '中心广场，报名后可收到日程提醒 ' }); add('button', 'gradient', { text: '立即报名', action: 'modal', prompt: '报名成功，期待见到你！' }); }
+  if (id === 'profile') { add('heading', 'center', { text: '我的主页' }); add('card', 'profile', { text: '你好，我是 Alex', detail: '喜欢记录生活、分享作品和探索新事物 ' }); group('two', [['card', 'stat', { text: '36', detail: '动态' }], ['card', 'stat', { text: '128', detail: '收藏' }]]); add('button', 'teal', { text: '编辑资料', action: 'toast', prompt: '这里可以设置编辑资料流程' }); }
+  if (id === 'notes') { add('heading', 'serif', { text: '阅读清单' }); add('text', 'caption', { text: '为好内容留一个位置' }); add('image', 'builtin-11'); add('card', 'minimal', { text: '从一杯咖啡开始', detail: '生活里细小而值得记录的瞬间 ' }); add('divider', 'double'); add('card', 'minimal', { text: '设计的日常', detail: '重新观察我们熟悉的界面 ' }); add('button', 'underline', { text: '查看全部 →', action: 'toast', prompt: '已显示全部内容' }); }
+  if (id === 'signup') { add('heading', 'hero', { text: '创建你的账号' }); add('text', 'body', { text: '填写基本信息，开始探索 ' }); add('input', 'email', { text: '邮箱地址' }); add('input', 'password', { text: '设置密码' }); add('switch', 'teal', { text: '接收产品更新', checked: true }); add('button', 'wide', { text: '创建账号', action: 'modal', prompt: '这里可以连接注册流程 ' }); add('text', 'caption', { text: '继续即表示你了解此页面的示例交互 ' }); }
   return items;
 }
 const TEMPLATE_FLOWS = {
@@ -373,13 +373,13 @@ const TEMPLATE_FLOWS = {
   event: ['报名信息', '报名成功'], profile: ['编辑资料', '保存完成'], notes: ['文章详情', '收藏成功'], signup: ['确认信息', '注册完成']
 };
 const FLOW_COPY = {
-  portfolio: ['这个项目从需求整理到视觉实现，记录了完整的设计过程。', '联系方式已展示。你可以把按钮改成邮件或网页链接。'],
-  shop: ['核对商品与收货信息，然后提交订单。', '订单已提交。这里可展示订单编号和后续操作。'],
-  dashboard: ['查看访问、收藏和分享的变化趋势。', '分析已生成。可继续扩充图表和筛选状态。'],
-  event: ['填写报名信息，确认参与本次活动。', '报名成功。可加入活动时间和地点提醒。'],
-  profile: ['修改昵称、简介和展示资料。', '资料已保存。返回主页查看更新后的内容。'],
-  notes: ['阅读正文，继续收藏或分享。', '文章已收藏。可返回阅读列表继续浏览。'],
-  signup: ['检查邮箱和账号信息，确认创建。', '账号已创建。可继续设计欢迎和个人资料页。']
+  portfolio: ['这个项目从需求整理到视觉实现，记录了完整的设计过程 ', '联系方式已展示 你可以把按钮改成邮件或网页链接 '],
+  shop: ['核对商品与收货信息，然后提交订单 ', '订单已提交 这里可展示订单编号和后续操作 '],
+  dashboard: ['查看访问、收藏和分享的变化趋势 ', '分析已生成 可继续扩充图表和筛选状态 '],
+  event: ['填写报名信息，确认参与本次活动 ', '报名成功 可加入活动时间和地点提醒 '],
+  profile: ['修改昵称、简介和展示资料 ', '资料已保存 返回主页查看更新后的内容 '],
+  notes: ['阅读正文，继续收藏或分享 ', '文章已收藏 可返回阅读列表继续浏览 '],
+  signup: ['检查邮箱和账号信息，确认创建 ', '账号已创建 可继续设计欢迎和个人资料页 ']
 };
 function composeFlowPage(templateId, page, title, index, previous, next) {
   const add = (type, variant, props = {}) => Object.assign(makeItem(type, variant, page), props);
@@ -390,7 +390,7 @@ function composeFlowPage(templateId, page, title, index, previous, next) {
     if (templateId === 'dashboard') content.push(add('image', 'builtin-16'));
     const labels = { portfolio: '查看联系方式', shop: '确认下单', dashboard: '完成分析', event: '确认报名', profile: '保存资料', notes: '收藏文章', signup: '创建账号' };
     content.push(add('button', 'wide', { text: labels[templateId], action: 'page', targetPage: next, requiresInput: ['shop', 'event', 'signup', 'profile'].includes(templateId), animation: 'rise' }));
-  } else content.push(add('card', 'feature', { text: '已完成', detail: '这是可编辑的流程结果状态。' }));
+  } else content.push(add('card', 'feature', { text: '已完成', detail: '这是可编辑的流程结果状态 ' }));
   content.push(add('button', 'text-button', { text: '← 返回上一步', action: 'page', targetPage: previous }));
   return content;
 }
@@ -544,7 +544,7 @@ function renamePage(page) {
 function duplicatePage(page) { commit(); const copy = `page-${uid()}`; const index = state.pages.indexOf(page); state.pages.splice(index + 1, 0, copy); state.pageTitles[copy] = `${state.pageTitles[page]} 副本`; state.pageIcons[copy] = state.pageIcons[page]; state.pageIconSettings ||= {}; state.pageIconSettings[copy] = clone(navIconSettings(page)); state.pageModes ||= {}; state.pageParent ||= {}; state.pageModes[copy] = isDetailPage(page) ? 'detail' : 'tab'; if (state.pageParent[page]) state.pageParent[copy] = state.pageParent[page]; state.headerActions[copy] = clone(state.headerActions[page]); const originals = state.items.filter(item => item.page === page); const ids = Object.fromEntries(originals.map(item => [item.id, uid()])); const items = originals.map(item => ({ ...clone(item), id: ids[item.id], page: copy, layoutId: item.layoutId ? ids[item.layoutId] || null : null })); state.items.push(...items); activePage = copy; selected = null; update(); }
 function deletePage(page) {
   if (state.pages.length <= 1) { editorToast('至少保留一个页面'); return; }
-  showConfirmDialog({ title: '删除页面', message: `删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复。`, confirmText: '删除', onConfirm: () => {
+  showConfirmDialog({ title: '删除页面', message: `删除“${state.pageTitles[page]}”及其中的元素？可使用撤销恢复 `, confirmText: '删除', onConfirm: () => {
     commit(); state.pages = state.pages.filter(id => id !== page); state.items = state.items.filter(item => item.page !== page); delete state.pageTitles[page]; delete state.pageIcons[page]; if (state.pageIconSettings) delete state.pageIconSettings[page]; delete state.headerActions[page]; if (state.pageModes) delete state.pageModes[page]; const promoted = !state.pages.some(id => !isDetailPage(id)); if (promoted) { state.pageModes ||= {}; state.pageModes[state.pages[0]] = 'tab'; } if (state.pageParent) { delete state.pageParent[page]; if (promoted) delete state.pageParent[state.pages[0]]; for (const [child, parent] of Object.entries(state.pageParent)) if (parent === page) state.pageParent[child] = state.pages.find(id => !isDetailPage(id)) || state.pages[0]; } for (const item of state.items) if (item.targetPage === page) item.targetPage = state.pages[0]; for (const action of Object.values(state.headerActions)) if (action.targetPage === page) action.targetPage = state.pages[0]; if (activePage === page) activePage = state.pages[0]; pageHistory = []; selected = null; update();
   }});
 }
@@ -592,7 +592,7 @@ function renderPageManager() {
   const manager = $('#pageManager'); manager.replaceChildren();
   const heading = document.createElement('div'); heading.className = 'page-manager-head'; const toggle = document.createElement('button'); toggle.type = 'button'; toggle.className = 'page-manager-toggle'; toggle.setAttribute('aria-expanded', String(!pageManagerCollapsed)); toggle.textContent = `${pageManagerCollapsed ? '▸' : '▾'} ${language === 'en' ? `${state.pages.length} Pages` : `页面 ${state.pages.length}`}`; toggle.onclick = () => { pageManagerCollapsed = !pageManagerCollapsed; renderPageManager(); }; const add = document.createElement('button'); add.type = 'button'; add.textContent = language === 'en' ? '+ New Page' : '+ 新建页'; add.onclick = addPage; heading.append(toggle, add); manager.append(heading);
   const list = document.createElement('div'); list.className = 'page-manager-list' + (pageManagerCollapsed ? ' hidden' : '');
-  state.pages.forEach((page, index) => { const row = document.createElement('div'); row.className = 'page-manager-row'; const select = document.createElement('button'); select.type = 'button'; select.className = 'page-select' + (page === activePage ? ' active' : ''); const pageTitle = language === 'en' ? (EN[state.pageTitles[page]] || state.pageTitles[page]) : state.pageTitles[page]; select.textContent = `${isDetailPage(page) ? '↳' : index + 1 + '.'} ${pageTitle}${isDetailPage(page) ? (language === 'en' ? ' · Detail' : ' · 子页面') : ''}`; select.onclick = () => switchPage(page); select.oncontextmenu = event => { event.preventDefault(); event.stopPropagation(); openContextMenu(event.clientX, event.clientY, 'page', page); }; const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'page-edit'; edit.title = language === 'en' ? 'Rename page' : '重命名页面'; edit.textContent = '✎'; edit.onclick = () => renamePage(page); row.append(select, edit); list.append(row); }); manager.append(list);
+  state.pages.forEach((page, index) => { const row = document.createElement('div'); row.className = 'page-manager-row'; const select = document.createElement('button'); select.type = 'button'; select.className = 'page-select' + (page === activePage ? ' active' : ''); const pageTitle = language === 'en' ? (EN[state.pageTitles[page]] || state.pageTitles[page]) : state.pageTitles[page]; select.textContent = `${isDetailPage(page) ? '↳' : index + 1} ${pageTitle}${isDetailPage(page) ? (language === 'en' ? ' · Detail' : ' · 子页面') : ''}`; select.onclick = () => switchPage(page); select.oncontextmenu = event => { event.preventDefault(); event.stopPropagation(); openContextMenu(event.clientX, event.clientY, 'page', page); }; const edit = document.createElement('button'); edit.type = 'button'; edit.className = 'page-edit'; edit.title = language === 'en' ? 'Rename page' : '重命名页面'; edit.textContent = '✎'; edit.onclick = () => renamePage(page); row.append(select, edit); list.append(row); }); manager.append(list);
 }
 function hideContextMenu() { $('#contextMenu').classList.add('hidden'); contextTarget = null; }
 function copyItem(id) { const item = state.items.find(entry => entry.id === id); if (!item) return; clipboard = { item: clone(item), children: item.type === 'layout' ? state.items.filter(entry => entry.layoutId === id).map(clone) : [] }; editorToast('元素已复制'); }
@@ -748,7 +748,7 @@ function renderCanvas() {
   const page = $('#canvasPage'); const scroll = page.scrollTop; page.replaceChildren();
   page.oncontextmenu = event => { if (preview) return; event.preventDefault(); selected = null; renderInspector(); openContextMenu(event.clientX, event.clientY, 'blank'); };
   const items = state.items.filter(item => item.page === activePage);
-  if (!items.length) { const empty = document.createElement('div'); empty.className = 'empty-page'; empty.innerHTML = '<strong>这个页面还是空的</strong>从左侧选择组件和样式开始搭建。'; page.append(empty); }
+  if (!items.length) { const empty = document.createElement('div'); empty.className = 'empty-page'; empty.innerHTML = '<strong>这个页面还是空的</strong>从左侧选择组件和样式开始搭建 '; page.append(empty); }
   for (const item of items.filter(item => !item.layoutId)) page.append(buildCanvasWrapper(item));
   $('#elementCount').textContent = language === 'en' ? `${items.length} elements on this page` : `${items.length} 个当前页面元素`;
   page.scrollTop = scroll;
@@ -785,7 +785,7 @@ function renderNavIconInspector(box, page) {
   for (const icon of NAV_ICONS) { const button = document.createElement('button'); button.type = 'button'; button.title = icon.name; button.setAttribute('aria-label', `使用${icon.name}图标`); button.classList.toggle('active', state.pageIcons[page] === `icon:${icon.id}`); button.innerHTML = navSvgMarkup(`icon:${icon.id}`); button.onclick = () => { commit(); state.pageIcons[page] = `icon:${icon.id}`; update(); }; picker.append(button); }
   box.append(picker);
   const upload = document.createElement('div'); upload.className = 'nav-icon-upload'; const current = navIconElement(state.pageIcons[page]); const choose = document.createElement('button'); choose.type = 'button'; choose.textContent = '上传自己的图标'; const input = document.createElement('input'); input.type = 'file'; input.accept = 'image/svg+xml,image/png,image/jpeg,image/webp,.svg'; input.hidden = true; choose.onclick = () => input.click(); input.onchange = async () => { const file = input.files?.[0]; if (!file) return; try { const data = await readNavIcon(file); commit(); state.pageIcons[page] = data; update(); editorToast('导航图标已更新'); } catch (error) { editorToast(error.message || '图标导入失败'); } }; upload.append(current, choose, input); box.append(upload);
-  const hint = document.createElement('p'); hint.className = 'nav-icon-hint'; hint.textContent = '内置图标可改颜色和线条；上传的 SVG、PNG、JPG、WEBP 会随项目保存。'; box.append(hint);
+  const hint = document.createElement('p'); hint.className = 'nav-icon-hint'; hint.textContent = '内置图标可改颜色和线条；上传的 SVG、PNG、JPG、WEBP 会随项目保存 '; box.append(hint);
   const settings = navIconSettings(page);
   const changeSetting = (key, value) => { commit(); state.pageIconSettings ||= {}; state.pageIconSettings[page] = { ...navIconSettings(page), [key]: value }; update(); };
   const size = field(box, '图标大小（px）', settings.size, 'number'); size.min = '16'; size.max = '32'; size.onchange = () => changeSetting('size', Math.max(16, Math.min(32, Number(size.value) || 23)));
@@ -864,7 +864,7 @@ function renderInspector() {
     const padding = field(box, '内边距（px）', item.padding, 'number'); padding.onchange = () => change('padding', Math.max(0, Math.min(50, Number(padding.value) || 0)));
     colorField(box, '背景颜色', item.background, value => change('background', value));
     const radius = field(box, '圆角（px）', item.radius, 'number'); radius.onchange = () => change('radius', Math.max(0, Math.min(99, Number(radius.value) || 0)));
-    const hint = document.createElement('p'); hint.className = 'inspector-hint'; hint.textContent = '选中布局后，从左侧添加组件；也可以把画布中的组件拖进布局。'; box.append(hint);
+    const hint = document.createElement('p'); hint.className = 'inspector-hint'; hint.textContent = '选中布局后，从左侧添加组件；也可以把画布中的组件拖进布局 '; box.append(hint);
     renderMotionFields(box, item); showCode(item); return;
   }
   if (item.type === 'input') { const placeholder = field(box, '占位文字', item.text); placeholder.onchange = () => change('text', placeholder.value); const inputType = field(box, '输入类型', safeInputType(item.inputType), 'select', [['text', '普通文字'], ['search', '搜索'], ['email', '邮箱'], ['password', '密码']]); inputType.onchange = () => change('inputType', inputType.value); }
@@ -917,18 +917,18 @@ function jsFor(item) {
   if (item.type === 'switch') lines.push("toggle.addEventListener('click', () => {\n  toggle.checked = !toggle.checked;\n});");
   if (item.type === 'input') lines.push("input.addEventListener('input', event => {\n  const value = event.target.value;\n});");
   if (item.type === 'button') {
-    if (item.visualState === 'disabled') return '// 禁用状态：按钮不会执行点击操作。';
+    if (item.visualState === 'disabled') return '// 禁用状态：按钮不会执行点击操作 ';
     if (item.action === 'page') lines.push(`button.addEventListener('click', () => show(${JSON.stringify(item.targetPage)}));`);
     if (item.action === 'toast') lines.push(`button.addEventListener('click', () => toast(${JSON.stringify(item.prompt)}));`);
     if (item.action === 'modal') lines.push(`button.addEventListener('click', () => {\n  message.textContent = ${JSON.stringify(item.prompt)};\n  modal.style.display = 'grid';\n});`);
     if (item.action === 'link') lines.push(`button.addEventListener('click', () => {\n  location.href = ${JSON.stringify(safeHref(item.href))};\n});`);
   }
-  return lines.join('\n') || '// 这个元素暂时没有点击逻辑。';
+  return lines.join('\n') || '// 这个元素暂时没有点击逻辑 ';
 }
 function showCode(item) {
   let code;
-  if (selected === '__header__') code = language === 'en' ? { css: '.phone-header-dot {\n  cursor: pointer;\n}', html: '<button aria-label="Page actions">•••</button>', js: '// Choose a menu, notice, modal, or page navigation action on the right.' } : { css: '.phone-header-dot {\n  cursor: pointer;\n}', html: '<button aria-label="页面操作">•••</button>', js: '// 在右侧选择菜单、提示、弹窗或页面跳转。' };
-  else if (!item) code = language === 'en' ? { css: '/* Select a component to inspect its styles */', html: '<!-- Select a component to inspect its generated HTML -->', js: '// Select an interactive component to inspect its click logic.' } : { css: '/* 选择一个组件查看它的样式 */', html: '<!-- 选择组件后查看生成的 HTML -->', js: '// 选择可交互组件后查看点击逻辑。' };
+  if (selected === '__header__') code = language === 'en' ? { css: '.phone-header-dot {\n  cursor: pointer;\n}', html: '<button aria-label="Page actions">•••</button>', js: '// Choose a menu, notice, modal, or page navigation action on the right.' } : { css: '.phone-header-dot {\n  cursor: pointer;\n}', html: '<button aria-label="页面操作">•••</button>', js: '// 在右侧选择菜单、提示、弹窗或页面跳转 ' };
+  else if (!item) code = language === 'en' ? { css: '/* Select a component to inspect its styles */', html: '<!-- Select a component to inspect its generated HTML -->', js: '// Select an interactive component to inspect its click logic.' } : { css: '/* 选择一个组件查看它的样式 */', html: '<!-- 选择组件后查看生成的 HTML -->', js: '// 选择可交互组件后查看点击逻辑 ' };
   else { const codeItem = language === 'en' ? { ...item, text: EN[item.text] || item.text, detail: EN[item.detail] || item.detail, prompt: EN[item.prompt] || item.prompt } : item; code = { css: cssFor(codeItem), html: exportElement(codeItem), js: jsFor(codeItem) }; }
   const preview = $('#cssPreview'); preview.replaceChildren();
   const explainLineEnglish = line => {
@@ -961,30 +961,30 @@ function showCode(item) {
   const explainLine = line => {
     if (language === 'en') return explainLineEnglish(line);
     const text = line.trim();
-    if (!text) return '空行把代码分成更容易阅读的小段。';
-    const colorMeaning = value => { const [red, green, blue] = hexToRgb(value); return `${value.toUpperCase()} 对应 RGB(${red}, ${green}, ${blue})；“#”表示十六进制颜色，后六位依次代表红、绿、蓝。`; };
+    if (!text) return '空行把代码分成更容易阅读的小段 ';
+    const colorMeaning = value => { const [red, green, blue] = hexToRgb(value); return `${value.toUpperCase()} 对应 RGB(${red}, ${green}, ${blue})；“#”表示十六进制颜色，后六位依次代表红、绿、蓝 `; };
     const declaration = text.match(/^([\w-]+):\s*(.+);$/);
-    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return `这是一行给学习者看的注释，浏览器不会把它显示在手机里。当前注释写的是“${text.replace(/^\/\*|\*\/$|^\/\/|^<!--|-->$/g, '').trim()}”，删除它也不会改变界面。`;
-    if (/^<\/?[a-z]/i.test(text)) { const tag = text.match(/^<\/?([\w-]+)/i)?.[1] || '元素'; const content = text.match(/>([^<]+)</)?.[1]; return text.startsWith('</') ? `</${tag}> 用斜杠表示“结束 ${tag} 元素”。它和前面的 <${tag}> 配对，防止后面的内容被误算进当前组件。` : `这里实际创建了一个 <${tag}> 元素${content ? `，手机里显示的内容是“${content}”` : ''}。尖括号 < > 用来包住标签名，浏览器看到它就知道这是页面结构，而不是普通文字。`; }
-    if (/^\.[\w-]+\s*\{/.test(text)) { const className = text.match(/^\.([\w-]+)/)?.[1]; return `“.${className}”正在选中当前画布里 class="${className}" 的组件；开头的点号表示按 class 查找。“{”之后的规则只作用于这类组件。`; }
+    if (text.startsWith('/*') || text.startsWith('//') || text.startsWith('<!--')) return `这是一行给学习者看的注释，浏览器不会把它显示在手机里 当前注释写的是“${text.replace(/^\/\*|\*\/$|^\/\/|^<!--|-->$/g, '').trim()}”，删除它也不会改变界面 `;
+    if (/^<\/?[a-z]/i.test(text)) { const tag = text.match(/^<\/?([\w-]+)/i)?.[1] || '元素'; const content = text.match(/>([^<]+)</)?.[1]; return text.startsWith('</') ? `</${tag}> 用斜杠表示“结束 ${tag} 元素” 它和前面的 <${tag}> 配对，防止后面的内容被误算进当前组件 ` : `这里实际创建了一个 <${tag}> 元素${content ? `，手机里显示的内容是“${content}”` : ''} 尖括号 < > 用来包住标签名，浏览器看到它就知道这是页面结构，而不是普通文字 `; }
+    if (/^\.[\w-]+\s*\{/.test(text)) { const className = text.match(/^\.([\w-]+)/)?.[1]; return `“.${className}”正在选中当前画布里 class="${className}" 的组件；开头的点号表示按 class 查找 “{”之后的规则只作用于这类组件 `; }
     if (declaration) {
       const [, property, value] = declaration;
-      if (property === 'color') return `当前把这个组件的文字设为 ${value}。${colorMeaning(value)} 这里用白色文字，是为了和当前深色背景形成清楚对比。`;
-      if (property === 'background') return `当前组件的背景实际使用 ${value}。${colorMeaning(value)} 这个值来自右侧“背景颜色”，修改色盘后本行会同步变化。`;
-      if (property === 'font-size') return `当前字号是 ${value}。px 是屏幕像素；这里的 ${parseFloat(value)} 让按钮文字保持紧凑，增大数值会更醒目，也更容易把按钮撑高。`;
-      if (property === 'border-radius') return `当前圆角半径是 ${value}。这里的 ${parseFloat(value)}px 会把四个角各向内收同样距离；0px 是方角，接近按钮高度一半时会变成胶囊形。`;
-      if (property === 'text-align') return `当前值 ${value} 表示内容${value === 'left' ? '靠左排列' : value === 'center' ? '水平居中' : '靠右排列'}。冒号左边是属性名，右边是这个组件正在使用的真实值，分号表示本条规则结束。`;
-      if (property === 'opacity') return `当前透明度是 ${value}：1 表示完全可见，0 表示完全透明，0.5 则是半透明。这里保持 1，所以手机中的组件没有被淡化。`;
+      if (property === 'color') return `当前把这个组件的文字设为 ${value} ${colorMeaning(value)} 这里用白色文字，是为了和当前深色背景形成清楚对比 `;
+      if (property === 'background') return `当前组件的背景实际使用 ${value} ${colorMeaning(value)} 这个值来自右侧“背景颜色”，修改色盘后本行会同步变化 `;
+      if (property === 'font-size') return `当前字号是 ${value} px 是屏幕像素；这里的 ${parseFloat(value)} 让按钮文字保持紧凑，增大数值会更醒目，也更容易把按钮撑高 `;
+      if (property === 'border-radius') return `当前圆角半径是 ${value} 这里的 ${parseFloat(value)}px 会把四个角各向内收同样距离；0px 是方角，接近按钮高度一半时会变成胶囊形 `;
+      if (property === 'text-align') return `当前值 ${value} 表示内容${value === 'left' ? '靠左排列' : value === 'center' ? '水平居中' : '靠右排列'} 冒号左边是属性名，右边是这个组件正在使用的真实值，分号表示本条规则结束 `;
+      if (property === 'opacity') return `当前透明度是 ${value}：1 表示完全可见，0 表示完全透明，0.5 则是半透明 这里保持 1，所以手机中的组件没有被淡化 `;
       if (property === 'box-shadow') { const color = value.match(/#[0-9a-f]{6}/i)?.[0]; return `当前阴影写成 ${value}：前两个 0 表示不向左右或上下偏移，20px 是模糊半径，所以光会均匀包围组件；${color ? colorMeaning(color) : ''}`; }
-      if (property === 'animation') { const parts = value.split(/\s+/); return `当前动画名是 ${parts[0]}，持续 ${parts[1]}（${parseInt(parts[1]) / 1000} 秒），${parts[2]} 让速度先加快再减慢，both 会同时保留动画开始前和结束后的状态。每个空格把一个动画参数分开。`; }
-      if (property === 'animation-delay') return `当前延迟是 ${value}。0ms 表示触发后立刻播放；ms 是毫秒，1000ms 等于 1 秒。`;
-      if (['padding', 'margin', 'gap'].includes(property)) return `当前 ${property} 使用 ${value}。${property === 'padding' ? '它控制内容到边框的内部距离' : property === 'margin' ? '它控制组件与外部元素的距离' : '它控制多个子元素之间的空隙'}；这里展示的是当前组件正在采用的数值。`;
-      if (property === 'display') return `当前 display 使用 ${value}，表示这个组件实际采用 ${value === 'grid' ? '网格布局' : value === 'flex' ? '弹性布局' : value}。属性和值之间必须用冒号分隔。`;
-      return `当前组件把 ${property} 设为 ${value}。冒号左侧是要改变的属性，右侧是画布正在使用的值，结尾分号告诉浏览器这条设置已经写完。`;
+      if (property === 'animation') { const parts = value.split(/\s+/); return `当前动画名是 ${parts[0]}，持续 ${parts[1]}（${parseInt(parts[1]) / 1000} 秒），${parts[2]} 让速度先加快再减慢，both 会同时保留动画开始前和结束后的状态 每个空格把一个动画参数分开 `; }
+      if (property === 'animation-delay') return `当前延迟是 ${value} 0ms 表示触发后立刻播放；ms 是毫秒，1000ms 等于 1 秒 `;
+      if (['padding', 'margin', 'gap'].includes(property)) return `当前 ${property} 使用 ${value} ${property === 'padding' ? '它控制内容到边框的内部距离' : property === 'margin' ? '它控制组件与外部元素的距离' : '它控制多个子元素之间的空隙'}；这里展示的是当前组件正在采用的数值 `;
+      if (property === 'display') return `当前 display 使用 ${value}，表示这个组件实际采用 ${value === 'grid' ? '网格布局' : value === 'flex' ? '弹性布局' : value} 属性和值之间必须用冒号分隔 `;
+      return `当前组件把 ${property} 设为 ${value} 冒号左侧是要改变的属性，右侧是画布正在使用的值，结尾分号告诉浏览器这条设置已经写完 `;
     }
-    if (/addEventListener/.test(text)) return `这里用 addEventListener 监听当前组件的用户操作。括号里的 'click' 表示只有用户点击它时才运行后面的函数；=> 是把这次操作指向后面的处理代码。`;
-    if (text === '}' || text === '});') return '这一行结束当前样式块或交互逻辑。它与前面的开始大括号配对，让浏览器知道这一组规则到哪里结束。';
-    return codeMode === 'js' ? `这一行是当前组件真实执行的 JavaScript：“${text}”。括号表示传入数据或条件，大括号把需要一起执行的语句包成一组。` : codeMode === 'html' ? `这一行就是当前组件对应的 HTML 结构：“${text}”。标签决定它是什么，属性记录它现在的内容、状态和用途。` : `这一行参与当前组件的实际外观：“${text}”。点击右侧相应属性后再回来看，可以观察具体字符和值如何变化。`;
+    if (/addEventListener/.test(text)) return `这里用 addEventListener 监听当前组件的用户操作 括号里的 'click' 表示只有用户点击它时才运行后面的函数；=> 是把这次操作指向后面的处理代码 `;
+    if (text === '}' || text === '});') return '这一行结束当前样式块或交互逻辑 它与前面的开始大括号配对，让浏览器知道这一组规则到哪里结束 ';
+    return codeMode === 'js' ? `这一行是当前组件真实执行的 JavaScript：“${text}” 括号表示传入数据或条件，大括号把需要一起执行的语句包成一组 ` : codeMode === 'html' ? `这一行就是当前组件对应的 HTML 结构：“${text}” 标签决定它是什么，属性记录它现在的内容、状态和用途 ` : `这一行参与当前组件的实际外观：“${text}” 点击右侧相应属性后再回来看，可以观察具体字符和值如何变化 `;
   };
   code[codeMode].split('\n').forEach(line => {
     const row = document.createElement('span'); row.className = 'code-line'; row.dataset.codeText = line; row.append(document.createTextNode(line || ' '));
@@ -1003,8 +1003,8 @@ function showCode(item) {
   const rawSelectionName = selected === '__header__' ? '页面操作按钮' : item ? TYPE_LABELS[item.type] : '选择画布元素开始理解';
   const selectionName = language === 'en' ? (EN[rawSelectionName] || rawSelectionName) : rawSelectionName;
   $('#codeSelectionLabel').textContent = item || selected === '__header__' ? (language === 'en' ? `${selectionName} · properties and code are linked` : `${selectionName} · 属性与代码已连接`) : selectionName;
-  $('#codeExplain').textContent = language === 'en' ? (codeMode === 'html' ? 'HTML describes the elements on the page.' : codeMode === 'css' ? 'CSS controls layout, color, and motion.' : 'JavaScript handles clicks, navigation, and feedback.') : (codeMode === 'html' ? 'HTML 描述页面有哪些元素。' : codeMode === 'css' ? 'CSS 控制布局、颜色和动画效果。' : 'JavaScript 负责点击、页面切换与提示。');
-  $('#codeLearningNote').textContent = item ? (language === 'en' ? `“${selectionName}” is selected. Select any code line to see how its current characters and values affect the interface.` : `当前选中“${selectionName}”。点击任意一行代码，可展开这一行的详细中文解释。`) : (language === 'en' ? 'Select any phone element, then select a code line for a detailed explanation.' : '点击手机中的任意元素，再点击代码行查看详细中文解释。');
+  $('#codeExplain').textContent = language === 'en' ? (codeMode === 'html' ? 'HTML describes the elements on the page.' : codeMode === 'css' ? 'CSS controls layout, color, and motion.' : 'JavaScript handles clicks, navigation, and feedback.') : (codeMode === 'html' ? 'HTML 描述页面有哪些元素 ' : codeMode === 'css' ? 'CSS 控制布局、颜色和动画效果 ' : 'JavaScript 负责点击、页面切换与提示 ');
+  $('#codeLearningNote').textContent = item ? (language === 'en' ? `“${selectionName}” is selected. Select any code line to see how its current characters and values affect the interface.` : `当前选中“${selectionName}” 点击任意一行代码，可展开这一行的详细中文解释 `) : (language === 'en' ? 'Select any phone element, then select a code line for a detailed explanation.' : '点击手机中的任意元素，再点击代码行查看详细中文解释 ');
   document.querySelectorAll('[data-code]').forEach(button => button.classList.toggle('active', button.dataset.code === codeMode));
 }
 
@@ -1286,7 +1286,7 @@ function loadExportFontFace() {
   if (window.BLOKBIRD_FONT_DATA) return Promise.resolve(build(window.BLOKBIRD_FONT_DATA));
   return new Promise(resolve => {
     const script = document.createElement('script');
-    script.src = 'export-font.js?v=20261110k';
+    script.src = 'export-font.js?v=20261110l';
     script.onload = () => resolve(build(window.BLOKBIRD_FONT_DATA));
     script.onerror = () => resolve('');
     document.head.append(script);
@@ -1351,7 +1351,7 @@ $('#exportDialog').onclick = event => { if (event.target === $('#exportDialog'))
 $('#importBtn').onclick = () => $('#projectInput').click();
 $('#projectInput').onchange = async event => { const file = event.target.files[0]; if (!file) return; try { const imported = JSON.parse(await file.text()); if (!validProject(imported)) throw Error(); commit(); state = normalizeProject(imported); activePage = state.pages[0]; selected = null; update(); renderAssets(); editorToast('项目导入成功'); } catch { editorToast('项目文件格式不正确'); } event.target.value = ''; };
 $('#newBtn').onclick = () => {
-  showConfirmDialog({ title: '新建项目', message: '新建项目会清空当前画布。建议先保存项目文件。', confirmText: '继续', onConfirm: () => {
+  showConfirmDialog({ title: '新建项目', message: '新建项目会清空当前画布 建议先保存项目文件 ', confirmText: '继续', onConfirm: () => {
     commit(); state = { name: '未命名项目', pages: ['home'], pageTitles: { home: '首页' }, pageIcons: { home: 'icon:home' }, pageIconSettings: { home: clone(DEFAULT_NAV_ICON_STYLE) }, navStyle: clone(DEFAULT_NAV_STYLE), headerActions: { home: { icon: '•••', action: 'menu', prompt: '这是首页', targetPage: 'home' } }, items: [], assets: [], styled: false }; activePage = 'home'; selected = null; update(); renderAssets();
   }});
 };

@@ -49,3 +49,5 @@ body{font-family:inherit}
 .learning-workbench.code-collapsed .code-workbench{display:none}
 .canvas-area{scrollbar-width:none}
 .canvas-area::-webkit-scrollbar{display:none}
+
+.guide-dialog .guide-card.wide{grid-column:1/-1;min-height:0}
