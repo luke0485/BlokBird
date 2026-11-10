@@ -2,15 +2,19 @@
 <html lang="zh-CN">
 <head>
   <meta charset="utf-8" />
+  <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+  <meta http-equiv="Pragma" content="no-cache" />
+  <meta http-equiv="Expires" content="0" />
   <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <link rel="preload" href="fonts/blokbird-pixel-12px-sc.woff2?v=20261110m" as="font" type="font/woff2" crossorigin />
   <meta name="description" content="自由拼接手机界面、设计交互并学习前端的可视化工具" />
   <title>BlokBird · UI Design</title>
   <link rel="icon" type="image/svg+xml" href="logo.svg?v=20260924" />
-  <link rel="stylesheet" href="styles.css?v=20261110l" />
-  <link rel="stylesheet" href="phone.css?v=20261110l" />
-  <link rel="stylesheet" href="theme.css?v=20261110l" />
-  <link rel="stylesheet" href="ui-overrides.css?v=20261110l" />
-  <link rel="stylesheet" href="mobile-gate.css?v=20261110l" />
+  <link rel="stylesheet" href="styles.css?v=20261110m" />
+  <link rel="stylesheet" href="phone.css?v=20261110m" />
+  <link rel="stylesheet" href="theme.css?v=20261110m" />
+  <link rel="stylesheet" href="ui-overrides.css?v=20261110m" />
+  <link rel="stylesheet" href="mobile-gate.css?v=20261110m" />
   <script>
     if (navigator.userAgentData?.mobile || /Android.*Mobile|iPhone|iPod|Windows Phone|Mobile/i.test(navigator.userAgent)) {
       document.documentElement.classList.add('phone-visitor');
@@ -81,6 +85,6 @@
 </div></div></div>
 <div id="exportDialog" class="guide-dialog hidden" role="dialog" aria-modal="true" aria-labelledby="exportTitle"><div class="guide-dialog-card export-card"><div class="guide-dialog-head"><strong id="exportTitle">导出网页</strong><button id="exportCloseBtn" type="button" aria-label="关闭导出提示">×</button></div><div class="export-body"><p>将生成 <code id="exportFileName">blokbird-app.html</code>（约 <span id="exportSize">—</span>），保存到本机桌面；不会上传或发布 </p></div><div class="export-actions"><button id="exportCancelBtn" type="button">取消</button><button id="exportDownloadBtn" class="primary" type="button">保存到桌面</button></div></div></div>
   <div class="phone-visitor-gate" role="status" aria-live="polite"><span>请在电脑上使用浏览器打开</span></div>
-  <script src="script.js?v=20261110l"></script>
+  <script src="script.js?v=20261110m"></script>
 </body>
 </html>
